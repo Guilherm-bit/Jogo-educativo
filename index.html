@@ -6,11 +6,9 @@
 
 <title>Jogo Educativo — Racismo Ambiental</title>
 
-<!-- PeerJS -->
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -45,10 +43,6 @@ h1 {
     padding: 15px;
 }
 
-/* =========================
-   LOBBY
-========================= */
-
 #lobby {
     max-width: 500px;
     margin: 25px auto;
@@ -79,7 +73,7 @@ input {
 #roomCodeDisplay {
     font-size: 25px;
     font-weight: bold;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     margin: 15px;
 }
 
@@ -87,10 +81,6 @@ input {
     font-weight: bold;
     min-height: 25px;
 }
-
-/* =========================
-   STATUS
-========================= */
 
 #status {
     background: white;
@@ -128,10 +118,6 @@ input {
 #progressText {
     font-weight: bold;
 }
-
-/* =========================
-   DADO
-========================= */
 
 #diceArea {
     margin: 15px;
@@ -208,10 +194,6 @@ button:disabled {
     white-space: pre-line;
 }
 
-/* =========================
-   JOGADORES
-========================= */
-
 #players {
     background: white;
     padding: 12px;
@@ -227,10 +209,6 @@ button:disabled {
     font-weight: bold;
     border: 2px solid #ddd;
 }
-
-/* =========================
-   TABULEIRO
-========================= */
 
 #board {
     display: grid;
@@ -273,37 +251,23 @@ button:disabled {
     border-color: #7b4bd6;
 }
 
-/* =========================
-   PEÕES
-========================= */
-
 .pawn {
     display: inline-flex;
-
     width: 28px;
     height: 28px;
-
     border-radius: 50%;
-
     justify-content: center;
     align-items: center;
-
     margin: 2px;
-
     font-size: 17px;
-
     color: white;
-
     box-shadow: 0 2px 4px #777;
-
     transition: transform 0.2s;
 }
 
 .pawn.moving {
     transform: scale(1.3);
 }
-
-/* CORES */
 
 .red {
     background: #e53935;
@@ -352,27 +316,17 @@ button:disabled {
     color: #222;
 }
 
-/* =========================
-   MODAL DE PERGUNTA
-========================= */
-
 #questionModal {
     display: none;
-
     position: fixed;
     z-index: 1000;
-
     left: 0;
     top: 0;
-
     width: 100%;
     height: 100%;
-
     background: rgba(0,0,0,0.65);
-
     justify-content: center;
     align-items: center;
-
     padding: 20px;
 }
 
@@ -380,11 +334,8 @@ button:disabled {
     background: white;
     max-width: 500px;
     width: 100%;
-
     padding: 25px;
-
     border-radius: 20px;
-
     box-shadow: 0 5px 25px #222;
 }
 
@@ -395,10 +346,6 @@ button:disabled {
 #answerInput {
     width: 100%;
 }
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 600px) {
 
@@ -424,28 +371,18 @@ button:disabled {
         width: 90%;
     }
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-
 <h1>🌍 Jogo Educativo</h1>
-
 <div>Racismo Ambiental</div>
 
-<div id="timer">
-    20:00
-</div>
-
+<div id="timer">20:00</div>
 </header>
 
-
-<!-- =========================
-     LOBBY
-========================= -->
 
 <div id="lobby">
 
@@ -481,7 +418,7 @@ button:disabled {
     <input
         id="roomInput"
         type="text"
-        maxlength="12"
+        maxlength="20"
         placeholder="Código da sala"
     >
 
@@ -513,10 +450,6 @@ button:disabled {
 </div>
 
 
-<!-- =========================
-     JOGO
-========================= -->
-
 <div id="game" style="display:none">
 
 <div id="status">
@@ -528,15 +461,12 @@ button:disabled {
 <div id="yourColor"></div>
 
 <div class="progress-container">
-
 <div id="progressBar"></div>
-
 </div>
 
 <div id="progressText">
-    Progresso: 1 / 80 casas
+    Seu progresso: 1 / 80 casas
 </div>
-
 
 <div id="diceArea">
 
@@ -546,7 +476,6 @@ button:disabled {
 
 </div>
 
-
 <button
     id="rollButton"
     onclick="rollDice()">
@@ -555,13 +484,11 @@ button:disabled {
 
 </button>
 
-
 <div id="message">
     Aguardando...
 </div>
 
 </div>
-
 
 <div id="players"></div>
 
@@ -569,10 +496,6 @@ button:disabled {
 
 </div>
 
-
-<!-- =========================
-     PERGUNTA
-========================= -->
 
 <div id="questionModal">
 
@@ -602,49 +525,26 @@ button:disabled {
 
 <script>
 
-/* =====================================================
-   CONFIGURAÇÕES
-===================================================== */
-
 const TOTAL_CASAS = 80;
-
 const TEMPO_TOTAL = 20 * 60;
-
 const MAX_JOGADORES = 11;
 
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
 let peer = null;
-
 let hostConnection = null;
-
 let connections = [];
 
 let isHost = false;
-
 let roomCode = "";
-
 let meuJogador = -1;
 
 let currentPlayer = 0;
-
 let jogoIniciado = false;
-
 let tempoRestante = TEMPO_TOTAL;
-
 let timer = null;
 
 let perguntaAtual = null;
-
 let movimentoEmAndamento = false;
 
-
-/* =====================================================
-   CORES
-===================================================== */
 
 const colors = [
 
@@ -717,16 +617,8 @@ const colors = [
 ];
 
 
-/* =====================================================
-   JOGADORES
-===================================================== */
-
 let players = [];
 
-
-/* =====================================================
-   CASAS ESPECIAIS
-===================================================== */
 
 const problems = {
 
@@ -847,6 +739,8 @@ const questions = {
     "Cite uma ação que pode ajudar a combater o racismo ambiental.",
     resposta:
     "políticas públicas"
+}
+
 };
 
 
@@ -878,14 +772,10 @@ const items = {
 };
 
 
-/* =====================================================
-   UTILIDADES
-===================================================== */
-
 function esperar(ms) {
 
-    return new Promise(resolve =>
-        setTimeout(resolve, ms)
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
     );
 
 }
@@ -893,7 +783,7 @@ function esperar(ms) {
 
 function normalizar(texto) {
 
-    return texto
+    return String(texto)
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -906,32 +796,20 @@ function normalizar(texto) {
 function respostaCorreta(resposta, correta) {
 
     const a = normalizar(resposta);
-
     const b = normalizar(correta);
 
-    if (a === b) {
-        return true;
-    }
-
-    return a.includes(b) || b.includes(a);
+    return a === b || a.includes(b) || b.includes(a);
 
 }
 
-
-/* =====================================================
-   CRIAR JOGADORES
-===================================================== */
 
 function novoJogador(nome) {
 
     return {
 
         nome: nome,
-
         posicao: 1,
-
         itens: 0,
-
         cor: colors[players.length]
 
     };
@@ -940,53 +818,175 @@ function novoJogador(nome) {
 
 
 /* =====================================================
-   PEERJS
+   PEERJS CORRIGIDO
 ===================================================== */
 
 function criarPeer(id, callback) {
 
-    peer = new Peer(id);
+    const opcoes = {
 
-    peer.on("open", function(idRecebido) {
+        debug: 1,
 
-        callback(idRecebido);
+        config: {
 
-    });
+            iceServers: [
+
+                {
+                    urls:
+                    "stun:stun.l.google.com:19302"
+                },
+
+                {
+                    urls:
+                    "stun:stun1.l.google.com:19302"
+                }
+
+            ]
+
+        }
+
+    };
 
 
-    peer.on("error", function(error) {
+    try {
 
-        console.error(error);
+        if (id) {
 
-        if (error.type === "unavailable-id") {
-
-            document.getElementById(
-                "lobbyMessage"
-            ).textContent =
-                "❌ Essa sala já existe. Escolha outro código.";
+            peer =
+                new Peer(
+                    id,
+                    opcoes
+                );
 
         }
 
         else {
 
-            document.getElementById(
-                "lobbyMessage"
-            ).textContent =
-                "❌ Erro de conexão: " + error.type;
+            peer =
+                new Peer(
+                    opcoes
+                );
 
         }
 
-    });
+    }
 
+    catch (erro) {
 
-    peer.on("disconnected", function() {
+        console.error(erro);
 
         document.getElementById(
-            "message"
+            "lobbyMessage"
         ).textContent =
-            "⚠️ Conexão com o servidor de sinalização perdida.";
+            "❌ Não foi possível iniciar a conexão.";
 
-    });
+        return;
+
+    }
+
+
+    peer.on(
+        "open",
+        function(idRecebido) {
+
+            console.log(
+                "Peer conectado:",
+                idRecebido
+            );
+
+            if (callback) {
+                callback(idRecebido);
+            }
+
+        }
+    );
+
+
+    peer.on(
+        "connection",
+        function(connection) {
+
+            if (isHost) {
+
+                receberConexao(
+                    connection
+                );
+
+            }
+
+        }
+    );
+
+
+    peer.on(
+        "error",
+        function(error) {
+
+            console.error(
+                "Erro PeerJS:",
+                error
+            );
+
+            const mensagem =
+                document.getElementById(
+                    "lobbyMessage"
+                );
+
+            if (!mensagem) return;
+
+
+            if (
+                error.type ===
+                "unavailable-id"
+            ) {
+
+                mensagem.textContent =
+                    "❌ Esse código já está sendo usado. Crie outra sala.";
+
+            }
+
+            else if (
+                error.type ===
+                "peer-unavailable"
+            ) {
+
+                mensagem.textContent =
+                    "❌ Sala não encontrada. Confira o código.";
+
+            }
+
+            else if (
+                error.type ===
+                "network"
+            ) {
+
+                mensagem.textContent =
+                    "❌ Problema de internet. Verifique sua conexão.";
+
+            }
+
+            else {
+
+                mensagem.textContent =
+                    "❌ Erro de conexão: " +
+                    error.type;
+
+            }
+
+        }
+    );
+
+
+    peer.on(
+        "disconnected",
+        function() {
+
+            console.log(
+                "Conexão PeerJS perdida."
+            );
+
+        }
+    );
 
 }
 
@@ -1005,7 +1005,9 @@ function criarSala() {
 
     if (!nome) {
 
-        alert("Digite seu nome primeiro.");
+        alert(
+            "Digite seu nome primeiro."
+        );
 
         return;
 
@@ -1018,12 +1020,13 @@ function criarSala() {
     roomCode =
         "racismo-" +
         Math.random()
-            .toString(36)
-            .substring(2,8)
-            .toUpperCase();
+        .toString(36)
+        .substring(2,8)
+        .toUpperCase();
 
 
     players = [];
+
 
     players.push(
         novoJogador(nome)
@@ -1033,6 +1036,12 @@ function criarSala() {
     meuJogador = 0;
 
 
+    document.getElementById(
+        "lobbyMessage"
+    ).textContent =
+        "⏳ Criando sala...";
+
+
     criarPeer(
         roomCode,
         function() {
@@ -1040,13 +1049,14 @@ function criarSala() {
             document.getElementById(
                 "roomCodeDisplay"
             ).textContent =
-                "Sala: " + roomCode;
+                "Sala: " +
+                roomCode;
 
 
             document.getElementById(
                 "lobbyMessage"
             ).textContent =
-                "Você é o administrador da sala. Compartilhe o código!";
+                "✅ Sala criada! Compartilhe o código com os outros jogadores.";
 
 
             document.getElementById(
@@ -1059,9 +1069,6 @@ function criarSala() {
 
         }
     );
-
-
-    peer.on("connection", receberConexao);
 
 }
 
@@ -1076,6 +1083,11 @@ function mostrarEntradaSala() {
         "joinArea"
     ).style.display =
         "block";
+
+
+    document.getElementById(
+        "roomInput"
+    ).focus();
 
 }
 
@@ -1114,6 +1126,12 @@ function entrarSala() {
     roomCode = codigo;
 
 
+    document.getElementById(
+        "lobbyMessage"
+    ).textContent =
+        "⏳ Procurando a sala...";
+
+
     criarPeer(
         undefined,
         function() {
@@ -1139,7 +1157,7 @@ function entrarSala() {
 
 
 /* =====================================================
-   CONFIGURAR CLIENTE
+   CLIENTE
 ===================================================== */
 
 function configurarConexaoCliente(
@@ -1151,99 +1169,142 @@ function configurarConexaoCliente(
         connection;
 
 
-    connection.on("open", function() {
+    connection.on(
+        "open",
+        function() {
 
-        connection.send({
+            connection.send({
 
-            tipo: "entrar",
+                tipo:
+                "entrar",
 
-            nome: nome
+                nome:
+                nome
 
-        });
-
-
-        document.getElementById(
-            "lobbyMessage"
-        ).textContent =
-            "✅ Conectado à sala. Aguardando...";
-
-    });
+            });
 
 
-    connection.on("data", function(data) {
+            document.getElementById(
+                "lobbyMessage"
+            ).textContent =
+                "✅ Conectado à sala! Aguardando o administrador iniciar.";
 
-        receberMensagem(data);
-
-    });
-
-
-    connection.on("close", function() {
-
-        alert(
-            "O administrador encerrou a conexão."
-        );
-
-        location.reload();
-
-    });
+        }
+    );
 
 
-    connection.on("error", function() {
+    connection.on(
+        "data",
+        function(data) {
 
-        document.getElementById(
-            "lobbyMessage"
-        ).textContent =
-            "❌ Não foi possível entrar na sala.";
+            receberMensagem(
+                data
+            );
 
-    });
+        }
+    );
+
+
+    connection.on(
+        "close",
+        function() {
+
+            alert(
+                "O administrador encerrou a conexão."
+            );
+
+            location.reload();
+
+        }
+    );
+
+
+    connection.on(
+        "error",
+        function(error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "lobbyMessage"
+            ).textContent =
+                "❌ Não foi possível entrar na sala.";
+
+        }
+    );
 
 }
 
 
 /* =====================================================
-   RECEBER NOVA CONEXÃO
+   CONEXÃO DO JOGADOR
 ===================================================== */
 
-function receberConexao(connection) {
+function receberConexao(
+    connection
+) {
 
-    connections.push(connection);
+    connections.push(
+        connection
+    );
 
 
-    connection.on("data", function(data) {
+    connection.on(
+        "data",
+        function(data) {
 
-        if (
-            data.tipo === "entrar"
-        ) {
+            if (
+                data.tipo ===
+                "entrar"
+            ) {
 
-            adicionarJogador(
-                connection,
-                data.nome
-            );
+                adicionarJogador(
+                    connection,
+                    data.nome
+                );
+
+            }
+
+
+            else if (
+                data.tipo ===
+                "resposta"
+            ) {
+
+                processarResposta(
+                    connection,
+                    data.resposta
+                );
+
+            }
+
+
+            else if (
+                data.tipo ===
+                "rolar"
+            ) {
+
+                processarPedidoDado(
+                    connection
+                );
+
+            }
 
         }
+    );
 
-        else if (
-            data.tipo === "resposta"
-        ) {
 
-            processarResposta(
-                connection,
-                data.resposta
-            );
+    connection.on(
+        "close",
+        function() {
+
+            connections =
+                connections.filter(
+                    c => c !== connection
+                );
 
         }
-
-    });
-
-
-    connection.on("close", function() {
-
-        connections =
-            connections.filter(
-                c => c !== connection
-            );
-
-    });
+    );
 
 }
 
@@ -1264,7 +1325,8 @@ function adicionarJogador(
 
         connection.send({
 
-            tipo: "lotado"
+            tipo:
+            "lotado"
 
         });
 
@@ -1281,7 +1343,9 @@ function adicionarJogador(
         players.length;
 
 
-    players.push(jogador);
+    players.push(
+        jogador
+    );
 
 
     connection.playerIndex =
@@ -1290,11 +1354,14 @@ function adicionarJogador(
 
     connection.send({
 
-        tipo: "entrada",
+        tipo:
+        "entrada",
 
-        index: index,
+        index:
+        index,
 
-        players: players
+        players:
+        players
 
     });
 
@@ -1307,7 +1374,7 @@ function adicionarJogador(
 
 
 /* =====================================================
-   ATUALIZAR LOBBY
+   LOBBY
 ===================================================== */
 
 function atualizarLobby() {
@@ -1323,18 +1390,31 @@ function atualizarLobby() {
 
 
     players.forEach(
-        (player, index) => {
+        function(player,index) {
 
             div.innerHTML +=
-                `${player.cor.emoji}
-                 ${player.nome}
-                 ${index === 0 ? "👑" : ""}<br>`;
+
+                player.cor.emoji +
+                " " +
+                player.nome +
+                " " +
+
+                (
+                    index === 0
+                    ? "👑"
+                    : ""
+                ) +
+
+                "<br>";
 
         }
     );
 
 
-    if (players.length >= MAX_JOGADORES) {
+    if (
+        players.length >=
+        MAX_JOGADORES
+    ) {
 
         div.innerHTML +=
             "<br>🔴 Sala cheia.";
@@ -1345,14 +1425,16 @@ function atualizarLobby() {
 
 
 /* =====================================================
-   INICIAR JOGO
+   INICIAR
 ===================================================== */
 
 function iniciarJogo() {
 
     if (!isHost) return;
 
-    if (players.length < 1) return;
+    if (
+        players.length < 1
+    ) return;
 
 
     jogoIniciado = true;
@@ -1361,6 +1443,9 @@ function iniciarJogo() {
 
     tempoRestante =
         TEMPO_TOTAL;
+
+    movimentoEmAndamento =
+        false;
 
 
     document.getElementById(
@@ -1387,7 +1472,7 @@ function iniciarJogo() {
 
 
 /* =====================================================
-   RECEBER ENTRADA DO CLIENTE
+   RECEBER MENSAGENS
 ===================================================== */
 
 function receberMensagem(data) {
@@ -1395,7 +1480,10 @@ function receberMensagem(data) {
     if (!data) return;
 
 
-    if (data.tipo === "entrada") {
+    if (
+        data.tipo ===
+        "entrada"
+    ) {
 
         meuJogador =
             data.index;
@@ -1403,15 +1491,18 @@ function receberMensagem(data) {
         players =
             data.players;
 
+
         document.getElementById(
             "lobby"
         ).style.display =
             "none";
 
+
         document.getElementById(
             "game"
         ).style.display =
             "block";
+
 
         criarTabuleiro();
 
@@ -1422,7 +1513,10 @@ function receberMensagem(data) {
     }
 
 
-    if (data.tipo === "estado") {
+    if (
+        data.tipo ===
+        "estado"
+    ) {
 
         players =
             data.players;
@@ -1440,7 +1534,8 @@ function receberMensagem(data) {
         if (
             document.getElementById(
                 "game"
-            ).style.display === "none"
+            ).style.display ===
+            "none"
         ) {
 
             document.getElementById(
@@ -1448,10 +1543,12 @@ function receberMensagem(data) {
             ).style.display =
                 "none";
 
+
             document.getElementById(
                 "game"
             ).style.display =
                 "block";
+
 
             criarTabuleiro();
 
@@ -1465,19 +1562,32 @@ function receberMensagem(data) {
     }
 
 
-    if (data.tipo === "passo") {
+    if (
+        data.tipo ===
+        "dado"
+    ) {
 
-        players =
-            data.players;
+        movimentoEmAndamento =
+            true;
 
-        atualizarTudo();
+
+        atualizarBotao();
+
+
+        executarMovimentoRemoto(
+            data.playerIndex,
+            data.resultado
+        );
 
         return;
 
     }
 
 
-    if (data.tipo === "pergunta") {
+    if (
+        data.tipo ===
+        "pergunta"
+    ) {
 
         mostrarPergunta(
             data.pergunta,
@@ -1489,17 +1599,22 @@ function receberMensagem(data) {
     }
 
 
-    if (data.tipo === "fim") {
+    if (
+        data.tipo ===
+        "fim"
+    ) {
 
         players =
             data.players;
 
         atualizarTudo();
 
+
         document.getElementById(
             "message"
         ).textContent =
             data.mensagem;
+
 
         document.getElementById(
             "rollButton"
@@ -1511,7 +1626,10 @@ function receberMensagem(data) {
     }
 
 
-    if (data.tipo === "lotado") {
+    if (
+        data.tipo ===
+        "lotado"
+    ) {
 
         alert(
             "❌ A sala já possui 11 jogadores."
@@ -1525,7 +1643,7 @@ function receberMensagem(data) {
 
 
 /* =====================================================
-   ENVIAR ESTADO
+   ESTADO
 ===================================================== */
 
 function enviarEstado() {
@@ -1535,21 +1653,26 @@ function enviarEstado() {
 
     const mensagem = {
 
-        tipo: "estado",
+        tipo:
+        "estado",
 
-        players: players,
+        players:
+        players,
 
-        currentPlayer: currentPlayer,
+        currentPlayer:
+        currentPlayer,
 
-        jogoIniciado: jogoIniciado,
+        jogoIniciado:
+        jogoIniciado,
 
-        tempoRestante: tempoRestante
+        tempoRestante:
+        tempoRestante
 
     };
 
 
     connections.forEach(
-        connection => {
+        function(connection) {
 
             if (
                 connection.open
@@ -1568,7 +1691,7 @@ function enviarEstado() {
 
 
 /* =====================================================
-   ATUALIZAR TUDO
+   ATUALIZAR
 ===================================================== */
 
 function atualizarTudo() {
@@ -1670,9 +1793,9 @@ function criarTabuleiro() {
         }
 
 
-        cell.innerHTML = `
+        cell.innerHTML =
 
-            <div class="cell-number">
+            `<div class="cell-number">
                 ${i}
             </div>
 
@@ -1680,12 +1803,12 @@ function criarTabuleiro() {
                 ${tipo}
             </div>
 
-            <div id="players-${i}"></div>
-
-        `;
+            <div id="players-${i}"></div>`;
 
 
-        board.appendChild(cell);
+        board.appendChild(
+            cell
+        );
 
     }
 
@@ -1696,7 +1819,7 @@ function criarTabuleiro() {
 
 
 /* =====================================================
-   ATUALIZAR TABULEIRO
+   TABULEIRO — PEÕES
 ===================================================== */
 
 function atualizarTabuleiro() {
@@ -1715,7 +1838,8 @@ function atualizarTabuleiro() {
 
         if (area) {
 
-            area.innerHTML = "";
+            area.innerHTML =
+                "";
 
         }
 
@@ -1723,7 +1847,7 @@ function atualizarTabuleiro() {
 
 
     players.forEach(
-        (player, index) => {
+        function(player,index) {
 
             const area =
                 document.getElementById(
@@ -1756,7 +1880,8 @@ function atualizarTabuleiro() {
 
 
             if (
-                index === currentPlayer
+                index ===
+                currentPlayer
             ) {
 
                 pawn.classList.add(
@@ -1793,7 +1918,7 @@ function atualizarJogadores() {
 
 
     players.forEach(
-        (player, index) => {
+        function(player,index) {
 
             const div =
                 document.createElement(
@@ -1823,7 +1948,8 @@ function atualizarJogadores() {
 
 
             if (
-                index === currentPlayer
+                index ===
+                currentPlayer
             ) {
 
                 div.innerHTML +=
@@ -1843,7 +1969,7 @@ function atualizarJogadores() {
 
 
 /* =====================================================
-   COR DO JOGADOR
+   COR
 ===================================================== */
 
 function atualizarCor() {
@@ -1913,9 +2039,10 @@ function atualizarProgresso() {
 
 
     const porcentagem =
-        ((player.posicao - 1) /
-        (TOTAL_CASAS - 1)) *
-        100;
+        (
+            (player.posicao - 1) /
+            (TOTAL_CASAS - 1)
+        ) * 100;
 
 
     document.getElementById(
@@ -1955,11 +2082,10 @@ function atualizarBotao() {
 
     button.disabled =
 
-        !isHost ||
-
         !jogoIniciado ||
 
-        currentPlayer !== meuJogador ||
+        currentPlayer !==
+        meuJogador ||
 
         movimentoEmAndamento;
 
@@ -1973,7 +2099,7 @@ function atualizarBotao() {
 function animarDado(resultado) {
 
     return new Promise(
-        resolve => {
+        function(resolve) {
 
             const dice =
                 document.getElementById(
@@ -1991,12 +2117,12 @@ function animarDado(resultado) {
 
             const intervalo =
                 setInterval(
-                    () => {
+                    function() {
 
                         dice.textContent =
+
                             Math.floor(
-                                Math.random() *
-                                6
+                                Math.random() * 6
                             ) + 1;
 
 
@@ -2039,16 +2165,22 @@ function animarDado(resultado) {
    ROLAR DADO
 ===================================================== */
 
-async function rollDice() {
-
-    if (!isHost) return;
+function rollDice() {
 
     if (
-        currentPlayer !== meuJogador
+        !jogoIniciado
     ) return;
 
-    if (movimentoEmAndamento)
-        return;
+
+    if (
+        currentPlayer !==
+        meuJogador
+    ) return;
+
+
+    if (
+        movimentoEmAndamento
+    ) return;
 
 
     movimentoEmAndamento =
@@ -2058,10 +2190,95 @@ async function rollDice() {
     atualizarBotao();
 
 
+    if (isHost) {
+
+        const resultado =
+            Math.floor(
+                Math.random() * 6
+            ) + 1;
+
+
+        executarJogadaHost(
+            resultado
+        );
+
+    }
+
+    else {
+
+        if (
+            hostConnection &&
+            hostConnection.open
+        ) {
+
+            hostConnection.send({
+
+                tipo:
+                "rolar"
+
+            });
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   PEDIDO DO DADO AO HOST
+===================================================== */
+
+function processarPedidoDado(
+    connection
+) {
+
+    if (!isHost) return;
+
+
+    if (
+        !jogoIniciado
+    ) return;
+
+
+    if (
+        connection.playerIndex !==
+        currentPlayer
+    ) return;
+
+
+    if (
+        movimentoEmAndamento
+    ) return;
+
+
+    movimentoEmAndamento =
+        true;
+
+
     const resultado =
         Math.floor(
             Math.random() * 6
         ) + 1;
+
+
+    executarJogadaHost(
+        resultado
+    );
+
+}
+
+
+/* =====================================================
+   JOGADA DO HOST
+===================================================== */
+
+async function executarJogadaHost(
+    resultado
+) {
+
+    const playerIndex =
+        currentPlayer;
 
 
     document.getElementById(
@@ -2070,13 +2287,59 @@ async function rollDice() {
         "🎲 O dado está rolando...";
 
 
+    connections.forEach(
+        function(connection) {
+
+            if (
+                connection.open
+            ) {
+
+                connection.send({
+
+                    tipo:
+                    "dado",
+
+                    playerIndex:
+                    playerIndex,
+
+                    resultado:
+                    resultado
+
+                });
+
+            }
+
+        }
+    );
+
+
+    await executarMovimentoRemoto(
+        playerIndex,
+        resultado
+    );
+
+}
+
+
+/* =====================================================
+   MOVIMENTO SINCRONIZADO
+===================================================== */
+
+async function executarMovimentoRemoto(
+    index,
+    resultado
+) {
+
     await animarDado(
         resultado
     );
 
 
     const player =
-        players[currentPlayer];
+        players[index];
+
+
+    if (!player) return;
 
 
     document.getElementById(
@@ -2090,7 +2353,6 @@ async function rollDice() {
         " tirou " +
 
         resultado +
-
         "!";
 
 
@@ -2098,20 +2360,24 @@ async function rollDice() {
 
 
     await moverJogador(
-        currentPlayer,
+        index,
         resultado
     );
 
 
-    await verificarCasa(
-        currentPlayer
-    );
+    if (isHost) {
+
+        await verificarCasa(
+            index
+        );
+
+    }
 
 }
 
 
 /* =====================================================
-   MOVIMENTO CASA POR CASA
+   MOVIMENTO
 ===================================================== */
 
 async function moverJogador(
@@ -2144,7 +2410,12 @@ async function moverJogador(
 
         atualizarTudo();
 
-        enviarEstado();
+
+        if (isHost) {
+
+            enviarEstado();
+
+        }
 
 
         document.getElementById(
@@ -2163,6 +2434,81 @@ async function moverJogador(
     }
 
 }
+
+
+/* =====================================================
+   MOVIMENTO PARA TRÁS
+===================================================== */
+
+async function moverJogadorNegativo(
+    index,
+    casas
+) {
+
+    const player =
+        players[index];
+
+
+    for (
+        let i = 0;
+        i < casas;
+        i++
+    ) {
+
+        if (
+            player.posicao <= 1
+        ) {
+
+            break;
+
+        }
+
+
+        player.posicao--;
+
+
+        atualizarTudo();
+
+
+        if (isHost) {
+
+            enviarEstado();
+
+        }
+
+
+        await esperar(350);
+
+    }
+
+}
+
+
+const moverOriginal =
+    moverJogador;
+
+
+moverJogador =
+async function(index,casas) {
+
+    if (casas < 0) {
+
+        await moverJogadorNegativo(
+            index,
+            Math.abs(casas)
+        );
+
+        return;
+
+    }
+
+
+    await moverOriginal(
+        index,
+        casas
+    );
+
+};
 
 
 /* =====================================================
@@ -2188,7 +2534,6 @@ async function verificarCasa(
         document.getElementById(
             "message"
         ).textContent =
-
             problems[posicao];
 
 
@@ -2200,12 +2545,6 @@ async function verificarCasa(
             -3
         );
 
-
-        /*
-           Movimento negativo
-           tratado abaixo
-        */
-
     }
 
 
@@ -2216,7 +2555,6 @@ async function verificarCasa(
         document.getElementById(
             "message"
         ).textContent =
-
             solutions[posicao];
 
 
@@ -2241,11 +2579,13 @@ async function verificarCasa(
         document.getElementById(
             "message"
         ).textContent =
-
             items[posicao];
 
 
         await esperar(1000);
+
+
+        enviarEstado();
 
     }
 
@@ -2260,10 +2600,11 @@ async function verificarCasa(
 
         perguntaAtual = {
 
-            playerIndex: index,
+            playerIndex:
+            index,
 
             resposta:
-                pergunta.resposta
+            pergunta.resposta
 
         };
 
@@ -2299,82 +2640,6 @@ async function verificarCasa(
 
 
 /* =====================================================
-   MOVIMENTO NEGATIVO
-===================================================== */
-
-async function moverJogadorNegativo(
-    index,
-    casas
-) {
-
-    const player =
-        players[index];
-
-
-    for (
-        let i = 0;
-        i < casas;
-        i++
-    ) {
-
-        if (
-            player.posicao <= 1
-        ) {
-
-            break;
-
-        }
-
-
-        player.posicao--;
-
-
-        atualizarTudo();
-
-        enviarEstado();
-
-
-        await esperar(350);
-
-    }
-
-}
-
-
-/* =====================================================
-   CORREÇÃO PARA MOVIMENTOS NEGATIVOS
-===================================================== */
-
-const moverOriginal =
-    moverJogador;
-
-
-moverJogador = async function(
-    index,
-    casas
-) {
-
-    if (casas < 0) {
-
-        await moverJogadorNegativo(
-            index,
-            Math.abs(casas)
-        );
-
-        return;
-
-    }
-
-
-    await moverOriginal(
-        index,
-        casas
-    );
-
-};
-
-
-/* =====================================================
    PERGUNTA
 ===================================================== */
 
@@ -2385,17 +2650,20 @@ function enviarPergunta(
 
     const mensagem = {
 
-        tipo: "pergunta",
+        tipo:
+        "pergunta",
 
-        pergunta: texto,
+        pergunta:
+        texto,
 
-        playerIndex: playerIndex
+        playerIndex:
+        playerIndex
 
     };
 
 
     connections.forEach(
-        connection => {
+        function(connection) {
 
             if (
                 connection.open
@@ -2443,8 +2711,11 @@ function mostrarPergunta(
         document.getElementById(
             "message"
         ).textContent =
+
             "❓ " +
+
             players[playerIndex].nome +
+
             " está respondendo uma pergunta.";
 
         return;
@@ -2460,7 +2731,8 @@ function mostrarPergunta(
 
     document.getElementById(
         "answerInput"
-    ).value = "";
+    ).value =
+        "";
 
 
     document.getElementById(
@@ -2477,7 +2749,7 @@ function mostrarPergunta(
 
 
 /* =====================================================
-   ENVIAR RESPOSTA
+   RESPOSTA
 ===================================================== */
 
 function enviarResposta() {
@@ -2511,13 +2783,22 @@ function enviarResposta() {
 
     else {
 
-        hostConnection.send({
+        if (
+            hostConnection &&
+            hostConnection.open
+        ) {
 
-            tipo: "resposta",
+            hostConnection.send({
 
-            resposta: resposta
+                tipo:
+                "resposta",
 
-        });
+                resposta:
+                resposta
+
+            });
+
+        }
 
     }
 
@@ -2541,6 +2822,17 @@ async function processarResposta(
 
     const playerIndex =
         perguntaAtual.playerIndex;
+
+
+    if (
+        connection &&
+        connection.playerIndex !==
+        playerIndex
+    ) {
+
+        return;
+
+    }
 
 
     const player =
@@ -2586,6 +2878,7 @@ async function processarResposta(
             player.nome +
 
             " permanece na casa.";
+
 
         await esperar(900);
 
@@ -2685,7 +2978,7 @@ function finalizarVitoria(
 
         vencedor.nome +
 
-        " venceu o jogo! " +
+        " venceu o jogo!\n\n" +
 
         vencedor.cor.emoji +
 
@@ -2711,7 +3004,7 @@ function finalizarVitoria(
     if (isHost) {
 
         connections.forEach(
-            connection => {
+            function(connection) {
 
                 if (
                     connection.open
@@ -2719,13 +3012,14 @@ function finalizarVitoria(
 
                     connection.send({
 
-                        tipo: "fim",
+                        tipo:
+                        "fim",
 
                         mensagem:
-                            mensagem,
+                        mensagem,
 
                         players:
-                            players
+                        players
 
                     });
 
@@ -2739,7 +3033,9 @@ function finalizarVitoria(
 
     if (timer) {
 
-        clearInterval(timer);
+        clearInterval(
+            timer
+        );
 
     }
 
@@ -2757,17 +3053,20 @@ function iniciarCronometro() {
 
     if (timer) {
 
-        clearInterval(timer);
+        clearInterval(
+            timer
+        );
 
     }
 
 
     timer =
         setInterval(
-            () => {
+            function() {
 
-                if (!jogoIniciado)
-                    return;
+                if (
+                    !jogoIniciado
+                ) return;
 
 
                 tempoRestante--;
@@ -2799,7 +3098,7 @@ function iniciarCronometro() {
 
 
 /* =====================================================
-   TIMER VISUAL
+   TIMER
 ===================================================== */
 
 function atualizarTimerVisual() {
@@ -2819,18 +3118,18 @@ function atualizarTimerVisual() {
     ).textContent =
 
         String(minutos)
-            .padStart(2,"0") +
+        .padStart(2,"0") +
 
         ":" +
 
         String(segundos)
-            .padStart(2,"0");
+        .padStart(2,"0");
 
 }
 
 
 /* =====================================================
-   FIM PELO TEMPO
+   FIM POR TEMPO
 ===================================================== */
 
 function finalizarPorTempo() {
@@ -2840,7 +3139,7 @@ function finalizarPorTempo() {
 
 
     players.forEach(
-        player => {
+        function(player) {
 
             if (
                 player.posicao >
@@ -2896,7 +3195,7 @@ function finalizarPorTempo() {
 
 
     connections.forEach(
-        connection => {
+        function(connection) {
 
             if (
                 connection.open
@@ -2904,13 +3203,14 @@ function finalizarPorTempo() {
 
                 connection.send({
 
-                    tipo: "fim",
+                    tipo:
+                    "fim",
 
                     mensagem:
-                        mensagem,
+                    mensagem,
 
                     players:
-                        players
+                    players
 
                 });
 
@@ -2930,8 +3230,6 @@ document.getElementById(
     "rollButton"
 ).disabled = true;
 
-
-/* Enter responde pergunta */
 
 document.getElementById(
     "answerInput"
