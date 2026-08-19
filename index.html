@@ -467,7 +467,6 @@ onclick="iniciarJogo()"
 
 </div>
 
-
 <div id="game" style="display:none">
 
 <div id="status">
@@ -509,7 +508,6 @@ Aguardando...
 <div id="board"></div>
 
 </div>
-
 
 <!-- COMO JOGAR -->
 
@@ -665,7 +663,6 @@ Entendi! 👍
 </div>
 </div>
 
-
 <!-- PERGUNTA -->
 
 <div id="questionModal" class="modal">
@@ -680,7 +677,6 @@ Entendi! 👍
 
 </div>
 </div>
-
 
 <!-- ITENS -->
 
@@ -701,7 +697,6 @@ onclick="fecharModal('itemsModal')"
 
 </div>
 </div>
-
 
 <!-- DENÚNCIA -->
 
@@ -739,7 +734,6 @@ style="background:#3157d5;color:white"
 
 </div>
 </div>
-
 
 <!-- PROTEÇÃO -->
 
@@ -784,7 +778,6 @@ style="background:#3157d5;color:white"
 </div>
 </div>
 
-
 <!-- MENSAGEM ESPECIAL -->
 
 <div id="specialModal" class="modal">
@@ -814,7 +807,6 @@ class="specialTimerBar"
 </div>
 </div>
 
-
 <script>
 
 /* =====================================================
@@ -825,7 +817,9 @@ const TOTAL_CASAS = 100;
 const TEMPO_TOTAL = 20 * 60;
 const MAX_JOGADORES = 11;
 
-const TEMPO_MENSAGEM = 1000;
+/* ALTERADO: 10 SEGUNDOS */
+const TEMPO_MENSAGEM = 10000;
+
 const TEMPO_ACAO = 500;
 const TEMPO_PASSO = 220;
 
@@ -1228,7 +1222,6 @@ return;
 
 }
 
-
 peer.on("open",function(idRecebido){
 
 if(callback)
@@ -1236,14 +1229,12 @@ callback(idRecebido);
 
 });
 
-
 peer.on("connection",function(connection){
 
 if(isHost)
 receberConexao(connection);
 
 });
-
 
 peer.on("error",function(error){
 
@@ -1394,13 +1385,11 @@ document.getElementById("lobbyMessage").textContent=
 
 });
 
-
 connection.on("data",function(data){
 
 receberMensagem(data);
 
 });
-
 
 connection.on("close",function(){
 
@@ -1428,7 +1417,6 @@ if(!data)return;
 if(data.tipo==="entrar"){
 
 adicionarJogador(connection,data.nome);
-
 return;
 
 }
@@ -1436,7 +1424,6 @@ return;
 if(data.tipo==="rolar"){
 
 processarPedidoDado(connection);
-
 return;
 
 }
@@ -1444,7 +1431,6 @@ return;
 if(data.tipo==="resposta"){
 
 processarResposta(connection,data.indice);
-
 return;
 
 }
@@ -1452,7 +1438,6 @@ return;
 if(data.tipo==="denuncia"){
 
 processarDenuncia(connection);
-
 return;
 
 }
@@ -1460,7 +1445,6 @@ return;
 if(data.tipo==="passarDenuncia"){
 
 processarPassarDenuncia(connection);
-
 return;
 
 }
@@ -1468,7 +1452,6 @@ return;
 if(data.tipo==="usarArvore"){
 
 processarItem(connection,"arvore");
-
 return;
 
 }
@@ -1476,7 +1459,6 @@ return;
 if(data.tipo==="usarAgua"){
 
 processarItem(connection,"agua");
-
 return;
 
 }
@@ -1484,13 +1466,11 @@ return;
 if(data.tipo==="passarProtecao"){
 
 processarPassarProtecao(connection);
-
 return;
 
 }
 
 });
-
 
 connection.on("close",function(){
 
@@ -1636,9 +1616,6 @@ function receberMensagem(data){
 
 if(!data)return;
 
-
-/* ENTRADA */
-
 if(data.tipo==="entrada"){
 
 meuJogador=data.index;
@@ -1654,9 +1631,6 @@ atualizarTudo();
 return;
 
 }
-
-
-/* ESTADO */
 
 if(data.tipo==="estado"){
 
@@ -1688,9 +1662,6 @@ return;
 
 }
 
-
-/* INÍCIO DO MOVIMENTO */
-
 if(data.tipo==="inicioMovimento"){
 
 movimentoEmAndamento=true;
@@ -1710,9 +1681,6 @@ return;
 
 }
 
-
-/* PASSO */
-
 if(data.tipo==="passo"){
 
 const player=
@@ -1730,9 +1698,6 @@ return;
 
 }
 
-
-/* AÇÃO */
-
 if(data.tipo==="acao"){
 
 document.getElementById("message").textContent=
@@ -1741,9 +1706,6 @@ data.texto;
 return;
 
 }
-
-
-/* PERGUNTA */
 
 if(data.tipo==="pergunta"){
 
@@ -1757,9 +1719,6 @@ return;
 
 }
 
-
-/* NOVA TENTATIVA */
-
 if(data.tipo==="novaTentativa"){
 
 mostrarPergunta(
@@ -1772,8 +1731,16 @@ return;
 
 }
 
+if(data.tipo==="mensagemEspecial"){
 
-/* DENÚNCIA */
+mostrarMensagemEspecial(
+data.titulo,
+data.texto
+);
+
+return;
+
+}
 
 if(data.tipo==="escolherDenuncia"){
 
@@ -1788,9 +1755,6 @@ return;
 
 }
 
-
-/* PROTEÇÃO */
-
 if(data.tipo==="escolherProtecao"){
 
 if(data.playerIndex===meuJogador){
@@ -1802,23 +1766,6 @@ mostrarModalProtecao();
 return;
 
 }
-
-
-/* MENSAGEM */
-
-if(data.tipo==="mensagemEspecial"){
-
-mostrarMensagemEspecial(
-data.titulo,
-data.texto
-);
-
-return;
-
-}
-
-
-/* NOVO TURNO */
 
 if(data.tipo==="novoTurno"){
 
@@ -1837,9 +1784,6 @@ players[currentPlayer].nome;
 return;
 
 }
-
-
-/* FIM */
 
 if(data.tipo==="fim"){
 
@@ -1860,9 +1804,6 @@ return;
 
 }
 
-
-/* LOTADO */
-
 if(data.tipo==="lotado"){
 
 alert("❌ A sala já possui 11 jogadores.");
@@ -1872,9 +1813,6 @@ location.reload();
 return;
 
 }
-
-
-/* JOGO EM ANDAMENTO */
 
 if(data.tipo==="jogoEmAndamento"){
 
@@ -2270,14 +2208,11 @@ resolve();
 
 function rollDice(){
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
-if(currentPlayer!==meuJogador)
-return;
+if(currentPlayer!==meuJogador)return;
 
-if(movimentoEmAndamento)
-return;
+if(movimentoEmAndamento)return;
 
 movimentoEmAndamento=true;
 
@@ -2308,11 +2243,9 @@ tipo:"rolar"
 
 function processarPedidoDado(connection){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
 if(connection.playerIndex!==currentPlayer)
 return;
@@ -2336,8 +2269,7 @@ processarRolagemHost(resultado);
 
 async function processarRolagemHost(resultado){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
 if(resultado===0){
 
@@ -2373,13 +2305,11 @@ resultado:resultado
 
 await animarDado(resultado);
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
 await moverJogadorHost(index,resultado);
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
 await resolverCasa(index);
 
@@ -2387,7 +2317,7 @@ await resolverCasa(index);
 
 
 /* =====================================================
-   MOVIMENTO DO DADO
+   MOVIMENTO
 ===================================================== */
 
 async function moverJogadorHost(index,casas){
@@ -2397,8 +2327,7 @@ players[index];
 
 for(let i=0;i<casas;i++){
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
 if(player.posicao>=TOTAL_CASAS)
 break;
@@ -2445,8 +2374,7 @@ casas>=0?1:-1;
 
 for(let i=0;i<Math.abs(casas);i++){
 
-if(!jogoIniciado)
-return;
+if(!jogoIniciado)return;
 
 if(direcao>0){
 
@@ -2486,16 +2414,14 @@ await esperar(TEMPO_PASSO);
 
 
 /* =====================================================
-   RESOLVER CASA
+   RESOLVER CASA — CORRIGIDO
 ===================================================== */
 
 async function resolverCasa(index){
 
-const player=
-players[index];
+const player=players[index];
 
-if(!player)
-return;
+if(!player)return;
 
 
 /* VITÓRIA */
@@ -2503,25 +2429,50 @@ return;
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
-
 return;
 
 }
 
 
-/* PROBLEMA */
+/* =====================================================
+   PROBLEMA
+===================================================== */
 
 if(problems[player.posicao]){
 
-enviarMensagemEspecialTodos(
+const textoProblema=
+problems[player.posicao];
+
+enviarTodos({
+
+tipo:"mensagemEspecial",
+
+titulo:"⚠️ Problema ambiental",
+
+texto:textoProblema
+
+});
+
+if(isHost){
+
+mostrarMensagemEspecial(
 "⚠️ Problema ambiental",
-problems[player.posicao]
+textoProblema
 );
+
+}
 
 await esperar(TEMPO_MENSAGEM);
 
-if(player.itens.arvore>0||
-player.itens.agua>0){
+if(!jogoIniciado)return;
+
+
+/* PROTEÇÃO */
+
+if(
+player.itens.arvore>0||
+player.itens.agua>0
+){
 
 protecaoAtual=index;
 
@@ -2550,26 +2501,43 @@ return;
 }
 
 
-/* SOLUÇÃO */
+/* =====================================================
+   SOLUÇÃO
+===================================================== */
 
 if(solutions[player.posicao]){
 
-enviarMensagemEspecialTodos(
+const textoSolucao=
+solutions[player.posicao];
 
+enviarTodos({
+
+tipo:"mensagemEspecial",
+
+titulo:"✅ Solução",
+
+texto:textoSolucao
+
+});
+
+if(isHost){
+
+mostrarMensagemEspecial(
 "✅ Solução",
-
-solutions[player.posicao]
-
+textoSolucao
 );
 
+}
+
 await esperar(TEMPO_MENSAGEM);
+
+if(!jogoIniciado)return;
 
 await moverEfeitoHost(index,3);
 
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
-
 return;
 
 }
@@ -2581,7 +2549,9 @@ return;
 }
 
 
-/* ITEM */
+/* =====================================================
+   ITEM
+===================================================== */
 
 if(items[player.posicao]){
 
@@ -2590,23 +2560,39 @@ items[player.posicao];
 
 darItem(player,item.nome);
 
-enviarMensagemEspecialTodos(
+enviarEstado();
 
-"🎁 Item encontrado!",
-
+const textoItem=
 player.nome+
 " encontrou "+
 item.emoji+
 " "+
 item.nome+
 "!\n\n"+
-item.descricao
+item.descricao;
 
+enviarTodos({
+
+tipo:"mensagemEspecial",
+
+titulo:"🎁 Item encontrado!",
+
+texto:textoItem
+
+});
+
+if(isHost){
+
+mostrarMensagemEspecial(
+"🎁 Item encontrado!",
+textoItem
 );
 
-enviarEstado();
+}
 
 await esperar(TEMPO_MENSAGEM);
+
+if(!jogoIniciado)return;
 
 terminarAcao();
 
@@ -2615,7 +2601,9 @@ return;
 }
 
 
-/* PERGUNTA */
+/* =====================================================
+   PERGUNTA
+===================================================== */
 
 if(questions[player.posicao]){
 
@@ -2676,30 +2664,6 @@ terminarAcao();
 
 
 /* =====================================================
-   MENSAGEM ESPECIAL
-===================================================== */
-
-function enviarMensagemEspecialTodos(titulo,texto){
-
-enviarTodos({
-
-tipo:"mensagemEspecial",
-
-titulo:titulo,
-
-texto:texto
-
-});
-
-mostrarMensagemEspecial(
-titulo,
-texto
-);
-
-}
-
-
-/* =====================================================
    PENALIDADE
 ===================================================== */
 
@@ -2723,27 +2687,18 @@ terminarAcao();
 
 
 /* =====================================================
-   TERMINAR AÇÃO / PASSAR TURNO
+   TERMINAR AÇÃO
 ===================================================== */
 
 function terminarAcao(){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
 perguntaAtual=null;
 
 protecaoAtual=null;
 
 movimentoEmAndamento=false;
-
-
-/*
-   CORREÇÃO PRINCIPAL DE SINCRONIZAÇÃO:
-
-   O jogador só muda depois que TODA a ação
-   do jogador atual terminou.
-*/
 
 currentPlayer++;
 
@@ -2860,11 +2815,9 @@ indice:indice
 
 async function processarResposta(connection,indice){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(!perguntaAtual)
-return;
+if(!perguntaAtual)return;
 
 const index=
 perguntaAtual.playerIndex;
@@ -2882,8 +2835,7 @@ players[index];
 const pergunta=
 questions[player.posicao];
 
-if(!pergunta)
-return;
+if(!pergunta)return;
 
 const correta=
 indice===pergunta.correta;
@@ -2897,13 +2849,22 @@ player.acertos++;
 
 perguntaAtual=null;
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"🎉 Resposta correta!",
+tipo:"mensagemEspecial",
 
+titulo:"🎉 Resposta correta!",
+
+texto:
 player.nome+
 " respondeu corretamente e avançará 2 casas!"
 
+});
+
+mostrarMensagemEspecial(
+"🎉 Resposta correta!",
+player.nome+
+" respondeu corretamente e avançará 2 casas!"
 );
 
 enviarEstado();
@@ -2915,7 +2876,6 @@ await moverEfeitoHost(index,2);
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
-
 return;
 
 }
@@ -2929,13 +2889,22 @@ return;
 
 /* ERRO */
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"❌ Resposta incorreta",
+tipo:"mensagemEspecial",
 
+titulo:"❌ Resposta incorreta",
+
+texto:
 player.nome+
 " errou a pergunta e permanece na casa."
 
+});
+
+mostrarMensagemEspecial(
+"❌ Resposta incorreta",
+player.nome+
+" errou a pergunta e permanece na casa."
 );
 
 await esperar(TEMPO_MENSAGEM);
@@ -2972,19 +2941,17 @@ terminarAcao();
 
 
 /* =====================================================
-   USAR DENÚNCIA
+   DENÚNCIA
 ===================================================== */
 
 function usarDenuncia(){
 
-if(!perguntaAtual)
-return;
+if(!perguntaAtual)return;
 
 const index=
 perguntaAtual.playerIndex;
 
-if(index!==meuJogador)
-return;
+if(index!==meuJogador)return;
 
 document.getElementById("denunciaChoice").style.display=
 "none";
@@ -3004,23 +2971,17 @@ tipo:"denuncia"
 }
 
 
-/* =====================================================
-   PASSAR DENÚNCIA
-===================================================== */
-
 function passarDenuncia(){
 
 document.getElementById("denunciaChoice").style.display=
 "none";
 
-if(!perguntaAtual)
-return;
+if(!perguntaAtual)return;
 
 const index=
 perguntaAtual.playerIndex;
 
-if(index!==meuJogador)
-return;
+if(index!==meuJogador)return;
 
 if(isHost){
 
@@ -3037,17 +2998,11 @@ tipo:"passarDenuncia"
 }
 
 
-/* =====================================================
-   PROCESSAR DENÚNCIA
-===================================================== */
-
 async function processarDenuncia(connection){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(!perguntaAtual)
-return;
+if(!perguntaAtual)return;
 
 const index=
 perguntaAtual.playerIndex;
@@ -3069,13 +3024,22 @@ questions[player.posicao];
 
 enviarEstado();
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"📢 Denúncia utilizada",
+tipo:"mensagemEspecial",
 
+titulo:"📢 Denúncia utilizada",
+
+texto:
 player.nome+
 " terá uma nova tentativa."
 
+});
+
+mostrarMensagemEspecial(
+"📢 Denúncia utilizada",
+player.nome+
+" terá uma nova tentativa."
 );
 
 await esperar(TEMPO_ACAO);
@@ -3112,17 +3076,11 @@ pergunta.opcoes
 }
 
 
-/* =====================================================
-   PASSAR DENÚNCIA
-===================================================== */
-
 function processarPassarDenuncia(connection){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(!perguntaAtual)
-return;
+if(!perguntaAtual)return;
 
 const index=
 perguntaAtual.playerIndex;
@@ -3139,7 +3097,7 @@ terminarAcao();
 
 
 /* =====================================================
-   ABRIR ITENS
+   ITENS
 ===================================================== */
 
 function abrirItens(){
@@ -3155,8 +3113,6 @@ document.getElementById("itemsList");
 
 lista.innerHTML="";
 
-
-/* ÁRVORE */
 
 const arvore=
 document.createElement("div");
@@ -3184,8 +3140,6 @@ arvore.innerHTML+=
 lista.appendChild(arvore);
 
 
-/* DENÚNCIA */
-
 const denuncia=
 document.createElement("div");
 
@@ -3211,8 +3165,6 @@ denuncia.innerHTML+=
 
 lista.appendChild(denuncia);
 
-
-/* ÁGUA */
 
 const agua=
 document.createElement("div");
@@ -3270,7 +3222,7 @@ alert(
 
 
 /* =====================================================
-   MODAL DE PROTEÇÃO
+   PROTEÇÃO
 ===================================================== */
 
 function mostrarModalProtecao(){
@@ -3278,8 +3230,7 @@ function mostrarModalProtecao(){
 const player=
 players[meuJogador];
 
-if(!player)
-return;
+if(!player)return;
 
 const modal=
 document.getElementById("protectionModal");
@@ -3301,10 +3252,6 @@ modal.style.display="flex";
 
 }
 
-
-/* =====================================================
-   USAR ÁRVORE
-===================================================== */
 
 function usarArvore(){
 
@@ -3330,10 +3277,6 @@ tipo:"usarArvore"
 }
 
 
-/* =====================================================
-   USAR ÁGUA
-===================================================== */
-
 function usarAgua(){
 
 fecharModal("protectionModal");
@@ -3357,10 +3300,6 @@ tipo:"usarAgua"
 
 }
 
-
-/* =====================================================
-   NÃO USAR PROTEÇÃO
-===================================================== */
 
 function passarProtecao(){
 
@@ -3390,11 +3329,9 @@ tipo:"passarProtecao"
 
 async function processarItem(connection,tipo){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(protecaoAtual===null)
-return;
+if(protecaoAtual===null)return;
 
 const index=
 protecaoAtual;
@@ -3406,8 +3343,7 @@ return;
 const player=
 players[index];
 
-if(!player)
-return;
+if(!player)return;
 
 
 /* ÁRVORE */
@@ -3421,13 +3357,22 @@ player.itens.arvore--;
 
 protecaoAtual=null;
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"🌳 Proteção utilizada!",
+tipo:"mensagemEspecial",
 
+titulo:"🌳 Proteção utilizada!",
+
+texto:
 player.nome+
 " utilizou uma Árvore e evitou a penalidade."
 
+});
+
+mostrarMensagemEspecial(
+"🌳 Proteção utilizada!",
+player.nome+
+" utilizou uma Árvore e evitou a penalidade."
 );
 
 enviarEstado();
@@ -3452,13 +3397,22 @@ player.itens.agua--;
 
 protecaoAtual=null;
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"💧 Água utilizada!",
+tipo:"mensagemEspecial",
 
+titulo:"💧 Água utilizada!",
+
+texto:
 player.nome+
 " utilizou Água e avançará 2 casas!"
 
+});
+
+mostrarMensagemEspecial(
+"💧 Água utilizada!",
+player.nome+
+" utilizou Água e avançará 2 casas!"
 );
 
 enviarEstado();
@@ -3470,7 +3424,6 @@ await moverEfeitoHost(index,2);
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
-
 return;
 
 }
@@ -3488,11 +3441,9 @@ terminarAcao();
 
 async function processarPassarProtecao(connection){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
-if(protecaoAtual===null)
-return;
+if(protecaoAtual===null)return;
 
 const index=
 protecaoAtual;
@@ -3506,13 +3457,22 @@ protecaoAtual=null;
 const player=
 players[index];
 
-enviarMensagemEspecialTodos(
+enviarTodos({
 
-"⚠️ Penalidade",
+tipo:"mensagemEspecial",
 
+titulo:"⚠️ Penalidade",
+
+texto:
 player.nome+
 " decidiu não usar proteção e perderá 3 casas."
 
+});
+
+mostrarMensagemEspecial(
+"⚠️ Penalidade",
+player.nome+
+" decidiu não usar proteção e perderá 3 casas."
 );
 
 await esperar(TEMPO_ACAO);
@@ -3543,7 +3503,7 @@ player.itens.agua++;
 
 
 /* =====================================================
-   MENSAGEM ESPECIAL
+   MENSAGEM ESPECIAL — 10 SEGUNDOS
 ===================================================== */
 
 function mostrarMensagemEspecial(titulo,texto){
@@ -3579,6 +3539,7 @@ bar.style.width="100%";
 
 modal.style.display="flex";
 
+
 setTimeout(function(){
 
 bar.style.transition=
@@ -3589,6 +3550,7 @@ bar.style.transition=
 bar.style.width="0%";
 
 },50);
+
 
 mensagemEspecialTimer=
 setTimeout(function(){
@@ -3603,7 +3565,7 @@ mensagemEspecialTimer=null;
 
 
 /* =====================================================
-   FECHAR MENSAGEM
+   FECHAR MENSAGEM ESPECIAL
 ===================================================== */
 
 function fecharMensagemEspecial(){
@@ -3616,8 +3578,10 @@ mensagemEspecialTimer=null;
 
 }
 
-document.getElementById("specialModal").style.display=
-"none";
+const modal=
+document.getElementById("specialModal");
+
+modal.style.display="none";
 
 }
 
@@ -3643,8 +3607,7 @@ modal.style.display="none";
 
 function finalizarVitoria(index){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
 const vencedor=
 players[index];
@@ -3696,8 +3659,7 @@ enviarEstado();
 
 function iniciarCronometro(){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
 if(timer)
 clearInterval(timer);
@@ -3756,12 +3718,6 @@ String(segundos).padStart(2,"0");
 
 function compararJogadores(a,b){
 
-/*
-1º posição
-2º itens
-3º respostas corretas
-*/
-
 if(a.posicao!==b.posicao){
 
 return b.posicao-a.posicao;
@@ -3797,8 +3753,7 @@ return 0;
 
 function finalizarPorTempo(){
 
-if(!isHost)
-return;
+if(!isHost)return;
 
 const ranking=
 [...players].sort(compararJogadores);
@@ -3923,4 +3878,4 @@ TOTAL_CASAS+
 </script>
 
 </body>
-    </html>
+   </html>
