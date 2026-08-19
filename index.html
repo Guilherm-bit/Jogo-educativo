@@ -297,7 +297,7 @@ button:disabled{
 
 .closeButton{
     position:absolute;
-    right:10px;
+    right:8px;
     top:5px;
     font-size:25px;
     background:none;
@@ -417,7 +417,7 @@ button:disabled{
 </header>
 
 
-<!-- ================= LOBBY ================= -->
+<!-- LOBBY -->
 
 <div id="lobby">
 
@@ -483,7 +483,7 @@ onclick="iniciarJogo()">
 </div>
 
 
-<!-- ================= JOGO ================= -->
+<!-- JOGO -->
 
 <div id="game" style="display:none">
 
@@ -500,7 +500,7 @@ Aguardando...
 </div>
 
 <div id="progressText">
-Seu progresso: 1 / 80 casas
+Seu progresso: 1 / 100 casas
 </div>
 
 <div id="diceArea">
@@ -512,8 +512,7 @@ Seu progresso: 1 / 80 casas
 </div>
 
 <button
-id="rollButton"
-onclick="rollDice">
+id="rollButton">
 🎲 Rolar dado
 </button>
 
@@ -536,7 +535,7 @@ Aguardando...
 </div>
 
 
-<!-- ================= COMO JOGAR ================= -->
+<!-- COMO JOGAR -->
 
 <div id="howToModal" class="modal">
 
@@ -551,17 +550,18 @@ onclick="fecharModal('howToModal')">
 <h2>📖 Como jogar</h2>
 
 <p>
-O objetivo é chegar primeiro à <b>casa 80</b>.
+🏁 <b>Objetivo:</b> ser o primeiro jogador a chegar à
+<b>casa 100</b>.
 </p>
 
-<p>
-🎲 Quando chegar sua vez, clique em
-<b>Rolar dado</b>.
-</p>
+<hr>
+
+<h3>🎲 Dado</h3>
 
 <p>
-Seu peão avançará uma casa por vez conforme
-o número sorteado.
+Quando for sua vez, clique em <b>Rolar dado</b>.
+Seu peão anda uma casa por vez de acordo com o número
+sorteado.
 </p>
 
 <hr>
@@ -569,7 +569,8 @@ o número sorteado.
 <h3>🟨 Casa de Pergunta</h3>
 
 <p>
-Você responde uma pergunta de múltipla escolha.
+Você responderá uma pergunta de múltipla escolha sobre
+<b>racismo ambiental</b>.
 </p>
 
 <p>
@@ -578,8 +579,8 @@ Você responde uma pergunta de múltipla escolha.
 </p>
 
 <p>
-Se possuir uma 📢 <b>Denúncia</b>, poderá escolher
-usá-la para tentar novamente.
+Se tiver 📢 <b>Denúncia</b>, poderá utilizá-la para
+tentar responder novamente.
 </p>
 
 <hr>
@@ -587,9 +588,17 @@ usá-la para tentar novamente.
 <h3>🟥 Casa de Problema</h3>
 
 <p>
-Mostra um problema relacionado ao racismo ambiental.
-Você perde <b>3 casas</b>, a menos que use
-🌳 Árvore ou 💧 Água.
+Você verá uma situação relacionada ao racismo ambiental.
+Normalmente perderia <b>3 casas</b>.
+</p>
+
+<p>
+🌳 <b>Árvore:</b> cancela completamente a penalidade.
+</p>
+
+<p>
+💧 <b>Água:</b> em vez de perder 3 casas, você
+<b>avança 2 casas</b>.
 </p>
 
 <hr>
@@ -597,7 +606,8 @@ Você perde <b>3 casas</b>, a menos que use
 <h3>🟩 Casa de Solução</h3>
 
 <p>
-Você avança <b>3 casas</b>.
+Apresenta uma solução relacionada à justiça ambiental.
+Depois disso, você <b>avança 3 casas</b>.
 </p>
 
 <hr>
@@ -605,7 +615,7 @@ Você avança <b>3 casas</b>.
 <h3>🟪 Casa de Item</h3>
 
 <p>
-Você recebe um item para utilizar durante a partida.
+Você recebe um item que poderá utilizar durante a partida.
 </p>
 
 <hr>
@@ -613,9 +623,57 @@ Você recebe um item para utilizar durante a partida.
 <h3>🎁 Itens</h3>
 
 <p>
-🌳 <b>Árvore:</b> protege contra um problema.<br>
-📢 <b>Denúncia:</b> permite tentar novamente uma pergunta errada.<br>
-💧 <b>Água:</b> protege contra um problema.
+🌳 <b>Árvore:</b> evita a penalidade de um problema.<br><br>
+
+💧 <b>Água:</b> quando você cair em um problema,
+permite avançar 2 casas em vez de perder 3.<br><br>
+
+📢 <b>Denúncia:</b> depois de errar uma pergunta,
+permite uma nova tentativa.
+</p>
+
+<hr>
+
+<h3>⏱️ Tempo</h3>
+
+<p>
+A partida possui <b>20 minutos</b>.
+</p>
+
+<p>
+Se alguém chegar à casa 100 antes do tempo acabar,
+essa pessoa vence imediatamente.
+</p>
+
+<hr>
+
+<h3>🏆 Se o tempo acabar</h3>
+
+<p>
+O vencedor será definido nesta ordem:
+</p>
+
+<p>
+<b>1º:</b> quem estiver na casa mais avançada.<br>
+<b>2º:</b> se empatar na posição, quem tiver
+mais itens.<br>
+<b>3º:</b> se ainda empatar, quem tiver mais
+respostas corretas.<br>
+<b>4º:</b> se continuar tudo igual, haverá
+<b>empate</b>.
+</p>
+
+<hr>
+
+<h3>🤝 Multiplayer</h3>
+
+<p>
+Cada jogador pode entrar pelo seu próprio celular usando
+o código da mesma sala.
+</p>
+
+<p>
+O jogador que criar a sala será o administrador da partida.
 </p>
 
 <button
@@ -628,7 +686,7 @@ Entendi! 👍
 </div>
 
 
-<!-- ================= PERGUNTA ================= -->
+<!-- PERGUNTA -->
 
 <div id="questionModal" class="modal">
 
@@ -644,7 +702,7 @@ Entendi! 👍
 </div>
 
 
-<!-- ================= ITENS ================= -->
+<!-- ITENS -->
 
 <div id="itemsModal" class="modal">
 
@@ -664,11 +722,17 @@ onclick="fecharModal('itemsModal')">
 </div>
 
 
-<!-- ================= DENÚNCIA ================= -->
+<!-- DENÚNCIA -->
 
 <div id="denunciaChoice" class="modal">
 
 <div class="modalBox">
+
+<button
+class="closeButton"
+onclick="passarDenuncia()">
+✕
+</button>
 
 <h2>📢 Você errou!</h2>
 
@@ -693,20 +757,22 @@ style="background:#3157d5;color:white">
 </div>
 
 
-<!-- ================= PROTEÇÃO ================= -->
+<!-- PROTEÇÃO -->
 
 <div id="protectionModal" class="modal">
 
 <div class="modalBox">
 
+<button
+class="closeButton"
+onclick="passarProtecao()">
+✕
+</button>
+
 <h2>⚠️ Problema ambiental</h2>
 
 <p>
-Você possui um item que pode evitar a penalidade.
-</p>
-
-<p>
-Escolha se deseja utilizar uma proteção.
+Você possui um item que pode alterar o resultado.
 </p>
 
 <button
@@ -731,7 +797,7 @@ style="background:#3157d5;color:white">
 </div>
 
 
-<!-- ================= MENSAGEM ================= -->
+<!-- MENSAGEM -->
 
 <div id="specialModal" class="modal">
 
@@ -766,9 +832,18 @@ class="specialTimerBar">
    CONFIGURAÇÕES
 ===================================================== */
 
-const TOTAL_CASAS = 80;
+const TOTAL_CASAS = 100;
 const TEMPO_TOTAL = 20 * 60;
 const MAX_JOGADORES = 11;
+
+/*
+   As esperas foram reduzidas para deixar o jogo
+   mais rápido entre uma ação e outra.
+*/
+
+const TEMPO_MENSAGEM = 1000;
+const TEMPO_ACAO = 500;
+const TEMPO_PASSO = 220;
 
 
 /* =====================================================
@@ -784,7 +859,7 @@ let meuJogador = -1;
 
 
 /* =====================================================
-   ESTADO DO JOGO
+   ESTADO
 ===================================================== */
 
 let players = [];
@@ -829,7 +904,6 @@ function novoJogador(nome){
 return{
 
 nome:nome,
-
 posicao:1,
 
 itens:{
@@ -837,6 +911,8 @@ arvore:0,
 denuncia:0,
 agua:0
 },
+
+acertos:0,
 
 cor:colors[players.length]
 
@@ -846,26 +922,32 @@ cor:colors[players.length]
 
 
 /* =====================================================
-   PROBLEMAS
+   PROBLEMAS — 100 CASAS
 ===================================================== */
 
 const problems = {
 
-7:"⚠️ Uma comunidade periférica sofre com enchentes frequentes porque a região tem pouca infraestrutura de drenagem.",
+7:"⚠️ Uma comunidade periférica sofre com enchentes frequentes por falta de infraestrutura adequada.",
 
-16:"⚠️ Um bairro recebe mais poluição de uma atividade industrial próxima e tem pouca fiscalização ambiental.",
+16:"⚠️ Uma região vulnerável recebe mais poluição de uma atividade industrial próxima.",
 
 25:"⚠️ Uma comunidade enfrenta descarte irregular de resíduos e coleta de lixo insuficiente.",
 
 34:"⚠️ Moradores de uma área vulnerável têm dificuldade de acesso à água potável.",
 
-43:"⚠️ Uma região vulnerável sofre com alagamentos e falta de políticas públicas de prevenção.",
+43:"⚠️ Uma comunidade sofre com alagamentos e falta de políticas públicas de prevenção.",
 
-52:"⚠️ Uma comunidade é afetada pela poluição de um rio usado para atividades do dia a dia.",
+52:"⚠️ Um rio utilizado pela comunidade está sendo contaminado por poluição.",
 
-61:"⚠️ O acesso desigual a saneamento básico aumenta os riscos ambientais para moradores de uma comunidade.",
+61:"⚠️ O acesso desigual ao saneamento aumenta os riscos ambientais para moradores.",
 
-70:"⚠️ Uma população vulnerável é exposta a riscos ambientais sem participação suficiente nas decisões."
+70:"⚠️ Uma população vulnerável é exposta a riscos ambientais sem participação suficiente nas decisões.",
+
+79:"⚠️ A falta de áreas verdes aumenta o calor e prejudica a qualidade de vida da comunidade.",
+
+88:"⚠️ Uma comunidade vive próxima a uma área de descarte de resíduos sem infraestrutura adequada.",
+
+96:"⚠️ Moradores enfrentam problemas ambientais enquanto recebem pouca atenção do poder público."
 
 };
 
@@ -878,7 +960,7 @@ const solutions = {
 
 11:"✅ Investir em saneamento básico ajuda a reduzir desigualdades ambientais.",
 
-20:"✅ Fiscalização ambiental pode reduzir impactos de atividades poluidoras.",
+20:"✅ Fiscalização ambiental pode reduzir os impactos de atividades poluidoras.",
 
 29:"✅ A coleta regular de resíduos ajuda a proteger comunidades e o meio ambiente.",
 
@@ -888,9 +970,13 @@ const solutions = {
 
 56:"✅ A participação das comunidades nas decisões ambientais fortalece a justiça ambiental.",
 
-65:"✅ Distribuir investimentos públicos de forma justa ajuda a reduzir desigualdades ambientais.",
+65:"✅ Distribuir investimentos públicos de forma justa ajuda a reduzir desigualdades.",
 
-74:"✅ Educação ambiental e participação social ajudam comunidades a defender seus direitos."
+74:"✅ Educação ambiental e participação social ajudam comunidades a defender seus direitos.",
+
+83:"✅ Criar e preservar áreas verdes pode melhorar a qualidade ambiental das comunidades.",
+
+92:"✅ Ouvir as comunidades afetadas é essencial para construir políticas ambientais justas."
 
 };
 
@@ -924,12 +1010,12 @@ correta:1
 },
 
 22:{
-pergunta:"Qual destes é um problema ambiental que pode atingir comunidades de forma desigual?",
+pergunta:"Qual destes pode ser um problema ambiental distribuído de maneira desigual entre comunidades?",
 opcoes:[
 "Poluição.",
-"Esporte.",
 "Música.",
-"Literatura."
+"Literatura.",
+"Esporte."
 ],
 correta:0
 },
@@ -949,9 +1035,9 @@ correta:2
 pergunta:"O que pode acontecer quando uma comunidade não possui drenagem adequada?",
 opcoes:[
 "Enchentes.",
-"Mais árvores automaticamente.",
 "Menos chuva.",
-"Mais energia elétrica."
+"Mais energia elétrica.",
+"Mais árvores automaticamente."
 ],
 correta:0
 },
@@ -998,6 +1084,39 @@ opcoes:[
 "Retirar o saneamento."
 ],
 correta:1
+},
+
+85:{
+pergunta:"Qual situação pode representar uma desigualdade ambiental?",
+opcoes:[
+"Todos terem acesso igual aos serviços.",
+"Uma comunidade vulnerável receber menos infraestrutura ambiental.",
+"Todas as regiões terem saneamento adequado.",
+"Todas as comunidades participarem das decisões."
+],
+correta:1
+},
+
+94:{
+pergunta:"Qual atitude contribui para a justiça ambiental?",
+opcoes:[
+"Ouvir as comunidades afetadas.",
+"Ignorar moradores.",
+"Diminuir o saneamento.",
+"Aumentar a poluição."
+],
+correta:0
+},
+
+98:{
+pergunta:"Por que políticas públicas são importantes no combate ao racismo ambiental?",
+opcoes:[
+"Porque podem reduzir desigualdades e garantir direitos.",
+"Porque aumentam os riscos ambientais.",
+"Porque impedem a participação social.",
+"Porque retiram serviços básicos."
+],
+correta:0
 }
 
 };
@@ -1012,7 +1131,7 @@ const items = {
 9:{
 nome:"Árvore",
 emoji:"🌳",
-descricao:"Protege contra uma penalidade de problema."
+descricao:"Protege contra a penalidade de uma casa de problema."
 },
 
 18:{
@@ -1024,13 +1143,13 @@ descricao:"Permite tentar novamente uma pergunta errada."
 27:{
 nome:"Água",
 emoji:"💧",
-descricao:"Protege contra uma penalidade de problema."
+descricao:"Ao cair em um problema, permite avançar 2 casas em vez de perder 3."
 },
 
 36:{
 nome:"Árvore",
 emoji:"🌳",
-descricao:"Protege contra uma penalidade de problema."
+descricao:"Protege contra a penalidade de uma casa de problema."
 },
 
 45:{
@@ -1042,16 +1161,34 @@ descricao:"Permite tentar novamente uma pergunta errada."
 54:{
 nome:"Água",
 emoji:"💧",
-descricao:"Protege contra uma penalidade de problema."
+descricao:"Ao cair em um problema, permite avançar 2 casas em vez de perder 3."
 },
 
 63:{
 nome:"Árvore",
 emoji:"🌳",
-descricao:"Protege contra uma penalidade de problema."
+descricao:"Protege contra a penalidade de uma casa de problema."
 },
 
 72:{
+nome:"Denúncia",
+emoji:"📢",
+descricao:"Permite tentar novamente uma pergunta errada."
+},
+
+81:{
+nome:"Água",
+emoji:"💧",
+descricao:"Ao cair em um problema, permite avançar 2 casas em vez de perder 3."
+},
+
+90:{
+nome:"Árvore",
+emoji:"🌳",
+descricao:"Protege contra a penalidade de uma casa de problema."
+},
+
+97:{
 nome:"Denúncia",
 emoji:"📢",
 descricao:"Permite tentar novamente uma pergunta errada."
@@ -1061,7 +1198,7 @@ descricao:"Permite tentar novamente uma pergunta errada."
 
 
 /* =====================================================
-   UTILITÁRIOS
+   UTILITÁRIO
 ===================================================== */
 
 function esperar(ms){
@@ -1199,7 +1336,7 @@ atualizarLobby();
 
 
 /* =====================================================
-   ENTRAR NA SALA
+   ENTRAR
 ===================================================== */
 
 function mostrarEntradaSala(){
@@ -1282,7 +1419,7 @@ location.reload();
 
 
 /* =====================================================
-   RECEBER CONEXÃO DO JOGADOR
+   CONEXÃO DO JOGADOR
 ===================================================== */
 
 function receberConexao(connection){
@@ -1422,14 +1559,12 @@ player.nome+
 
 
 /* =====================================================
-   INICIAR JOGO
+   INICIAR
 ===================================================== */
 
 function iniciarJogo(){
 
 if(!isHost)return;
-
-if(players.length<1)return;
 
 jogoIniciado=true;
 
@@ -1472,15 +1607,6 @@ players=data.players;
 currentPlayer=data.currentPlayer;
 jogoIniciado=data.jogoIniciado;
 
-if(jogoIniciado){
-
-document.getElementById("lobby").style.display="none";
-document.getElementById("game").style.display="block";
-
-criarTabuleiro();
-
-}
-
 atualizarTudo();
 
 return;
@@ -1495,12 +1621,12 @@ currentPlayer=data.currentPlayer;
 jogoIniciado=data.jogoIniciado;
 tempoRestante=data.tempoRestante;
 
-if(document.getElementById("game").style.display==="none" &&
-jogoIniciado){
+if(jogoIniciado){
 
 document.getElementById("lobby").style.display="none";
 document.getElementById("game").style.display="block";
 
+if(!document.getElementById("board").children.length)
 criarTabuleiro();
 
 }
@@ -1511,8 +1637,6 @@ return;
 
 }
 
-
-/* MOVIMENTO */
 
 if(data.tipo==="inicioMovimento"){
 
@@ -1533,8 +1657,6 @@ return;
 }
 
 
-/* MOVIMENTO PASSO A PASSO */
-
 if(data.tipo==="passo"){
 
 const player=players[data.playerIndex];
@@ -1552,13 +1674,7 @@ return;
 }
 
 
-/* FINAL DO MOVIMENTO */
-
 if(data.tipo==="acao"){
-
-movimentoEmAndamento=true;
-
-atualizarBotao();
 
 document.getElementById("message").textContent=
 data.texto;
@@ -1567,8 +1683,6 @@ return;
 
 }
 
-
-/* PERGUNTA */
 
 if(data.tipo==="pergunta"){
 
@@ -1583,8 +1697,6 @@ return;
 }
 
 
-/* NOVA TENTATIVA */
-
 if(data.tipo==="novaTentativa"){
 
 mostrarPergunta(
@@ -1597,8 +1709,6 @@ return;
 
 }
 
-
-/* DENÚNCIA */
 
 if(data.tipo==="escolherDenuncia"){
 
@@ -1613,13 +1723,11 @@ return;
 }
 
 
-/* PROTEÇÃO */
-
 if(data.tipo==="escolherProtecao"){
 
 if(data.playerIndex===meuJogador){
 
-mostrarModalProtecao(data);
+mostrarModalProtecao();
 
 }
 
@@ -1627,8 +1735,6 @@ return;
 
 }
 
-
-/* MENSAGEM */
 
 if(data.tipo==="mensagemEspecial"){
 
@@ -1642,7 +1748,23 @@ return;
 }
 
 
-/* FIM */
+if(data.tipo==="novoTurno"){
+
+currentPlayer=data.currentPlayer;
+
+movimentoEmAndamento=false;
+
+atualizarTudo();
+
+document.getElementById("message").textContent=
+currentPlayer===meuJogador
+?"🎯 É a sua vez!"
+:"🎯 Vez de "+players[currentPlayer].nome;
+
+return;
+
+}
+
 
 if(data.tipo==="fim"){
 
@@ -1683,7 +1805,7 @@ location.reload();
 
 
 /* =====================================================
-   ESTADO — HOST É A AUTORIDADE
+   ENVIAR ESTADO
 ===================================================== */
 
 function enviarEstado(){
@@ -1720,7 +1842,7 @@ connection.send(mensagem);
 
 
 /* =====================================================
-   ENVIAR PARA TODOS
+   ENVIAR TODOS
 ===================================================== */
 
 function enviarTodos(mensagem){
@@ -1884,7 +2006,9 @@ player.nome+
 "</b> — Casa "+
 player.posicao+
 " — 🎁 "+
-contarItens(player);
+contarItens(player)+
+" — ✅ "+
+player.acertos;
 
 if(index===currentPlayer)
 div.innerHTML+=" 🎯";
@@ -1971,7 +2095,7 @@ TOTAL_CASAS+
 
 
 /* =====================================================
-   BOTÃO DO DADO
+   BOTÃO
 ===================================================== */
 
 function atualizarBotao(){
@@ -2009,7 +2133,7 @@ Math.floor(Math.random()*6)+1;
 
 contador++;
 
-if(contador>=15){
+if(contador>=12){
 
 clearInterval(intervalo);
 
@@ -2021,7 +2145,7 @@ resolve();
 
 }
 
-},90);
+},70);
 
 });
 
@@ -2029,7 +2153,7 @@ resolve();
 
 
 /* =====================================================
-   ROLAR DADO
+   ROLAR
 ===================================================== */
 
 function rollDice(){
@@ -2044,9 +2168,6 @@ movimentoEmAndamento=true;
 
 atualizarBotao();
 
-
-/* HOST */
-
 if(isHost){
 
 processarRolagemHost(0);
@@ -2054,9 +2175,6 @@ processarRolagemHost(0);
 return;
 
 }
-
-
-/* JOGADOR */
 
 if(hostConnection&&hostConnection.open){
 
@@ -2094,17 +2212,13 @@ processarRolagemHost(resultado);
 
 
 /* =====================================================
-   ROLAGEM DO HOST
+   ROLAGEM
 ===================================================== */
 
 async function processarRolagemHost(resultado){
 
-if(resultado===0){
-
-resultado=
-Math.floor(Math.random()*6)+1;
-
-}
+if(resultado===0)
+resultado=Math.floor(Math.random()*6)+1;
 
 const index=currentPlayer;
 
@@ -2116,9 +2230,6 @@ movimentoEmAndamento=false;
 return;
 
 }
-
-
-/* TODOS SABEM QUE A JOGADA COMEÇOU */
 
 enviarTodos({
 
@@ -2132,18 +2243,9 @@ resultado:resultado
 
 });
 
-
-/* HOST TAMBÉM ANIMA */
-
 await animarDado(resultado);
 
-
-/* MOVIMENTO */
-
 await moverJogadorHost(index,resultado);
-
-
-/* RESOLVE A CASA */
 
 await resolverCasa(index);
 
@@ -2151,7 +2253,7 @@ await resolverCasa(index);
 
 
 /* =====================================================
-   MOVIMENTO DO HOST
+   MOVIMENTO
 ===================================================== */
 
 async function moverJogadorHost(index,casas){
@@ -2184,7 +2286,7 @@ document.getElementById("message").textContent=
 player.nome+
 " está andando...";
 
-await esperar(350);
+await esperar(TEMPO_PASSO);
 
 }
 
@@ -2233,7 +2335,7 @@ posicao:player.posicao
 
 enviarEstado();
 
-await esperar(350);
+await esperar(TEMPO_PASSO);
 
 }
 
@@ -2265,61 +2367,36 @@ return;
 
 if(problems[player.posicao]){
 
-const texto=problems[player.posicao];
-
 enviarTodos({
 
 tipo:"mensagemEspecial",
 
 titulo:"⚠️ Problema ambiental",
 
-texto:texto
+texto:problems[player.posicao]
 
 });
 
-document.getElementById("message").textContent=
-"⚠️ "+
-player.nome+
-" caiu em um problema.";
-
-await esperar(2500);
-
-
-/* SE POSSUI PROTEÇÃO */
+await esperar(TEMPO_MENSAGEM);
 
 if(player.itens.arvore>0||player.itens.agua>0){
 
 protecaoAtual=index;
 
-movimentoEmAndamento=true;
-
 enviarTodos({
 
 tipo:"escolherProtecao",
 
-playerIndex:index,
-
-arvore:player.itens.arvore,
-
-agua:player.itens.agua
+playerIndex:index
 
 });
 
-if(index===meuJogador){
-
-mostrarModalProtecao({
-arvore:player.itens.arvore,
-agua:player.itens.agua
-});
-
-}
+if(index===meuJogador)
+mostrarModalProtecao();
 
 return;
 
 }
-
-
-/* SEM PROTEÇÃO */
 
 await aplicarPenalidade(index);
 
@@ -2342,7 +2419,7 @@ texto:solutions[player.posicao]
 
 });
 
-await esperar(2500);
+await esperar(TEMPO_MENSAGEM);
 
 await moverEfeitoHost(index,3);
 
@@ -2380,7 +2457,7 @@ item.descricao
 
 enviarEstado();
 
-await esperar(2500);
+await esperar(TEMPO_MENSAGEM);
 
 terminarAcao();
 
@@ -2398,12 +2475,9 @@ const pergunta=questions[player.posicao];
 perguntaAtual={
 
 playerIndex:index,
-
 posicao:player.posicao
 
 };
-
-movimentoEmAndamento=true;
 
 enviarTodos({
 
@@ -2443,7 +2517,7 @@ return;
 }
 
 
-/* CASA NORMAL */
+/* NORMAL */
 
 terminarAcao();
 
@@ -2463,7 +2537,7 @@ document.getElementById("message").textContent=
 player.nome+
 " perdeu 3 casas.";
 
-await esperar(800);
+await esperar(TEMPO_ACAO);
 
 await moverEfeitoHost(index,-3);
 
@@ -2474,7 +2548,7 @@ terminarAcao();
 
 /* =====================================================
    TERMINAR AÇÃO
-   ESTA É A PARTE MAIS IMPORTANTE
+   CORREÇÃO DO PROBLEMA "AGUARDE"
 ===================================================== */
 
 function terminarAcao(){
@@ -2487,7 +2561,10 @@ protecaoAtual=null;
 movimentoEmAndamento=false;
 
 
-/* PASSA PARA O PRÓXIMO JOGADOR */
+/*
+   O turno só muda depois que TODA a ação anterior
+   terminou.
+*/
 
 currentPlayer++;
 
@@ -2495,18 +2572,19 @@ if(currentPlayer>=players.length)
 currentPlayer=0;
 
 
-/* ENVIA O NOVO TURNO PRIMEIRO */
+/*
+   Primeiro atualizamos o estado completo.
+*/
 
 enviarEstado();
 
 atualizarTudo();
 
-document.getElementById("message").textContent=
-"🎯 Agora é a vez de "+
-players[currentPlayer].nome;
 
-
-/* ENVIA UMA MENSAGEM EXTRA DE SEGURANÇA */
+/*
+   Depois avisamos explicitamente que o novo turno
+   está liberado.
+*/
 
 enviarTodos({
 
@@ -2516,20 +2594,9 @@ currentPlayer:currentPlayer
 
 });
 
-}
-
-
-/* =====================================================
-   MENSAGEM DE NOVO TURNO
-===================================================== */
-
-function processarNovoTurno(data){
-
-currentPlayer=data.currentPlayer;
-
-movimentoEmAndamento=false;
-
-atualizarTudo();
+document.getElementById("message").textContent=
+"🎯 Agora é a vez de "+
+players[currentPlayer].nome;
 
 }
 
@@ -2569,6 +2636,9 @@ button.textContent=
 String.fromCharCode(65+i)+") "+opcao;
 
 button.onclick=function(){
+
+area.querySelectorAll("button")
+.forEach(b=>b.disabled=true);
 
 enviarResposta(i);
 
@@ -2640,9 +2710,11 @@ const correta=
 indice===pergunta.correta;
 
 
-/* ACERTOU */
+/* ACERTO */
 
 if(correta){
+
+player.acertos++;
 
 perguntaAtual=null;
 
@@ -2658,7 +2730,9 @@ player.nome+
 
 });
 
-await esperar(1800);
+enviarEstado();
+
+await esperar(TEMPO_MENSAGEM);
 
 await moverEfeitoHost(index,2);
 
@@ -2676,12 +2750,7 @@ return;
 }
 
 
-/* ERROU */
-
-document.getElementById("message").textContent=
-"❌ "+
-player.nome+
-" errou a pergunta.";
+/* ERRO */
 
 enviarTodos({
 
@@ -2695,10 +2764,10 @@ player.nome+
 
 });
 
-await esperar(1800);
+await esperar(TEMPO_MENSAGEM);
 
 
-/* TEM DENÚNCIA */
+/* DENÚNCIA */
 
 if(player.itens.denuncia>0){
 
@@ -2720,8 +2789,6 @@ return;
 
 }
 
-
-/* SEM DENÚNCIA */
 
 perguntaAtual=null;
 
@@ -2806,8 +2873,6 @@ const pergunta=questions[player.posicao];
 
 enviarEstado();
 
-await esperar(500);
-
 enviarTodos({
 
 tipo:"mensagemEspecial",
@@ -2816,18 +2881,18 @@ titulo:"📢 Denúncia utilizada",
 
 texto:
 player.nome+
-" utilizou uma Denúncia e terá uma nova tentativa."
+" terá uma nova tentativa."
 
 });
 
-await esperar(1500);
+await esperar(TEMPO_ACAO);
 
 enviarTodos({
 
 tipo:"novaTentativa",
 
 pergunta:
-"📢 DENÚNCIA — Nova tentativa!\n\n"+
+"📢 NOVA TENTATIVA\n\n"+
 pergunta.pergunta,
 
 opcoes:pergunta.opcoes,
@@ -2839,7 +2904,7 @@ playerIndex:index
 if(index===meuJogador){
 
 mostrarPergunta(
-"📢 DENÚNCIA — Nova tentativa!\n\n"+
+"📢 NOVA TENTATIVA\n\n"+
 pergunta.pergunta,
 index,
 pergunta.opcoes
@@ -2863,8 +2928,6 @@ return;
 
 perguntaAtual=null;
 
-document.getElementById("denunciaChoice").style.display="none";
-
 terminarAcao();
 
 }
@@ -2886,8 +2949,6 @@ const lista=document.getElementById("itemsList");
 lista.innerHTML="";
 
 
-/* ÁRVORE */
-
 const arvore=document.createElement("div");
 
 arvore.className="itemCard";
@@ -2896,7 +2957,7 @@ arvore.innerHTML=
 `
 <h3>🌳 Árvore</h3>
 <p>Quantidade: <b>${player.itens.arvore}</b></p>
-<p>Protege contra uma penalidade de problema.</p>
+<p>Evita a penalidade de um problema.</p>
 `;
 
 if(player.itens.arvore>0){
@@ -2913,8 +2974,6 @@ arvore.innerHTML+=
 lista.appendChild(arvore);
 
 
-/* DENÚNCIA */
-
 const denuncia=document.createElement("div");
 
 denuncia.className="itemCard";
@@ -2923,7 +2982,7 @@ denuncia.innerHTML=
 `
 <h3>📢 Denúncia</h3>
 <p>Quantidade: <b>${player.itens.denuncia}</b></p>
-<p>Permite tentar novamente uma pergunta errada.</p>
+<p>Permite uma nova tentativa após errar uma pergunta.</p>
 `;
 
 if(player.itens.denuncia>0){
@@ -2940,8 +2999,6 @@ denuncia.innerHTML+=
 lista.appendChild(denuncia);
 
 
-/* ÁGUA */
-
 const agua=document.createElement("div");
 
 agua.className="itemCard";
@@ -2950,7 +3007,7 @@ agua.innerHTML=
 `
 <h3>💧 Água</h3>
 <p>Quantidade: <b>${player.itens.agua}</b></p>
-<p>Protege contra uma penalidade de problema.</p>
+<p>Em um problema, você avança 2 casas em vez de perder 3.</p>
 `;
 
 if(player.itens.agua>0){
@@ -2972,7 +3029,7 @@ document.getElementById("itemsModal").style.display="flex";
 
 
 /* =====================================================
-   USAR DENÚNCIA PELO INVENTÁRIO
+   DENÚNCIA PELO INVENTÁRIO
 ===================================================== */
 
 function usarDenunciaDoInventario(){
@@ -2996,10 +3053,10 @@ alert(
 
 
 /* =====================================================
-   MOSTRAR PROTEÇÃO
+   PROTEÇÃO
 ===================================================== */
 
-function mostrarModalProtecao(data){
+function mostrarModalProtecao(){
 
 const player=players[meuJogador];
 
@@ -3025,7 +3082,7 @@ modal.style.display="flex";
 
 
 /* =====================================================
-   USAR ÁRVORE
+   ÁRVORE
 ===================================================== */
 
 function usarArvore(){
@@ -3033,17 +3090,8 @@ function usarArvore(){
 fecharModal("protectionModal");
 fecharModal("itemsModal");
 
-if(!protecaoAtual &&
-(!players[meuJogador]||
-!problems[players[meuJogador].posicao])){
-
-alert(
-"🌳 A Árvore só pode ser usada para proteger contra um problema."
-);
-
+if(protecaoAtual===null)
 return;
-
-}
 
 if(isHost){
 
@@ -3061,7 +3109,7 @@ tipo:"usarArvore"
 
 
 /* =====================================================
-   USAR ÁGUA
+   ÁGUA
 ===================================================== */
 
 function usarAgua(){
@@ -3069,17 +3117,8 @@ function usarAgua(){
 fecharModal("protectionModal");
 fecharModal("itemsModal");
 
-if(!protecaoAtual &&
-(!players[meuJogador]||
-!problems[players[meuJogador].posicao])){
-
-alert(
-"💧 A Água só pode ser usada para proteger contra um problema."
-);
-
+if(protecaoAtual===null)
 return;
-
-}
 
 if(isHost){
 
@@ -3097,12 +3136,15 @@ tipo:"usarAgua"
 
 
 /* =====================================================
-   NÃO USAR PROTEÇÃO
+   NÃO USAR
 ===================================================== */
 
 function passarProtecao(){
 
 fecharModal("protectionModal");
+
+if(protecaoAtual===null)
+return;
 
 if(isHost){
 
@@ -3149,6 +3191,8 @@ return;
 
 player.itens.arvore--;
 
+protecaoAtual=null;
+
 enviarTodos({
 
 tipo:"mensagemEspecial",
@@ -3163,7 +3207,7 @@ player.nome+
 
 enviarEstado();
 
-await esperar(1800);
+await esperar(TEMPO_ACAO);
 
 terminarAcao();
 
@@ -3181,25 +3225,34 @@ return;
 
 player.itens.agua--;
 
+protecaoAtual=null;
+
 enviarTodos({
 
 tipo:"mensagemEspecial",
 
-titulo:"💧 Proteção utilizada!",
+titulo:"💧 Água utilizada!",
 
 texto:
 player.nome+
-" utilizou Água e evitou a penalidade."
+" utilizou Água e avançará 2 casas!"
 
 });
 
 enviarEstado();
 
-await esperar(1800);
+await esperar(TEMPO_ACAO);
+
+await moverEfeitoHost(index,2);
+
+if(player.posicao>=TOTAL_CASAS){
+
+finalizarVitoria(index);
+return;
+
+}
 
 terminarAcao();
-
-return;
 
 }
 
@@ -3238,7 +3291,7 @@ player.nome+
 
 });
 
-await esperar(1800);
+await esperar(TEMPO_ACAO);
 
 await moverEfeitoHost(index,-3);
 
@@ -3266,7 +3319,7 @@ player.itens.agua++;
 
 
 /* =====================================================
-   MENSAGENS
+   MENSAGEM ESPECIAL
 ===================================================== */
 
 function mostrarMensagemEspecial(titulo,texto){
@@ -3290,16 +3343,16 @@ modal.style.display="flex";
 
 setTimeout(function(){
 
-bar.style.transition="width 3s linear";
+bar.style.transition="width 1.2s linear";
 bar.style.width="0%";
 
-},50);
+},30);
 
 setTimeout(function(){
 
 fecharMensagemEspecial();
 
-},3200);
+},1400);
 
 }
 
@@ -3317,7 +3370,10 @@ document.getElementById("specialModal").style.display="none";
 
 function fecharModal(id){
 
-document.getElementById(id).style.display="none";
+const modal=document.getElementById(id);
+
+if(modal)
+modal.style.display="none";
 
 }
 
@@ -3388,6 +3444,7 @@ tempoRestante--;
 
 atualizarTimerVisual();
 
+if(tempoRestante%2===0)
 enviarEstado();
 
 if(tempoRestante<=0){
@@ -3424,31 +3481,91 @@ String(segundos).padStart(2,"0");
 
 
 /* =====================================================
-   FIM POR TEMPO
+   DESEMPATE QUANDO O TEMPO ACABA
 ===================================================== */
+
+function compararJogadores(a,b){
+
+/*
+   1º — posição
+   2º — quantidade de itens
+   3º — respostas corretas
+*/
+
+if(a.posicao!==b.posicao)
+return b.posicao-a.posicao;
+
+const itensA=contarItens(a);
+const itensB=contarItens(b);
+
+if(itensA!==itensB)
+return itensB-itensA;
+
+if(a.acertos!==b.acertos)
+return b.acertos-a.acertos;
+
+return 0;
+
+}
+
 
 function finalizarPorTempo(){
 
 if(!isHost)return;
 
-let vencedor=players[0];
+const ranking=[...players]
+.sort(compararJogadores);
 
-players.forEach(function(player){
+const vencedor=ranking[0];
 
-if(player.posicao>vencedor.posicao)
-vencedor=player;
+const empatados=ranking.filter(function(player){
+
+return player.posicao===vencedor.posicao &&
+contarItens(player)===contarItens(vencedor) &&
+player.acertos===vencedor.acertos;
 
 });
 
-const mensagem=
+
+let mensagem="";
+
+if(empatados.length>1){
+
+mensagem=
+"⏰ O tempo acabou!\n\n"+
+"🤝 Houve um empate!\n\n";
+
+empatados.forEach(function(player){
+
+mensagem+=
+player.cor.emoji+
+" "+
+player.nome+
+" — Casa "+
+player.posicao+
+" — 🎁 "+
+contarItens(player)+
+" itens — ✅ "+
+player.acertos+
+" acertos\n";
+
+});
+
+}else{
+
+mensagem=
 "⏰ O tempo acabou!\n\n"+
 "🏆 "+
 vencedor.nome+
-" ("+
-vencedor.cor.nome+
-") está na frente, na casa "+
+" venceu!\n\n"+
+"📍 Casa: "+
 vencedor.posicao+
-"!";
+"\n🎁 Itens: "+
+contarItens(vencedor)+
+"\n✅ Respostas corretas: "+
+vencedor.acertos;
+
+}
 
 jogoIniciado=false;
 movimentoEmAndamento=true;
@@ -3485,43 +3602,7 @@ document.getElementById("howToModal").style.display="flex";
 
 
 /* =====================================================
-   CORREÇÃO DE NOVO TURNO RECEBIDO
-===================================================== */
-
-const funcaoReceberMensagemOriginal=receberMensagem;
-
-receberMensagem=function(data){
-
-if(data&&data.tipo==="novoTurno"){
-
-currentPlayer=data.currentPlayer;
-
-movimentoEmAndamento=false;
-
-atualizarTudo();
-
-document.getElementById("message").textContent=
-"🎯 Agora é a sua vez!";
-
-if(currentPlayer!==meuJogador){
-
-document.getElementById("message").textContent=
-"🎯 Vez de "+
-players[currentPlayer].nome;
-
-}
-
-return;
-
-}
-
-funcaoReceberMensagemOriginal(data);
-
-};
-
-
-/* =====================================================
-   BOTÃO
+   BOTÃO DO DADO
 ===================================================== */
 
 document.getElementById("rollButton").onclick=rollDice;
@@ -3531,4 +3612,4 @@ document.getElementById("rollButton").disabled=true;
 </script>
 
 </body>
-</html>
+    </html>
