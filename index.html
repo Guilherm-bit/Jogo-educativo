@@ -2,254 +2,248 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Jogo Educativo — Racismo Ambiental</title>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#eef3ff;
-    color:#222;
-    text-align:center;
+margin:0;
+font-family:Arial,sans-serif;
+background:#eef3ff;
+color:#222;
+text-align:center
 }
 
 header{
-    background:#3157d5;
-    color:white;
-    padding:15px;
+background:#3157d5;
+color:white;
+padding:15px
 }
 
-h1{
-    margin:5px 0;
-}
+h1{margin:5px 0}
 
 #timer{
-    font-size:28px;
-    font-weight:bold;
-    margin-top:8px;
+font-size:28px;
+font-weight:bold;
+margin-top:8px
 }
 
 #lobby{
-    max-width:520px;
-    margin:25px auto;
-    background:white;
-    padding:25px;
-    border-radius:18px;
-    box-shadow:0 3px 12px #bbb;
+max-width:520px;
+margin:25px auto;
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 3px 12px #bbb
 }
 
 input{
-    width:90%;
-    padding:13px;
-    margin:7px;
-    border:2px solid #ccc;
-    border-radius:10px;
-    font-size:16px;
+width:90%;
+padding:13px;
+margin:7px;
+border:2px solid #ccc;
+border-radius:10px;
+font-size:16px
 }
 
 button{
-    border:none;
-    border-radius:12px;
-    padding:13px 22px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-    margin:8px;
+border:none;
+border-radius:12px;
+padding:13px 22px;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+margin:8px
 }
 
 button:disabled{
-    background:#999!important;
-    cursor:not-allowed;
+background:#999!important;
+cursor:not-allowed
 }
 
 .lobbyButton{
-    background:#3157d5;
-    color:white;
+background:#3157d5;
+color:white
 }
 
 #roomCodeDisplay{
-    font-size:25px;
-    font-weight:bold;
-    letter-spacing:3px;
-    margin:15px;
+font-size:25px;
+font-weight:bold;
+letter-spacing:3px;
+margin:15px
 }
 
 #lobbyMessage{
-    font-weight:bold;
-    min-height:25px;
+font-weight:bold;
+min-height:25px
 }
 
 #game{
-    max-width:1100px;
-    margin:auto;
-    padding:15px;
+max-width:1100px;
+margin:auto;
+padding:15px
 }
 
 #status{
-    background:white;
-    padding:15px;
-    border-radius:16px;
-    margin-bottom:15px;
-    box-shadow:0 2px 8px #bbb;
+background:white;
+padding:15px;
+border-radius:16px;
+margin-bottom:15px;
+box-shadow:0 2px 8px #bbb
 }
 
 #turnText{
-    margin:5px;
+margin:5px
 }
 
 #yourColor{
-    font-weight:bold;
-    margin:8px;
+font-weight:bold;
+margin:8px
 }
 
 .progress-container{
-    width:100%;
-    height:25px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-    margin:12px 0;
+width:100%;
+height:25px;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+margin:12px 0
 }
 
 #progressBar{
-    height:100%;
-    width:0%;
-    background:#35a853;
-    transition:width .3s;
+height:100%;
+width:0%;
+background:#35a853;
+transition:width .3s
 }
 
 #progressText{
-    font-weight:bold;
+font-weight:bold
 }
 
 #diceArea{
-    margin:15px;
+margin:15px
 }
 
 #dice{
-    width:80px;
-    height:80px;
-    margin:auto;
-    background:white;
-    border:4px solid #222;
-    border-radius:15px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:42px;
-    font-weight:bold;
-    box-shadow:0 5px 10px #aaa;
+width:80px;
+height:80px;
+margin:auto;
+background:white;
+border:4px solid #222;
+border-radius:15px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:42px;
+font-weight:bold;
+box-shadow:0 5px 10px #aaa
 }
 
 .diceRolling{
-    animation:diceRoll .12s linear infinite;
+animation:diceRoll .12s linear infinite
 }
 
 @keyframes diceRoll{
-    0%{transform:rotate(0deg) scale(1)}
-    25%{transform:rotate(90deg) scale(1.1)}
-    50%{transform:rotate(180deg) scale(1)}
-    75%{transform:rotate(270deg) scale(1.1)}
-    100%{transform:rotate(360deg) scale(1)}
+0%{transform:rotate(0) scale(1)}
+25%{transform:rotate(90deg) scale(1.1)}
+50%{transform:rotate(180deg) scale(1)}
+75%{transform:rotate(270deg) scale(1.1)}
+100%{transform:rotate(360deg) scale(1)}
 }
 
 #rollButton{
-    background:#3157d5;
-    color:white;
+background:#3157d5;
+color:white
 }
 
 #itemButton{
-    background:#7b4bd6;
-    color:white;
+background:#7b4bd6;
+color:white
 }
 
 #message{
-    min-height:45px;
-    font-weight:bold;
-    white-space:pre-line;
+min-height:45px;
+font-weight:bold;
+white-space:pre-line
 }
 
 #players{
-    background:white;
-    padding:12px;
-    border-radius:15px;
-    margin-bottom:15px;
+background:white;
+padding:12px;
+border-radius:15px;
+margin-bottom:15px
 }
 
 .player-info{
-    display:inline-block;
-    margin:5px;
-    padding:8px 12px;
-    border-radius:10px;
-    font-weight:bold;
-    border:2px solid #ddd;
+display:inline-block;
+margin:5px;
+padding:8px 12px;
+border-radius:10px;
+font-weight:bold;
+border:2px solid #ddd
 }
 
 #board{
-    display:grid;
-    grid-template-columns:repeat(8,1fr);
-    gap:6px;
+display:grid;
+grid-template-columns:repeat(8,1fr);
+gap:6px
 }
 
 .cell{
-    min-height:80px;
-    background:white;
-    border:2px solid #ccc;
-    border-radius:10px;
-    padding:5px;
-    font-size:12px;
-    position:relative;
+min-height:80px;
+background:white;
+border:2px solid #ccc;
+border-radius:10px;
+padding:5px;
+font-size:12px;
+position:relative
 }
 
 .cell-number{
-    font-weight:bold;
-    font-size:14px;
+font-weight:bold;
+font-size:14px
 }
 
 .problem{
-    background:#ffd6d6;
-    border-color:#e53935;
+background:#ffd6d6;
+border-color:#e53935
 }
 
 .solution{
-    background:#d8f5d8;
-    border-color:#35a853;
+background:#d8f5d8;
+border-color:#35a853
 }
 
 .question{
-    background:#fff0bd;
-    border-color:#f0ad00;
+background:#fff0bd;
+border-color:#f0ad00
 }
 
 .item{
-    background:#e3d8ff;
-    border-color:#7b4bd6;
+background:#e3d8ff;
+border-color:#7b4bd6
 }
 
 .pawn{
-    display:inline-flex;
-    width:28px;
-    height:28px;
-    border-radius:50%;
-    justify-content:center;
-    align-items:center;
-    margin:2px;
-    font-size:17px;
-    color:white;
-    box-shadow:0 2px 4px #777;
+display:inline-flex;
+width:28px;
+height:28px;
+border-radius:50%;
+justify-content:center;
+align-items:center;
+margin:2px;
+font-size:17px;
+color:white;
+box-shadow:0 2px 4px #777
 }
 
 .pawn.moving{
-    transform:scale(1.3);
+transform:scale(1.3)
 }
 
 .red{background:#e53935}
@@ -262,162 +256,150 @@ button:disabled{
 .cyan{background:#00acc1}
 .brown{background:#795548}
 .black{background:#222}
-
 .whitePawn{
-    background:#eee;
-    border:2px solid #555;
-    color:#222;
+background:#eee;
+border:2px solid #555;
+color:#222
 }
 
 .modal{
-    display:none;
-    position:fixed;
-    z-index:1000;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,.65);
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+display:none;
+position:fixed;
+z-index:1000;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.65);
+justify-content:center;
+align-items:center;
+padding:20px
 }
 
 .modalBox{
-    background:white;
-    max-width:550px;
-    width:100%;
-    padding:25px;
-    border-radius:20px;
-    box-shadow:0 5px 25px #222;
-    position:relative;
-    max-height:90vh;
-    overflow-y:auto;
+background:white;
+max-width:550px;
+width:100%;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 25px #222;
+position:relative;
+max-height:90vh;
+overflow-y:auto
 }
 
 .closeButton{
-    position:absolute;
-    right:8px;
-    top:5px;
-    font-size:25px;
-    background:none;
-    color:#222;
-    padding:5px 10px;
+position:absolute;
+right:8px;
+top:5px;
+font-size:25px;
+background:none;
+color:#222;
+padding:5px 10px
 }
 
 .specialMessage{
-    max-width:550px;
+max-width:550px
 }
 
 .specialMessage h2{
-    margin-top:10px;
+margin-top:10px
 }
 
 .specialTimer{
-    height:14px;
-    width:100%;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:20px;
+height:14px;
+width:100%;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+margin-top:20px
 }
 
 .specialTimerBar{
-    height:100%;
-    width:100%;
-    background:#3157d5;
+height:100%;
+width:100%;
+background:#3157d5
 }
 
 .questionBox h2{
-    color:#3157d5;
+color:#3157d5
 }
 
 .optionButton{
-    width:90%;
-    background:#eef3ff;
-    border:2px solid #3157d5;
-    color:#222;
-    text-align:left;
+width:90%;
+background:#eef3ff;
+border:2px solid #3157d5;
+color:#222;
+text-align:left
 }
 
 .optionButton:hover{
-    background:#dbe4ff;
+background:#dbe4ff
 }
 
 #itemsModal .modalBox{
-    max-width:500px;
+max-width:500px
 }
 
 .itemCard{
-    background:#f5f1ff;
-    border:2px solid #7b4bd6;
-    border-radius:14px;
-    padding:15px;
-    margin:10px 0;
+background:#f5f1ff;
+border:2px solid #7b4bd6;
+border-radius:14px;
+padding:15px;
+margin:10px 0
 }
 
 .itemCard button{
-    background:#7b4bd6;
-    color:white;
-}
-
-#denunciaChoice{
-    display:none;
+background:#7b4bd6;
+color:white
 }
 
 #helpButton{
-    background:#35a853;
-    color:white;
+background:#35a853;
+color:white
 }
 
 .protectionButton{
-    background:#7b4bd6;
-    color:white;
-    width:90%;
+background:#7b4bd6;
+color:white;
+width:90%
 }
 
 @media(max-width:600px){
 
-    #board{
-        grid-template-columns:repeat(5,1fr);
-    }
-
-    .cell{
-        min-height:65px;
-        font-size:10px;
-    }
-
-    .cell-number{
-        font-size:12px;
-    }
-
-    #dice{
-        width:70px;
-        height:70px;
-    }
-
-    button{
-        width:90%;
-    }
+#board{
+grid-template-columns:repeat(5,1fr)
 }
 
+.cell{
+min-height:65px;
+font-size:10px
+}
+
+.cell-number{
+font-size:12px
+}
+
+#dice{
+width:70px;
+height:70px
+}
+
+button{
+width:90%
+}
+
+}
 </style>
 </head>
 
 <body>
 
 <header>
-
 <h1>🌍 Jogo Educativo</h1>
-
 <div>Racismo Ambiental</div>
-
 <div id="timer">20:00</div>
-
 </header>
-
-
-<!-- LOBBY -->
 
 <div id="lobby">
 
@@ -434,19 +416,22 @@ placeholder="Digite seu nome"
 
 <button
 class="lobbyButton"
-onclick="criarSala()">
+onclick="criarSala()"
+>
 🏠 Criar sala
 </button>
 
 <button
 class="lobbyButton"
-onclick="mostrarEntradaSala()">
+onclick="mostrarEntradaSala()"
+>
 🚪 Entrar em sala
 </button>
 
 <button
 id="helpButton"
-onclick="mostrarComoJogar()">
+onclick="mostrarComoJogar()"
+>
 📖 Como jogar?
 </button>
 
@@ -461,37 +446,33 @@ placeholder="Código da sala"
 
 <button
 class="lobbyButton"
-onclick="entrarSala()">
+onclick="entrarSala()"
+>
 Entrar
 </button>
 
 </div>
 
 <div id="roomCodeDisplay"></div>
-
 <div id="lobbyMessage"></div>
-
 <div id="waitingPlayers"></div>
 
 <button
 id="startButton"
 style="display:none;background:#35a853;color:white"
-onclick="iniciarJogo()">
+onclick="iniciarJogo()"
+>
 ▶️ Iniciar jogo
 </button>
 
 </div>
 
 
-<!-- JOGO -->
-
 <div id="game" style="display:none">
 
 <div id="status">
 
-<h2 id="turnText">
-Aguardando...
-</h2>
+<h2 id="turnText">Aguardando...</h2>
 
 <div id="yourColor"></div>
 
@@ -504,21 +485,17 @@ Seu progresso: 1 / 100 casas
 </div>
 
 <div id="diceArea">
-
-<div id="dice">
-🎲
+<div id="dice">🎲</div>
 </div>
 
-</div>
-
-<button
-id="rollButton">
+<button id="rollButton">
 🎲 Rolar dado
 </button>
 
 <button
 id="itemButton"
-onclick="abrirItens()">
+onclick="abrirItens()"
+>
 🎁 Itens
 </button>
 
@@ -529,7 +506,6 @@ Aguardando...
 </div>
 
 <div id="players"></div>
-
 <div id="board"></div>
 
 </div>
@@ -543,7 +519,8 @@ Aguardando...
 
 <button
 class="closeButton"
-onclick="fecharModal('howToModal')">
+onclick="fecharModal('howToModal')"
+>
 ✕
 </button>
 
@@ -560,8 +537,8 @@ onclick="fecharModal('howToModal')">
 
 <p>
 Quando for sua vez, clique em <b>Rolar dado</b>.
-Seu peão anda uma casa por vez de acordo com o número
-sorteado.
+Seu peão anda uma casa por vez de acordo com
+o número sorteado.
 </p>
 
 <hr>
@@ -569,8 +546,8 @@ sorteado.
 <h3>🟨 Casa de Pergunta</h3>
 
 <p>
-Você responderá uma pergunta de múltipla escolha sobre
-<b>racismo ambiental</b>.
+Você responderá uma pergunta de múltipla escolha
+sobre <b>racismo ambiental</b>.
 </p>
 
 <p>
@@ -579,8 +556,8 @@ Você responderá uma pergunta de múltipla escolha sobre
 </p>
 
 <p>
-Se tiver 📢 <b>Denúncia</b>, poderá utilizá-la para
-tentar responder novamente.
+Se tiver 📢 <b>Denúncia</b>, poderá utilizá-la
+para tentar responder novamente.
 </p>
 
 <hr>
@@ -597,8 +574,8 @@ Normalmente perderia <b>3 casas</b>.
 </p>
 
 <p>
-💧 <b>Água:</b> em vez de perder 3 casas, você
-<b>avança 2 casas</b>.
+💧 <b>Água:</b> em vez de perder 3 casas,
+você <b>avança 2 casas</b>.
 </p>
 
 <hr>
@@ -623,10 +600,12 @@ Você recebe um item que poderá utilizar durante a partida.
 <h3>🎁 Itens</h3>
 
 <p>
-🌳 <b>Árvore:</b> evita a penalidade de um problema.<br><br>
+🌳 <b>Árvore:</b> evita a penalidade de um problema.
+<br><br>
 
 💧 <b>Água:</b> quando você cair em um problema,
-permite avançar 2 casas em vez de perder 3.<br><br>
+permite avançar 2 casas em vez de perder 3.
+<br><br>
 
 📢 <b>Denúncia:</b> depois de errar uma pergunta,
 permite uma nova tentativa.
@@ -654,13 +633,13 @@ O vencedor será definido nesta ordem:
 </p>
 
 <p>
-<b>1º:</b> quem estiver na casa mais avançada.<br>
-<b>2º:</b> se empatar na posição, quem tiver
-mais itens.<br>
-<b>3º:</b> se ainda empatar, quem tiver mais
-respostas corretas.<br>
-<b>4º:</b> se continuar tudo igual, haverá
-<b>empate</b>.
+<b>1º:</b> quem estiver na casa mais avançada.
+<br>
+<b>2º:</b> se empatar na posição, quem tiver mais itens.
+<br>
+<b>3º:</b> se ainda empatar, quem tiver mais respostas corretas.
+<br>
+<b>4º:</b> se continuar tudo igual, haverá <b>empate</b>.
 </p>
 
 <hr>
@@ -668,8 +647,8 @@ respostas corretas.<br>
 <h3>🤝 Multiplayer</h3>
 
 <p>
-Cada jogador pode entrar pelo seu próprio celular usando
-o código da mesma sala.
+Cada jogador pode entrar pelo seu próprio celular
+usando o código da mesma sala.
 </p>
 
 <p>
@@ -678,7 +657,8 @@ O jogador que criar a sala será o administrador da partida.
 
 <button
 onclick="fecharModal('howToModal')"
-style="background:#3157d5;color:white">
+style="background:#3157d5;color:white"
+>
 Entendi! 👍
 </button>
 
@@ -710,7 +690,8 @@ Entendi! 👍
 
 <button
 class="closeButton"
-onclick="fecharModal('itemsModal')">
+onclick="fecharModal('itemsModal')"
+>
 ✕
 </button>
 
@@ -730,7 +711,8 @@ onclick="fecharModal('itemsModal')">
 
 <button
 class="closeButton"
-onclick="passarDenuncia()">
+onclick="passarDenuncia()"
+>
 ✕
 </button>
 
@@ -743,13 +725,15 @@ Deseja utilizá-la para tentar novamente?
 
 <button
 onclick="usarDenuncia()"
-style="background:#7b4bd6;color:white">
+style="background:#7b4bd6;color:white"
+>
 📢 Usar Denúncia
 </button>
 
 <button
 onclick="passarDenuncia()"
-style="background:#3157d5;color:white">
+style="background:#3157d5;color:white"
+>
 ➡️ Guardar e passar a vez
 </button>
 
@@ -765,7 +749,8 @@ style="background:#3157d5;color:white">
 
 <button
 class="closeButton"
-onclick="passarProtecao()">
+onclick="passarProtecao()"
+>
 ✕
 </button>
 
@@ -777,19 +762,22 @@ Você possui um item que pode alterar o resultado.
 
 <button
 class="protectionButton"
-onclick="usarArvore()">
+onclick="usarArvore()"
+>
 🌳 Usar Árvore
 </button>
 
 <button
 class="protectionButton"
-onclick="usarAgua()">
+onclick="usarAgua()"
+>
 💧 Usar Água
 </button>
 
 <button
 onclick="passarProtecao()"
-style="background:#3157d5;color:white">
+style="background:#3157d5;color:white"
+>
 ➡️ Não usar proteção
 </button>
 
@@ -797,7 +785,7 @@ style="background:#3157d5;color:white">
 </div>
 
 
-<!-- MENSAGEM -->
+<!-- MENSAGEM ESPECIAL -->
 
 <div id="specialModal" class="modal">
 
@@ -805,7 +793,8 @@ style="background:#3157d5;color:white">
 
 <button
 class="closeButton"
-onclick="fecharMensagemEspecial()">
+onclick="fecharMensagemEspecial()"
+>
 ✕
 </button>
 
@@ -817,8 +806,8 @@ onclick="fecharMensagemEspecial()">
 
 <div
 id="specialTimerBar"
-class="specialTimerBar">
-</div>
+class="specialTimerBar"
+></div>
 
 </div>
 
@@ -836,34 +825,26 @@ const TOTAL_CASAS = 100;
 const TEMPO_TOTAL = 20 * 60;
 const MAX_JOGADORES = 11;
 
-/*
-   As esperas foram reduzidas para deixar o jogo
-   mais rápido entre uma ação e outra.
-*/
-
 const TEMPO_MENSAGEM = 1000;
 const TEMPO_ACAO = 500;
 const TEMPO_PASSO = 220;
 
 
 /* =====================================================
-   PEER
+   VARIÁVEIS
 ===================================================== */
 
 let peer = null;
 let hostConnection = null;
 let connections = [];
+
 let isHost = false;
 let roomCode = "";
 let meuJogador = -1;
 
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
 let players = [];
 let currentPlayer = 0;
+
 let jogoIniciado = false;
 let tempoRestante = TEMPO_TOTAL;
 let timer = null;
@@ -872,6 +853,8 @@ let movimentoEmAndamento = false;
 
 let perguntaAtual = null;
 let protecaoAtual = null;
+
+let mensagemEspecialTimer = null;
 
 
 /* =====================================================
@@ -901,9 +884,10 @@ const colors = [
 
 function novoJogador(nome){
 
-return{
+return {
 
 nome:nome,
+
 posicao:1,
 
 itens:{
@@ -922,7 +906,7 @@ cor:colors[players.length]
 
 
 /* =====================================================
-   PROBLEMAS — 100 CASAS
+   PROBLEMAS
 ===================================================== */
 
 const problems = {
@@ -1198,11 +1182,15 @@ descricao:"Permite tentar novamente uma pergunta errada."
 
 
 /* =====================================================
-   UTILITÁRIO
+   ESPERA
 ===================================================== */
 
 function esperar(ms){
-return new Promise(resolve=>setTimeout(resolve,ms));
+
+return new Promise(resolve=>{
+setTimeout(resolve,ms);
+});
+
 }
 
 
@@ -1212,7 +1200,7 @@ return new Promise(resolve=>setTimeout(resolve,ms));
 
 function criarPeer(id,callback){
 
-const opcoes={
+const opcoes = {
 
 debug:1,
 
@@ -1227,9 +1215,9 @@ iceServers:[
 
 try{
 
-peer=id
-?new Peer(id,opcoes)
-:new Peer(opcoes);
+peer = id
+? new Peer(id,opcoes)
+: new Peer(opcoes);
 
 }catch(e){
 
@@ -1240,6 +1228,7 @@ return;
 
 }
 
+
 peer.on("open",function(idRecebido){
 
 if(callback)
@@ -1247,12 +1236,14 @@ callback(idRecebido);
 
 });
 
+
 peer.on("connection",function(connection){
 
 if(isHost)
 receberConexao(connection);
 
 });
+
 
 peer.on("error",function(error){
 
@@ -1336,12 +1327,13 @@ atualizarLobby();
 
 
 /* =====================================================
-   ENTRAR
+   ENTRAR EM SALA
 ===================================================== */
 
 function mostrarEntradaSala(){
 
-document.getElementById("joinArea").style.display="block";
+document.getElementById("joinArea").style.display=
+"block";
 
 document.getElementById("roomInput").focus();
 
@@ -1364,6 +1356,7 @@ return;
 }
 
 isHost=false;
+
 roomCode=codigo;
 
 document.getElementById("lobbyMessage").textContent=
@@ -1401,11 +1394,13 @@ document.getElementById("lobbyMessage").textContent=
 
 });
 
+
 connection.on("data",function(data){
 
 receberMensagem(data);
 
 });
+
 
 connection.on("close",function(){
 
@@ -1419,7 +1414,7 @@ location.reload();
 
 
 /* =====================================================
-   CONEXÃO DO JOGADOR
+   CONEXÃO DO HOST
 ===================================================== */
 
 function receberConexao(connection){
@@ -1430,43 +1425,72 @@ connection.on("data",function(data){
 
 if(!data)return;
 
-switch(data.tipo){
+if(data.tipo==="entrar"){
 
-case"entrar":
 adicionarJogador(connection,data.nome);
-break;
 
-case"rolar":
+return;
+
+}
+
+if(data.tipo==="rolar"){
+
 processarPedidoDado(connection);
-break;
 
-case"resposta":
+return;
+
+}
+
+if(data.tipo==="resposta"){
+
 processarResposta(connection,data.indice);
-break;
 
-case"denuncia":
+return;
+
+}
+
+if(data.tipo==="denuncia"){
+
 processarDenuncia(connection);
-break;
 
-case"passarDenuncia":
+return;
+
+}
+
+if(data.tipo==="passarDenuncia"){
+
 processarPassarDenuncia(connection);
-break;
 
-case"usarArvore":
+return;
+
+}
+
+if(data.tipo==="usarArvore"){
+
 processarItem(connection,"arvore");
-break;
 
-case"usarAgua":
+return;
+
+}
+
+if(data.tipo==="usarAgua"){
+
 processarItem(connection,"agua");
-break;
 
-case"passarProtecao":
+return;
+
+}
+
+if(data.tipo==="passarProtecao"){
+
 processarPassarProtecao(connection);
-break;
+
+return;
 
 }
 
 });
+
 
 connection.on("close",function(){
 
@@ -1542,7 +1566,8 @@ function atualizarLobby(){
 const div=
 document.getElementById("waitingPlayers");
 
-div.innerHTML="<h3>👥 Jogadores na sala</h3>";
+div.innerHTML=
+"<h3>👥 Jogadores na sala</h3>";
 
 players.forEach(function(player,index){
 
@@ -1566,6 +1591,8 @@ function iniciarJogo(){
 
 if(!isHost)return;
 
+if(players.length<1)return;
+
 jogoIniciado=true;
 
 currentPlayer=0;
@@ -1575,6 +1602,7 @@ tempoRestante=TEMPO_TOTAL;
 movimentoEmAndamento=false;
 
 document.getElementById("lobby").style.display="none";
+
 document.getElementById("game").style.display="block";
 
 criarTabuleiro();
@@ -1585,6 +1613,14 @@ iniciarCronometro();
 
 enviarEstado();
 
+enviarTodos({
+
+tipo:"novoTurno",
+
+currentPlayer:currentPlayer
+
+});
+
 document.getElementById("message").textContent=
 "🎯 Agora é a vez de "+
 players[currentPlayer].nome;
@@ -1593,18 +1629,24 @@ players[currentPlayer].nome;
 
 
 /* =====================================================
-   RECEBER MENSAGENS
+   RECEBER MENSAGENS DO CLIENTE
 ===================================================== */
 
 function receberMensagem(data){
 
 if(!data)return;
 
+
+/* ENTRADA */
+
 if(data.tipo==="entrada"){
 
 meuJogador=data.index;
+
 players=data.players;
+
 currentPlayer=data.currentPlayer;
+
 jogoIniciado=data.jogoIniciado;
 
 atualizarTudo();
@@ -1614,20 +1656,29 @@ return;
 }
 
 
+/* ESTADO */
+
 if(data.tipo==="estado"){
 
 players=data.players;
+
 currentPlayer=data.currentPlayer;
+
 jogoIniciado=data.jogoIniciado;
+
 tempoRestante=data.tempoRestante;
 
 if(jogoIniciado){
 
 document.getElementById("lobby").style.display="none";
+
 document.getElementById("game").style.display="block";
 
-if(!document.getElementById("board").children.length)
+if(!document.getElementById("board").children.length){
+
 criarTabuleiro();
+
+}
 
 }
 
@@ -1637,6 +1688,8 @@ return;
 
 }
 
+
+/* INÍCIO DO MOVIMENTO */
 
 if(data.tipo==="inicioMovimento"){
 
@@ -1648,7 +1701,8 @@ document.getElementById("message").textContent=
 "🎲 "+
 data.nome+
 " tirou "+
-data.resultado+"!";
+data.resultado+
+"!";
 
 animarDado(data.resultado);
 
@@ -1657,9 +1711,12 @@ return;
 }
 
 
+/* PASSO */
+
 if(data.tipo==="passo"){
 
-const player=players[data.playerIndex];
+const player=
+players[data.playerIndex];
 
 if(player){
 
@@ -1674,6 +1731,8 @@ return;
 }
 
 
+/* AÇÃO */
+
 if(data.tipo==="acao"){
 
 document.getElementById("message").textContent=
@@ -1683,6 +1742,8 @@ return;
 
 }
 
+
+/* PERGUNTA */
 
 if(data.tipo==="pergunta"){
 
@@ -1697,6 +1758,8 @@ return;
 }
 
 
+/* NOVA TENTATIVA */
+
 if(data.tipo==="novaTentativa"){
 
 mostrarPergunta(
@@ -1710,11 +1773,14 @@ return;
 }
 
 
+/* DENÚNCIA */
+
 if(data.tipo==="escolherDenuncia"){
 
 if(data.playerIndex===meuJogador){
 
-document.getElementById("denunciaChoice").style.display="flex";
+document.getElementById("denunciaChoice").style.display=
+"flex";
 
 }
 
@@ -1722,6 +1788,8 @@ return;
 
 }
 
+
+/* PROTEÇÃO */
 
 if(data.tipo==="escolherProtecao"){
 
@@ -1736,6 +1804,8 @@ return;
 }
 
 
+/* MENSAGEM */
+
 if(data.tipo==="mensagemEspecial"){
 
 mostrarMensagemEspecial(
@@ -1748,6 +1818,8 @@ return;
 }
 
 
+/* NOVO TURNO */
+
 if(data.tipo==="novoTurno"){
 
 currentPlayer=data.currentPlayer;
@@ -1759,17 +1831,22 @@ atualizarTudo();
 document.getElementById("message").textContent=
 currentPlayer===meuJogador
 ?"🎯 É a sua vez!"
-:"🎯 Vez de "+players[currentPlayer].nome;
+:"🎯 Vez de "+
+players[currentPlayer].nome;
 
 return;
 
 }
 
 
+/* FIM */
+
 if(data.tipo==="fim"){
 
 players=data.players;
+
 jogoIniciado=false;
+
 movimentoEmAndamento=true;
 
 atualizarTudo();
@@ -1784,20 +1861,28 @@ return;
 }
 
 
+/* LOTADO */
+
 if(data.tipo==="lotado"){
 
 alert("❌ A sala já possui 11 jogadores.");
 
 location.reload();
 
+return;
+
 }
 
+
+/* JOGO EM ANDAMENTO */
 
 if(data.tipo==="jogoEmAndamento"){
 
 alert("❌ Essa partida já começou.");
 
 location.reload();
+
+return;
 
 }
 
@@ -1831,7 +1916,9 @@ connections.forEach(function(connection){
 if(connection.open){
 
 try{
+
 connection.send(mensagem);
+
 }catch(e){}
 
 }
@@ -1842,7 +1929,7 @@ connection.send(mensagem);
 
 
 /* =====================================================
-   ENVIAR TODOS
+   ENVIAR PARA TODOS
 ===================================================== */
 
 function enviarTodos(mensagem){
@@ -1854,7 +1941,9 @@ connections.forEach(function(connection){
 if(connection.open){
 
 try{
+
 connection.send(mensagem);
+
 }catch(e){}
 
 }
@@ -1865,17 +1954,23 @@ connection.send(mensagem);
 
 
 /* =====================================================
-   ATUALIZAÇÃO
+   ATUALIZAÇÃO GERAL
 ===================================================== */
 
 function atualizarTudo(){
 
 atualizarTabuleiro();
+
 atualizarJogadores();
+
 atualizarCor();
+
 atualizarTurno();
+
 atualizarProgresso();
+
 atualizarBotao();
+
 atualizarTimerVisual();
 
 }
@@ -1903,21 +1998,25 @@ let tipo="";
 if(problems[i]){
 
 cell.classList.add("problem");
+
 tipo="⚠️ Problema";
 
 }else if(solutions[i]){
 
 cell.classList.add("solution");
+
 tipo="✅ Solução";
 
 }else if(questions[i]){
 
 cell.classList.add("question");
+
 tipo="❓ Pergunta";
 
 }else if(items[i]){
 
 cell.classList.add("item");
+
 tipo="🎁 Item";
 
 }
@@ -1957,11 +2056,14 @@ area.innerHTML="";
 players.forEach(function(player,index){
 
 const area=
-document.getElementById("players-"+player.posicao);
+document.getElementById(
+"players-"+player.posicao
+);
 
 if(!area)return;
 
-const pawn=document.createElement("span");
+const pawn=
+document.createElement("span");
 
 pawn.classList.add(
 "pawn",
@@ -1991,11 +2093,13 @@ function atualizarJogadores(){
 const container=
 document.getElementById("players");
 
-container.innerHTML="<h3>👥 Jogadores</h3>";
+container.innerHTML=
+"<h3>👥 Jogadores</h3>";
 
 players.forEach(function(player,index){
 
-const div=document.createElement("div");
+const div=
+document.createElement("div");
 
 div.className="player-info";
 
@@ -2010,8 +2114,11 @@ contarItens(player)+
 " — ✅ "+
 player.acertos;
 
-if(index===currentPlayer)
+if(index===currentPlayer){
+
 div.innerHTML+=" 🎯";
+
+}
 
 container.appendChild(div);
 
@@ -2042,7 +2149,8 @@ function atualizarCor(){
 if(meuJogador<0||!players[meuJogador])
 return;
 
-const player=players[meuJogador];
+const player=
+players[meuJogador];
 
 document.getElementById("yourColor").textContent=
 "♟️ Você é "+
@@ -2059,7 +2167,8 @@ player.cor.nome;
 
 function atualizarTurno(){
 
-if(!players[currentPlayer])return;
+if(!players[currentPlayer])
+return;
 
 document.getElementById("turnText").textContent=
 "🎯 Vez de "+
@@ -2074,9 +2183,11 @@ players[currentPlayer].nome;
 
 function atualizarProgresso(){
 
-if(!players[meuJogador])return;
+if(!players[meuJogador])
+return;
 
-const player=players[meuJogador];
+const player=
+players[meuJogador];
 
 const porcentagem=
 ((player.posicao-1)/(TOTAL_CASAS-1))*100;
@@ -2104,15 +2215,15 @@ const button=
 document.getElementById("rollButton");
 
 button.disabled=
-!jogoIniciado ||
-currentPlayer!==meuJogador ||
+!jogoIniciado||
+currentPlayer!==meuJogador||
 movimentoEmAndamento;
 
 }
 
 
 /* =====================================================
-   DADO
+   ANIMAÇÃO DO DADO
 ===================================================== */
 
 function animarDado(resultado){
@@ -2126,7 +2237,8 @@ dice.classList.add("diceRolling");
 
 let contador=0;
 
-const intervalo=setInterval(function(){
+const intervalo=
+setInterval(function(){
 
 dice.textContent=
 Math.floor(Math.random()*6)+1;
@@ -2153,16 +2265,19 @@ resolve();
 
 
 /* =====================================================
-   ROLAR
+   ROLAR DADO
 ===================================================== */
 
 function rollDice(){
 
-if(!jogoIniciado)return;
+if(!jogoIniciado)
+return;
 
-if(currentPlayer!==meuJogador)return;
+if(currentPlayer!==meuJogador)
+return;
 
-if(movimentoEmAndamento)return;
+if(movimentoEmAndamento)
+return;
 
 movimentoEmAndamento=true;
 
@@ -2188,18 +2303,22 @@ tipo:"rolar"
 
 
 /* =====================================================
-   PEDIDO DO JOGADOR
+   PEDIDO DE DADO
 ===================================================== */
 
 function processarPedidoDado(connection){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
-if(!jogoIniciado)return;
+if(!jogoIniciado)
+return;
 
-if(connection.playerIndex!==currentPlayer)return;
+if(connection.playerIndex!==currentPlayer)
+return;
 
-if(movimentoEmAndamento)return;
+if(movimentoEmAndamento)
+return;
 
 movimentoEmAndamento=true;
 
@@ -2212,21 +2331,30 @@ processarRolagemHost(resultado);
 
 
 /* =====================================================
-   ROLAGEM
+   ROLAGEM DO HOST
 ===================================================== */
 
 async function processarRolagemHost(resultado){
 
-if(resultado===0)
-resultado=Math.floor(Math.random()*6)+1;
+if(!isHost)
+return;
+
+if(resultado===0){
+
+resultado=
+Math.floor(Math.random()*6)+1;
+
+}
 
 const index=currentPlayer;
 
-const player=players[index];
+const player=
+players[index];
 
 if(!player){
 
 movimentoEmAndamento=false;
+
 return;
 
 }
@@ -2245,7 +2373,13 @@ resultado:resultado
 
 await animarDado(resultado);
 
+if(!jogoIniciado)
+return;
+
 await moverJogadorHost(index,resultado);
+
+if(!jogoIniciado)
+return;
 
 await resolverCasa(index);
 
@@ -2253,14 +2387,18 @@ await resolverCasa(index);
 
 
 /* =====================================================
-   MOVIMENTO
+   MOVIMENTO DO DADO
 ===================================================== */
 
 async function moverJogadorHost(index,casas){
 
-const player=players[index];
+const player=
+players[index];
 
 for(let i=0;i<casas;i++){
+
+if(!jogoIniciado)
+return;
 
 if(player.posicao>=TOTAL_CASAS)
 break;
@@ -2299,11 +2437,16 @@ await esperar(TEMPO_PASSO);
 
 async function moverEfeitoHost(index,casas){
 
-const player=players[index];
+const player=
+players[index];
 
-const direcao=casas>=0?1:-1;
+const direcao=
+casas>=0?1:-1;
 
 for(let i=0;i<Math.abs(casas);i++){
+
+if(!jogoIniciado)
+return;
 
 if(direcao>0){
 
@@ -2348,9 +2491,11 @@ await esperar(TEMPO_PASSO);
 
 async function resolverCasa(index){
 
-const player=players[index];
+const player=
+players[index];
 
-if(!player)return;
+if(!player)
+return;
 
 
 /* VITÓRIA */
@@ -2358,6 +2503,7 @@ if(!player)return;
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
+
 return;
 
 }
@@ -2367,19 +2513,15 @@ return;
 
 if(problems[player.posicao]){
 
-enviarTodos({
-
-tipo:"mensagemEspecial",
-
-titulo:"⚠️ Problema ambiental",
-
-texto:problems[player.posicao]
-
-});
+enviarMensagemEspecialTodos(
+"⚠️ Problema ambiental",
+problems[player.posicao]
+);
 
 await esperar(TEMPO_MENSAGEM);
 
-if(player.itens.arvore>0||player.itens.agua>0){
+if(player.itens.arvore>0||
+player.itens.agua>0){
 
 protecaoAtual=index;
 
@@ -2391,8 +2533,11 @@ playerIndex:index
 
 });
 
-if(index===meuJogador)
+if(index===meuJogador){
+
 mostrarModalProtecao();
+
+}
 
 return;
 
@@ -2409,19 +2554,25 @@ return;
 
 if(solutions[player.posicao]){
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"✅ Solução",
 
-titulo:"✅ Solução",
+solutions[player.posicao]
 
-texto:solutions[player.posicao]
-
-});
+);
 
 await esperar(TEMPO_MENSAGEM);
 
 await moverEfeitoHost(index,3);
+
+if(player.posicao>=TOTAL_CASAS){
+
+finalizarVitoria(index);
+
+return;
+
+}
 
 terminarAcao();
 
@@ -2434,17 +2585,15 @@ return;
 
 if(items[player.posicao]){
 
-const item=items[player.posicao];
+const item=
+items[player.posicao];
 
 darItem(player,item.nome);
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"🎁 Item encontrado!",
 
-titulo:"🎁 Item encontrado!",
-
-texto:
 player.nome+
 " encontrou "+
 item.emoji+
@@ -2453,7 +2602,7 @@ item.nome+
 "!\n\n"+
 item.descricao
 
-});
+);
 
 enviarEstado();
 
@@ -2470,11 +2619,13 @@ return;
 
 if(questions[player.posicao]){
 
-const pergunta=questions[player.posicao];
+const pergunta=
+questions[player.posicao];
 
 perguntaAtual={
 
 playerIndex:index,
+
 posicao:player.posicao
 
 };
@@ -2517,9 +2668,33 @@ return;
 }
 
 
-/* NORMAL */
+/* CASA NORMAL */
 
 terminarAcao();
+
+}
+
+
+/* =====================================================
+   MENSAGEM ESPECIAL
+===================================================== */
+
+function enviarMensagemEspecialTodos(titulo,texto){
+
+enviarTodos({
+
+tipo:"mensagemEspecial",
+
+titulo:titulo,
+
+texto:texto
+
+});
+
+mostrarMensagemEspecial(
+titulo,
+texto
+);
 
 }
 
@@ -2530,7 +2705,8 @@ terminarAcao();
 
 async function aplicarPenalidade(index){
 
-const player=players[index];
+const player=
+players[index];
 
 document.getElementById("message").textContent=
 "⚠️ "+
@@ -2547,44 +2723,39 @@ terminarAcao();
 
 
 /* =====================================================
-   TERMINAR AÇÃO
-   CORREÇÃO DO PROBLEMA "AGUARDE"
+   TERMINAR AÇÃO / PASSAR TURNO
 ===================================================== */
 
 function terminarAcao(){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
 perguntaAtual=null;
+
 protecaoAtual=null;
 
 movimentoEmAndamento=false;
 
 
 /*
-   O turno só muda depois que TODA a ação anterior
-   terminou.
+   CORREÇÃO PRINCIPAL DE SINCRONIZAÇÃO:
+
+   O jogador só muda depois que TODA a ação
+   do jogador atual terminou.
 */
 
 currentPlayer++;
 
-if(currentPlayer>=players.length)
+if(currentPlayer>=players.length){
+
 currentPlayer=0;
 
-
-/*
-   Primeiro atualizamos o estado completo.
-*/
+}
 
 enviarEstado();
 
 atualizarTudo();
-
-
-/*
-   Depois avisamos explicitamente que o novo turno
-   está liberado.
-*/
 
 enviarTodos({
 
@@ -2628,7 +2799,8 @@ texto;
 
 opcoes.forEach(function(opcao,i){
 
-const button=document.createElement("button");
+const button=
+document.createElement("button");
 
 button.className="optionButton";
 
@@ -2648,7 +2820,8 @@ area.appendChild(button);
 
 });
 
-document.getElementById("questionModal").style.display="flex";
+document.getElementById("questionModal").style.display=
+"flex";
 
 }
 
@@ -2659,7 +2832,8 @@ document.getElementById("questionModal").style.display="flex";
 
 function enviarResposta(indice){
 
-document.getElementById("questionModal").style.display="none";
+document.getElementById("questionModal").style.display=
+"none";
 
 if(isHost){
 
@@ -2686,19 +2860,24 @@ indice:indice
 
 async function processarResposta(connection,indice){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
-if(!perguntaAtual)return;
+if(!perguntaAtual)
+return;
 
-const index=perguntaAtual.playerIndex;
+const index=
+perguntaAtual.playerIndex;
 
-if(connection&&connection.playerIndex!==index)
+if(connection&&
+connection.playerIndex!==index)
 return;
 
 if(index!==currentPlayer)
 return;
 
-const player=players[index];
+const player=
+players[index];
 
 const pergunta=
 questions[player.posicao];
@@ -2718,17 +2897,14 @@ player.acertos++;
 
 perguntaAtual=null;
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"🎉 Resposta correta!",
 
-titulo:"🎉 Resposta correta!",
-
-texto:
 player.nome+
 " respondeu corretamente e avançará 2 casas!"
 
-});
+);
 
 enviarEstado();
 
@@ -2739,6 +2915,7 @@ await moverEfeitoHost(index,2);
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
+
 return;
 
 }
@@ -2752,17 +2929,14 @@ return;
 
 /* ERRO */
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"❌ Resposta incorreta",
 
-titulo:"❌ Resposta incorreta",
-
-texto:
 player.nome+
 " errou a pergunta e permanece na casa."
 
-});
+);
 
 await esperar(TEMPO_MENSAGEM);
 
@@ -2781,14 +2955,14 @@ playerIndex:index
 
 if(index===meuJogador){
 
-document.getElementById("denunciaChoice").style.display="flex";
+document.getElementById("denunciaChoice").style.display=
+"flex";
 
 }
 
 return;
 
 }
-
 
 perguntaAtual=null;
 
@@ -2798,18 +2972,22 @@ terminarAcao();
 
 
 /* =====================================================
-   DENÚNCIA
+   USAR DENÚNCIA
 ===================================================== */
 
 function usarDenuncia(){
 
-if(!perguntaAtual)return;
+if(!perguntaAtual)
+return;
 
-const index=perguntaAtual.playerIndex;
+const index=
+perguntaAtual.playerIndex;
 
-if(index!==meuJogador)return;
+if(index!==meuJogador)
+return;
 
-document.getElementById("denunciaChoice").style.display="none";
+document.getElementById("denunciaChoice").style.display=
+"none";
 
 if(isHost){
 
@@ -2826,15 +3004,23 @@ tipo:"denuncia"
 }
 
 
+/* =====================================================
+   PASSAR DENÚNCIA
+===================================================== */
+
 function passarDenuncia(){
 
-document.getElementById("denunciaChoice").style.display="none";
+document.getElementById("denunciaChoice").style.display=
+"none";
 
-if(!perguntaAtual)return;
+if(!perguntaAtual)
+return;
 
-const index=perguntaAtual.playerIndex;
+const index=
+perguntaAtual.playerIndex;
 
-if(index!==meuJogador)return;
+if(index!==meuJogador)
+return;
 
 if(isHost){
 
@@ -2851,39 +3037,46 @@ tipo:"passarDenuncia"
 }
 
 
+/* =====================================================
+   PROCESSAR DENÚNCIA
+===================================================== */
+
 async function processarDenuncia(connection){
 
-if(!isHost)return;
-
-if(!perguntaAtual)return;
-
-const index=perguntaAtual.playerIndex;
-
-if(connection&&connection.playerIndex!==index)
+if(!isHost)
 return;
 
-const player=players[index];
+if(!perguntaAtual)
+return;
+
+const index=
+perguntaAtual.playerIndex;
+
+if(connection&&
+connection.playerIndex!==index)
+return;
+
+const player=
+players[index];
 
 if(player.itens.denuncia<=0)
 return;
 
 player.itens.denuncia--;
 
-const pergunta=questions[player.posicao];
+const pergunta=
+questions[player.posicao];
 
 enviarEstado();
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"📢 Denúncia utilizada",
 
-titulo:"📢 Denúncia utilizada",
-
-texto:
 player.nome+
 " terá uma nova tentativa."
 
-});
+);
 
 await esperar(TEMPO_ACAO);
 
@@ -2904,10 +3097,14 @@ playerIndex:index
 if(index===meuJogador){
 
 mostrarPergunta(
+
 "📢 NOVA TENTATIVA\n\n"+
 pergunta.pergunta,
+
 index,
+
 pergunta.opcoes
+
 );
 
 }
@@ -2915,15 +3112,23 @@ pergunta.opcoes
 }
 
 
+/* =====================================================
+   PASSAR DENÚNCIA
+===================================================== */
+
 function processarPassarDenuncia(connection){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
-if(!perguntaAtual)return;
+if(!perguntaAtual)
+return;
 
-const index=perguntaAtual.playerIndex;
+const index=
+perguntaAtual.playerIndex;
 
-if(connection&&connection.playerIndex!==index)
+if(connection&&
+connection.playerIndex!==index)
 return;
 
 perguntaAtual=null;
@@ -2934,7 +3139,7 @@ terminarAcao();
 
 
 /* =====================================================
-   ITENS
+   ABRIR ITENS
 ===================================================== */
 
 function abrirItens(){
@@ -2942,14 +3147,19 @@ function abrirItens(){
 if(!players[meuJogador])
 return;
 
-const player=players[meuJogador];
+const player=
+players[meuJogador];
 
-const lista=document.getElementById("itemsList");
+const lista=
+document.getElementById("itemsList");
 
 lista.innerHTML="";
 
 
-const arvore=document.createElement("div");
+/* ÁRVORE */
+
+const arvore=
+document.createElement("div");
 
 arvore.className="itemCard";
 
@@ -2974,7 +3184,10 @@ arvore.innerHTML+=
 lista.appendChild(arvore);
 
 
-const denuncia=document.createElement("div");
+/* DENÚNCIA */
+
+const denuncia=
+document.createElement("div");
 
 denuncia.className="itemCard";
 
@@ -2999,7 +3212,10 @@ denuncia.innerHTML+=
 lista.appendChild(denuncia);
 
 
-const agua=document.createElement("div");
+/* ÁGUA */
+
+const agua=
+document.createElement("div");
 
 agua.className="itemCard";
 
@@ -3023,7 +3239,8 @@ agua.innerHTML+=
 
 lista.appendChild(agua);
 
-document.getElementById("itemsModal").style.display="flex";
+document.getElementById("itemsModal").style.display=
+"flex";
 
 }
 
@@ -3036,7 +3253,7 @@ function usarDenunciaDoInventario(){
 
 fecharModal("itemsModal");
 
-if(perguntaAtual &&
+if(perguntaAtual&&
 perguntaAtual.playerIndex===meuJogador){
 
 usarDenuncia();
@@ -3053,14 +3270,16 @@ alert(
 
 
 /* =====================================================
-   PROTEÇÃO
+   MODAL DE PROTEÇÃO
 ===================================================== */
 
 function mostrarModalProtecao(){
 
-const player=players[meuJogador];
+const player=
+players[meuJogador];
 
-if(!player)return;
+if(!player)
+return;
 
 const modal=
 document.getElementById("protectionModal");
@@ -3070,11 +3289,13 @@ modal.querySelectorAll(".protectionButton");
 
 botoes[0].style.display=
 player.itens.arvore>0
-?"inline-block":"none";
+?"inline-block"
+:"none";
 
 botoes[1].style.display=
 player.itens.agua>0
-?"inline-block":"none";
+?"inline-block"
+:"none";
 
 modal.style.display="flex";
 
@@ -3082,12 +3303,13 @@ modal.style.display="flex";
 
 
 /* =====================================================
-   ÁRVORE
+   USAR ÁRVORE
 ===================================================== */
 
 function usarArvore(){
 
 fecharModal("protectionModal");
+
 fecharModal("itemsModal");
 
 if(protecaoAtual===null)
@@ -3109,12 +3331,13 @@ tipo:"usarArvore"
 
 
 /* =====================================================
-   ÁGUA
+   USAR ÁGUA
 ===================================================== */
 
 function usarAgua(){
 
 fecharModal("protectionModal");
+
 fecharModal("itemsModal");
 
 if(protecaoAtual===null)
@@ -3136,7 +3359,7 @@ tipo:"usarAgua"
 
 
 /* =====================================================
-   NÃO USAR
+   NÃO USAR PROTEÇÃO
 ===================================================== */
 
 function passarProtecao(){
@@ -3167,19 +3390,24 @@ tipo:"passarProtecao"
 
 async function processarItem(connection,tipo){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
 if(protecaoAtual===null)
 return;
 
-const index=protecaoAtual;
+const index=
+protecaoAtual;
 
-if(connection&&connection.playerIndex!==index)
+if(connection&&
+connection.playerIndex!==index)
 return;
 
-const player=players[index];
+const player=
+players[index];
 
-if(!player)return;
+if(!player)
+return;
 
 
 /* ÁRVORE */
@@ -3193,17 +3421,14 @@ player.itens.arvore--;
 
 protecaoAtual=null;
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"🌳 Proteção utilizada!",
 
-titulo:"🌳 Proteção utilizada!",
-
-texto:
 player.nome+
 " utilizou uma Árvore e evitou a penalidade."
 
-});
+);
 
 enviarEstado();
 
@@ -3227,17 +3452,14 @@ player.itens.agua--;
 
 protecaoAtual=null;
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"💧 Água utilizada!",
 
-titulo:"💧 Água utilizada!",
-
-texto:
 player.nome+
 " utilizou Água e avançará 2 casas!"
 
-});
+);
 
 enviarEstado();
 
@@ -3248,6 +3470,7 @@ await moverEfeitoHost(index,2);
 if(player.posicao>=TOTAL_CASAS){
 
 finalizarVitoria(index);
+
 return;
 
 }
@@ -3265,31 +3488,32 @@ terminarAcao();
 
 async function processarPassarProtecao(connection){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
 if(protecaoAtual===null)
 return;
 
-const index=protecaoAtual;
+const index=
+protecaoAtual;
 
-if(connection&&connection.playerIndex!==index)
+if(connection&&
+connection.playerIndex!==index)
 return;
 
 protecaoAtual=null;
 
-const player=players[index];
+const player=
+players[index];
 
-enviarTodos({
+enviarMensagemEspecialTodos(
 
-tipo:"mensagemEspecial",
+"⚠️ Penalidade",
 
-titulo:"⚠️ Penalidade",
-
-texto:
 player.nome+
 " decidiu não usar proteção e perderá 3 casas."
 
-});
+);
 
 await esperar(TEMPO_ACAO);
 
@@ -3324,11 +3548,11 @@ player.itens.agua++;
 
 function mostrarMensagemEspecial(titulo,texto){
 
-document.getElementById("specialTitle").textContent=
-titulo;
+const title=
+document.getElementById("specialTitle");
 
-document.getElementById("specialText").textContent=
-texto;
+const content=
+document.getElementById("specialText");
 
 const modal=
 document.getElementById("specialModal");
@@ -3336,30 +3560,64 @@ document.getElementById("specialModal");
 const bar=
 document.getElementById("specialTimerBar");
 
+
+if(mensagemEspecialTimer){
+
+clearTimeout(mensagemEspecialTimer);
+
+mensagemEspecialTimer=null;
+
+}
+
+title.textContent=titulo;
+
+content.textContent=texto;
+
 bar.style.transition="none";
+
 bar.style.width="100%";
 
 modal.style.display="flex";
 
 setTimeout(function(){
 
-bar.style.transition="width 1.2s linear";
+bar.style.transition=
+"width "+
+(TEMPO_MENSAGEM/1000)+
+"s linear";
+
 bar.style.width="0%";
 
-},30);
+},50);
 
+mensagemEspecialTimer=
 setTimeout(function(){
 
 fecharMensagemEspecial();
 
-},1400);
+mensagemEspecialTimer=null;
+
+},TEMPO_MENSAGEM);
 
 }
 
 
+/* =====================================================
+   FECHAR MENSAGEM
+===================================================== */
+
 function fecharMensagemEspecial(){
 
-document.getElementById("specialModal").style.display="none";
+if(mensagemEspecialTimer){
+
+clearTimeout(mensagemEspecialTimer);
+
+mensagemEspecialTimer=null;
+
+}
+
+document.getElementById("specialModal").style.display=
+"none";
 
 }
 
@@ -3370,7 +3628,8 @@ document.getElementById("specialModal").style.display="none";
 
 function fecharModal(id){
 
-const modal=document.getElementById(id);
+const modal=
+document.getElementById(id);
 
 if(modal)
 modal.style.display="none";
@@ -3384,9 +3643,11 @@ modal.style.display="none";
 
 function finalizarVitoria(index){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
-const vencedor=players[index];
+const vencedor=
+players[index];
 
 jogoIniciado=false;
 
@@ -3406,8 +3667,13 @@ mensagem;
 
 document.getElementById("rollButton").disabled=true;
 
-if(timer)
+if(timer){
+
 clearInterval(timer);
+
+timer=null;
+
+}
 
 enviarTodos({
 
@@ -3430,12 +3696,14 @@ enviarEstado();
 
 function iniciarCronometro(){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
 if(timer)
 clearInterval(timer);
 
-timer=setInterval(function(){
+timer=
+setInterval(function(){
 
 if(!jogoIniciado)
 return;
@@ -3451,6 +3719,8 @@ if(tempoRestante<=0){
 
 clearInterval(timer);
 
+timer=null;
+
 finalizarPorTempo();
 
 }
@@ -3461,7 +3731,7 @@ finalizarPorTempo();
 
 
 /* =====================================================
-   TIMER
+   TIMER VISUAL
 ===================================================== */
 
 function atualizarTimerVisual(){
@@ -3481,53 +3751,81 @@ String(segundos).padStart(2,"0");
 
 
 /* =====================================================
-   DESEMPATE QUANDO O TEMPO ACABA
+   DESEMPATE
 ===================================================== */
 
 function compararJogadores(a,b){
 
 /*
-   1º — posição
-   2º — quantidade de itens
-   3º — respostas corretas
+1º posição
+2º itens
+3º respostas corretas
 */
 
-if(a.posicao!==b.posicao)
+if(a.posicao!==b.posicao){
+
 return b.posicao-a.posicao;
 
-const itensA=contarItens(a);
-const itensB=contarItens(b);
+}
 
-if(itensA!==itensB)
+const itensA=
+contarItens(a);
+
+const itensB=
+contarItens(b);
+
+if(itensA!==itensB){
+
 return itensB-itensA;
 
-if(a.acertos!==b.acertos)
+}
+
+if(a.acertos!==b.acertos){
+
 return b.acertos-a.acertos;
+
+}
 
 return 0;
 
 }
 
 
+/* =====================================================
+   FINALIZAR POR TEMPO
+===================================================== */
+
 function finalizarPorTempo(){
 
-if(!isHost)return;
+if(!isHost)
+return;
 
-const ranking=[...players]
-.sort(compararJogadores);
+const ranking=
+[...players].sort(compararJogadores);
 
-const vencedor=ranking[0];
+const vencedor=
+ranking[0];
 
-const empatados=ranking.filter(function(player){
+const empatados=
+ranking.filter(function(player){
 
-return player.posicao===vencedor.posicao &&
-contarItens(player)===contarItens(vencedor) &&
-player.acertos===vencedor.acertos;
+return (
+
+player.posicao===vencedor.posicao&&
+
+contarItens(player)===
+contarItens(vencedor)&&
+
+player.acertos===
+vencedor.acertos
+
+);
 
 });
 
 
 let mensagem="";
+
 
 if(empatados.length>1){
 
@@ -3568,6 +3866,7 @@ vencedor.acertos;
 }
 
 jogoIniciado=false;
+
 movimentoEmAndamento=true;
 
 document.getElementById("message").textContent=
@@ -3596,7 +3895,8 @@ enviarEstado();
 
 function mostrarComoJogar(){
 
-document.getElementById("howToModal").style.display="flex";
+document.getElementById("howToModal").style.display=
+"flex";
 
 }
 
@@ -3605,9 +3905,20 @@ document.getElementById("howToModal").style.display="flex";
    BOTÃO DO DADO
 ===================================================== */
 
-document.getElementById("rollButton").onclick=rollDice;
+document.getElementById("rollButton").onclick=
+rollDice;
 
 document.getElementById("rollButton").disabled=true;
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+document.getElementById("progressText").textContent=
+"Seu progresso: 1 / "+
+TOTAL_CASAS+
+" casas";
 
 </script>
 
