@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Jogo Educativo — Racismo Ambiental</title>
+<title>Caminhos da Justiça Ambiental</title>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
@@ -11,948 +11,1219 @@
 *{box-sizing:border-box}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#071b13,#123b28);
-  color:white;
-  min-height:100vh;
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#101827;
+    color:white;
+    overflow-x:hidden;
+}
+
+button,input{
+    font:inherit;
 }
 
 button{
-  border:0;
-  border-radius:12px;
-  padding:12px 18px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  background:#25c26e;
-  color:white;
+    cursor:pointer;
+    border:0;
 }
 
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+.hidden{
+    display:none!important;
 }
 
-input{
-  padding:12px;
-  border-radius:10px;
-  border:2px solid #315b47;
-  background:#10251b;
-  color:white;
-  font-size:16px;
-  width:100%;
-  margin-bottom:10px;
-}
-
-.hidden{display:none!important}
+/* ================= LOBBY ================= */
 
 #lobby{
-  max-width:600px;
-  margin:30px auto;
-  padding:25px;
-  text-align:center;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 }
 
-.card{
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:20px;
-  padding:20px;
-  margin:15px 0;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
+.lobbyBox{
+    width:100%;
+    max-width:520px;
+    background:#1c293d;
+    border-radius:22px;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 15px 50px #0008;
 }
 
-#roomCode{
-  font-size:28px;
-  letter-spacing:5px;
-  color:#69e89d;
-  font-weight:bold;
+.lobbyBox h1{
+    margin-top:0;
+    font-size:28px;
 }
+
+.lobbyBox p{
+    color:#cbd5e1;
+}
+
+.lobbyBox input{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:2px solid #334155;
+    background:#0f172a;
+    color:white;
+    margin:7px 0;
+    outline:none;
+}
+
+.lobbyBox button{
+    width:100%;
+    padding:14px;
+    margin-top:8px;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+}
+
+.lobbyBox button:hover{
+    filter:brightness(1.15);
+}
+
+.roomCode{
+    font-size:25px;
+    font-weight:bold;
+    letter-spacing:4px;
+    margin:15px 0;
+}
+
+#playersLobby{
+    margin-top:15px;
+    background:#111827;
+    padding:12px;
+    border-radius:12px;
+    text-align:left;
+}
+
+.playerLobby{
+    padding:7px;
+    border-bottom:1px solid #334155;
+}
+
+#lobbyMessage{
+    margin-top:12px;
+    min-height:24px;
+    color:#93c5fd;
+}
+
+/* ================= GAME ================= */
 
 #game{
-  padding:10px;
+    min-height:100vh;
+    padding-bottom:30px;
 }
 
 #hud{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  max-width:1400px;
-  margin:auto;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:#162235;
+    border-bottom:2px solid #334155;
+    padding:10px;
+    box-shadow:0 5px 20px #0006;
 }
 
-.hudBox{
-  background:rgba(255,255,255,.09);
-  border-radius:14px;
-  padding:10px;
-  text-align:center;
-  min-height:70px;
+.hudTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
-.hudTitle{
-  font-size:12px;
-  opacity:.7;
+.hudCard{
+    background:#0f172a;
+    border-radius:12px;
+    padding:8px 12px;
+    min-width:100px;
+}
+
+.hudLabel{
+    color:#94a3b8;
+    font-size:11px;
 }
 
 .hudValue{
-  font-size:18px;
-  font-weight:bold;
-  margin-top:4px;
+    font-weight:bold;
+    font-size:15px;
 }
 
 #timer{
-  color:#74f0a5;
-  font-size:23px;
+    color:#facc15;
+    font-size:19px;
 }
 
 #turnText{
-  max-width:1400px;
-  margin:10px auto;
-  padding:12px;
-  background:#183d2b;
-  border-radius:14px;
-  text-align:center;
-  font-weight:bold;
+    text-align:center;
+    margin-top:8px;
+    padding:9px;
+    background:#0f172a;
+    border-radius:10px;
+    color:#bfdbfe;
+    font-weight:bold;
 }
 
-#progressArea{
-  max-width:1400px;
-  margin:10px auto;
+.hudButtons{
+    display:flex;
+    gap:7px;
 }
 
-#progressBar{
-  height:15px;
-  background:#183326;
-  border-radius:20px;
-  overflow:hidden;
+.hudButtons button{
+    padding:9px 12px;
+    border-radius:10px;
+    background:#334155;
+    color:white;
+    font-weight:bold;
+}
+
+/* ================= TAB PLAYERS ================= */
+
+#playersHud{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding:8px 0 2px;
+}
+
+.playerHud{
+    flex:0 0 auto;
+    padding:7px 10px;
+    border-radius:10px;
+    background:#0f172a;
+    font-size:12px;
+    border:2px solid transparent;
+}
+
+.playerHud.me{
+    border-color:#facc15;
+}
+
+/* ================= BOARD ================= */
+
+#boardArea{
+    max-width:1200px;
+    margin:auto;
+    padding:15px;
+}
+
+#progressBox{
+    background:#1c293d;
+    padding:12px;
+    border-radius:15px;
+    margin-bottom:12px;
+}
+
+.progressBar{
+    height:13px;
+    background:#0f172a;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:7px;
 }
 
 #progressFill{
-  height:100%;
-  width:0%;
-  background:#36d878;
-  transition:.3s;
+    height:100%;
+    width:0%;
+    background:#22c55e;
+    transition:width:.3s;
+}
+
+#progressText{
+    font-weight:bold;
 }
 
 #board{
-  max-width:1400px;
-  margin:15px auto;
-  display:grid;
-  grid-template-columns:repeat(10,1fr);
-  gap:5px;
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:5px;
 }
 
 .cell{
-  position:relative;
-  min-height:75px;
-  background:#e9f3ec;
-  color:#102018;
-  border-radius:9px;
-  padding:5px;
-  font-size:12px;
-  font-weight:bold;
-  border:2px solid #bdd3c4;
-  overflow:hidden;
-}
-
-.cell.problem{
-  background:#ffcaca;
-  border-color:#ef6565;
-}
-
-.cell.solution{
-  background:#c9f4d6;
-  border-color:#55c978;
-}
-
-.cell.question{
-  background:#c9ddff;
-  border-color:#5f91ef;
-}
-
-.cell.item{
-  background:#f0d0ff;
-  border-color:#b864e5;
-}
-
-.cell.start{
-  background:#ffe49a;
-  border-color:#e8b52f;
-}
-
-.cell.finish{
-  background:#a8ffd0;
-  border-color:#20ad62;
+    min-height:72px;
+    background:#26364c;
+    border-radius:9px;
+    border:1px solid #3d4e66;
+    position:relative;
+    padding:5px;
+    font-size:11px;
+    overflow:visible;
 }
 
 .cellNumber{
-  position:absolute;
-  top:4px;
-  left:5px;
+    position:absolute;
+    top:3px;
+    left:5px;
+    color:#cbd5e1;
+    font-weight:bold;
 }
 
 .cellIcon{
-  text-align:center;
-  font-size:23px;
-  margin-top:18px;
+    position:absolute;
+    right:4px;
+    top:3px;
 }
 
-.people{
-  position:absolute;
-  left:4px;
-  right:4px;
-  bottom:3px;
-  display:flex;
-  justify-content:center;
-  gap:2px;
-  flex-wrap:wrap;
+.cell.problem{
+    background:#54252b;
+}
+
+.cell.solution{
+    background:#164b35;
+}
+
+.cell.question{
+    background:#43316b;
+}
+
+.cell.item{
+    background:#15506a;
+}
+
+.cell.finish{
+    background:#8a6510;
+}
+
+.pawns{
+    position:absolute;
+    left:3px;
+    right:3px;
+    bottom:4px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:2px;
+    justify-content:center;
 }
 
 .person{
-  width:25px;
-  height:31px;
-  position:relative;
-  display:inline-block;
+    width:24px;
+    height:31px;
+    position:relative;
+    filter:drop-shadow(0 2px 2px #000);
 }
 
 .person .head{
-  position:absolute;
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  top:0;
-  left:7px;
-  background:#ffd2aa;
-  border:1px solid #333;
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:currentColor;
+    left:7px;
+    top:0;
 }
 
 .person .body{
-  position:absolute;
-  width:17px;
-  height:17px;
-  border-radius:8px 8px 4px 4px;
-  top:10px;
-  left:4px;
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-radius:8px 8px 5px 5px;
+    background:currentColor;
+    left:4px;
+    top:9px;
 }
 
-.person .legs{
-  position:absolute;
-  width:15px;
-  height:7px;
-  bottom:0;
-  left:5px;
-  background:#222;
-  border-radius:5px;
+.person .leg1,
+.person .leg2{
+    position:absolute;
+    width:5px;
+    height:8px;
+    background:currentColor;
+    top:24px;
+    border-radius:4px;
 }
 
-.controls{
-  max-width:600px;
-  margin:15px auto;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
+.person .leg1{left:5px}
+.person .leg2{right:5px}
+
+/* ================= CONTROLS ================= */
+
+#controls{
+    max-width:700px;
+    margin:15px auto;
+    padding:15px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
 }
 
 #dice{
-  font-size:65px;
-  width:100px;
-  height:100px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:white;
-  color:#111;
-  border-radius:20px;
-  margin:10px auto;
+    width:90px;
+    height:90px;
+    border-radius:18px;
+    background:white;
+    color:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:45px;
+    box-shadow:0 8px 20px #0007;
 }
 
-.diceRoll{
-  animation:roll .7s ease;
+.diceRolling{
+    animation:diceRoll .55s infinite;
 }
 
-@keyframes roll{
-  0%{transform:rotate(0) scale(1)}
-  25%{transform:rotate(90deg) scale(1.15)}
-  50%{transform:rotate(180deg) scale(.9)}
-  75%{transform:rotate(270deg) scale(1.15)}
-  100%{transform:rotate(360deg) scale(1)}
+@keyframes diceRoll{
+    0%{transform:rotate(0) scale(1)}
+    25%{transform:rotate(90deg) scale(1.1)}
+    50%{transform:rotate(180deg) scale(.95)}
+    75%{transform:rotate(270deg) scale(1.1)}
+    100%{transform:rotate(360deg) scale(1)}
 }
+
+#rollBtn{
+    background:#22c55e;
+    color:white;
+    padding:15px 35px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+#rollBtn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+#myProfession{
+    background:#1c293d;
+    padding:10px 16px;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+/* ================= MODAIS ================= */
 
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
-  padding:15px;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:#000b;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
 }
 
 .modalBox{
-  width:min(700px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#10271b;
-  border:2px solid #3f7655;
-  border-radius:22px;
-  padding:22px;
-  box-shadow:0 20px 60px #000;
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#1c293d;
+    border-radius:20px;
+    padding:22px;
+    position:relative;
+    box-shadow:0 15px 60px #000;
 }
 
 .close{
-  float:right;
-  background:#d94444;
-  padding:7px 11px;
+    position:absolute;
+    right:12px;
+    top:10px;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#ef4444;
+    color:white;
+    font-weight:bold;
+    font-size:20px;
 }
 
-.option{
-  display:block;
-  width:100%;
-  margin:8px 0;
-  text-align:left;
-  background:#214f36;
+.modalBox h2{
+    margin-top:5px;
 }
 
-.option:hover{
-  background:#2c704b;
+.itemGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
 }
+
+.itemCard{
+    background:#0f172a;
+    padding:12px;
+    border-radius:12px;
+}
+
+.itemCount{
+    font-size:22px;
+    font-weight:bold;
+    color:#facc15;
+}
+
+.questionOption{
+    display:block;
+    width:100%;
+    padding:13px;
+    margin:8px 0;
+    border-radius:12px;
+    background:#334155;
+    color:white;
+    text-align:left;
+}
+
+.questionOption:hover{
+    background:#475569;
+}
+
+/* ================= SORTEIO ================= */
 
 #drawBox{
-  text-align:center;
+    text-align:center;
 }
 
-#drawText{
-  font-size:32px;
-  min-height:70px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#76f1a5;
-  font-weight:bold;
+#drawDisplay{
+    min-height:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:bold;
+    background:#0f172a;
+    border-radius:15px;
+    margin:15px 0;
+    padding:20px;
 }
 
-.drawAnimation{
-  animation:pulse .18s infinite alternate;
+.drawSpin{
+    animation:drawSpin .1s infinite;
 }
 
-@keyframes pulse{
-  from{transform:scale(1)}
-  to{transform:scale(1.08)}
+@keyframes drawSpin{
+    0%{transform:scale(.95)}
+    50%{transform:scale(1.08)}
+    100%{transform:scale(.95)}
 }
 
-.playerLine{
-  padding:7px;
-  margin:4px 0;
-  background:rgba(255,255,255,.06);
-  border-radius:8px;
+#drawResult{
+    font-size:24px;
+    color:#facc15;
+    font-weight:bold;
 }
 
-.itemLine{
-  padding:12px;
-  margin:8px 0;
-  background:#183d2b;
-  border-radius:12px;
+/* ================= TOAST ================= */
+
+#toast{
+    position:fixed;
+    left:50%;
+    bottom:20px;
+    transform:translateX(-50%);
+    z-index:200;
+    background:#020617;
+    padding:13px 18px;
+    border-radius:12px;
+    box-shadow:0 8px 25px #0008;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    text-align:center;
+    max-width:90%;
 }
 
-.small{
-  font-size:13px;
-  opacity:.75;
+#toast.show{
+    opacity:1;
 }
+
+/* ================= RESPONSIVO ================= */
 
 @media(max-width:700px){
-  #hud{
-    grid-template-columns:repeat(2,1fr);
-  }
+    #board{
+        grid-template-columns:repeat(5,1fr);
+    }
 
-  #board{
-    grid-template-columns:repeat(5,1fr);
-  }
+    .cell{
+        min-height:65px;
+    }
 
-  .cell{
-    min-height:65px;
-  }
+    .hudCard{
+        min-width:90px;
+    }
 
-  .cellIcon{
-    font-size:18px;
-  }
+    .itemGrid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:430px){
+    .cell{
+        min-height:58px;
+        font-size:9px;
+    }
+
+    .person{
+        transform:scale(.8);
+        transform-origin:bottom center;
+        margin:-3px;
+    }
+
+    .hudCard{
+        padding:6px 8px;
+        min-width:80px;
+    }
+
+    .hudValue{
+        font-size:13px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div id="lobby">
+<!-- ================= LOBBY ================= -->
 
-  <h1>🌱 Caminhos da Justiça Ambiental</h1>
-  <p>Jogo educativo sobre racismo ambiental</p>
+<section id="lobby">
+    <div class="lobbyBox">
+        <h1>🌎 Caminhos da Justiça Ambiental</h1>
+        <p>Chegue à casa 150 antes do tempo acabar!</p>
 
-  <div class="card">
-    <h2>Entrar no jogo</h2>
+        <input id="nameInput" maxlength="18" placeholder="Seu nome">
 
-    <input id="nameInput" placeholder="Digite seu nome">
+        <button onclick="createRoom()">🏠 Criar sala</button>
 
-    <button onclick="createRoom()">🏠 Criar sala</button>
+        <hr style="border-color:#334155;margin:18px 0">
 
-    <hr>
+        <input id="roomInput" placeholder="Código da sala">
+        <button onclick="joinRoom()">🚪 Entrar na sala</button>
 
-    <input id="joinCode" placeholder="Código da sala">
+        <div id="roomCodeBox" class="hidden">
+            <p>Código da sala:</p>
+            <div id="roomCode" class="roomCode"></div>
+        </div>
 
-    <button onclick="joinRoom()">🚪 Entrar na sala</button>
+        <div id="playersLobby">
+            <b>Jogadores:</b>
+            <div id="playersList">Nenhum jogador conectado.</div>
+        </div>
 
-    <p id="connectionStatus">Desconectado</p>
-  </div>
+        <button id="startBtn" class="hidden" onclick="startGame()">
+            ▶️ Começar partida
+        </button>
 
-  <div id="roomArea" class="card hidden">
-    <p>Código da sala:</p>
-    <div id="roomCode"></div>
+        <div id="lobbyMessage"></div>
+    </div>
+</section>
 
-    <h3>Jogadores</h3>
-    <div id="lobbyPlayers"></div>
+<!-- ================= GAME ================= -->
 
-    <button id="startButton" class="hidden" onclick="startGame()">
-      ▶️ Começar partida
-    </button>
-  </div>
+<section id="game" class="hidden">
 
+    <div id="hud">
+
+        <div class="hudTop">
+
+            <div class="hudCard">
+                <div class="hudLabel">VOCÊ</div>
+                <div id="hudName" class="hudValue">-</div>
+            </div>
+
+            <div class="hudCard">
+                <div class="hudLabel">PROFISSÃO</div>
+                <div id="hudProfession" class="hudValue">Sorteando...</div>
+            </div>
+
+            <div class="hudCard">
+                <div class="hudLabel">TEMPO</div>
+                <div id="timer" class="hudValue">30:00</div>
+            </div>
+
+            <div class="hudButtons">
+                <button onclick="openItems()">🎒 Itens</button>
+                <button onclick="openHowTo()">❓ Como jogar</button>
+            </div>
+
+        </div>
+
+        <div id="playersHud"></div>
+
+        <div id="turnText">Aguardando...</div>
+
+    </div>
+
+    <main id="boardArea">
+
+        <div id="progressBox">
+            <div id="progressText">Seu progresso: 0 / 150 casas</div>
+            <div class="progressBar">
+                <div id="progressFill"></div>
+            </div>
+        </div>
+
+        <div id="board"></div>
+
+        <div id="controls">
+
+            <div id="dice">🎲</div>
+
+            <button id="rollBtn" onclick="rollDice()" disabled>
+                🎲 Jogar dado
+            </button>
+
+            <div id="myProfession">
+                Profissão: sorteando...
+            </div>
+
+        </div>
+
+    </main>
+</section>
+
+<!-- ================= COMO JOGAR ================= -->
+
+<div id="howModal" class="modal hidden">
+    <div class="modalBox">
+
+        <button class="close" onclick="closeModal('howModal')">×</button>
+
+        <h2>❓ Como jogar</h2>
+
+        <p>
+            O objetivo é chegar à <b>casa 150</b> antes que os
+            <b>30 minutos</b> acabem.
+        </p>
+
+        <h3>🎲 Movimento</h3>
+        <p>
+            Quando for sua vez, jogue o dado. Seu personagem
+            anda uma casa por vez até chegar ao resultado.
+        </p>
+
+        <h3>🏆 Vitória</h3>
+        <p>
+            Quem chegar primeiro à casa 150 vence imediatamente.
+        </p>
+
+        <p>
+            Se o tempo acabar, vence quem estiver mais avançado.
+            Se houver empate, a quantidade de itens e depois os
+            acertos nas perguntas são usados como desempate.
+        </p>
+
+        <h3>💼 Profissões</h3>
+        <p>
+            No começo da partida cada jogador recebe uma profissão
+            por meio de um sorteio animado.
+        </p>
+
+        <h3>🎒 Itens</h3>
+        <p>
+            Os itens encontrados durante a partida ficam guardados
+            na aba <b>Itens</b>.
+        </p>
+
+        <h3>⚠️ Casas especiais</h3>
+        <p>
+            Existem casas de problemas, soluções, perguntas e itens.
+            Ao cair nelas, um evento será ativado.
+        </p>
+
+        <h3>❓ Perguntas</h3>
+        <p>
+            Responda perguntas sobre racismo ambiental.
+            Uma resposta correta ajuda no avanço.
+        </p>
+
+    </div>
 </div>
 
+<!-- ================= ITENS ================= -->
 
-<div id="game" class="hidden">
+<div id="itemsModal" class="modal hidden">
+    <div class="modalBox">
 
-  <div id="hud">
+        <button class="close" onclick="closeModal('itemsModal')">×</button>
 
-    <div class="hudBox">
-      <div class="hudTitle">👤 VOCÊ</div>
-      <div class="hudValue" id="hudName">-</div>
+        <h2>🎒 Seus itens</h2>
+
+        <div id="itemGrid" class="itemGrid"></div>
+
     </div>
-
-    <div class="hudBox">
-      <div class="hudTitle">💼 PROFISSÃO</div>
-      <div class="hudValue" id="hudProfession">Sorteando...</div>
-    </div>
-
-    <div class="hudBox">
-      <div class="hudTitle">⏱️ TEMPO</div>
-      <div class="hudValue" id="timer">30:00</div>
-    </div>
-
-    <div class="hudBox">
-      <div class="hudTitle">🏠 CASA</div>
-      <div class="hudValue" id="hudPosition">1 / 150</div>
-    </div>
-
-    <div class="hudBox">
-      <div class="hudTitle">🎒 ITENS</div>
-      <div class="hudValue" id="hudItems">0</div>
-    </div>
-
-  </div>
-
-  <div id="turnText">
-    Preparando partida...
-  </div>
-
-  <div id="progressArea">
-    <div id="progressBar">
-      <div id="progressFill"></div>
-    </div>
-  </div>
-
-  <div class="controls">
-
-    <button onclick="openItems()">
-      🎒 Itens
-    </button>
-
-    <button onclick="openHowToPlay()">
-      📖 Como jogar
-    </button>
-
-    <button id="rollButton" onclick="rollDice()" disabled>
-      🎲 Jogar dado
-    </button>
-
-  </div>
-
-  <div id="dice">🎲</div>
-
-  <div id="board"></div>
-
 </div>
 
+<!-- ================= SORTEIO ================= -->
 
-<!-- MODAL GENÉRICO -->
+<div id="drawModal" class="modal hidden">
+    <div class="modalBox" id="drawBox">
 
-<div id="modal" class="modal hidden">
-  <div class="modalBox">
+        <h2 id="drawTitle">🎰 Sorteando...</h2>
 
-    <button class="close" onclick="closeModal()">✕</button>
+        <div id="drawDisplay" class="drawSpin">
+            Preparando sorteio...
+        </div>
 
-    <div id="modalContent"></div>
+        <div id="drawResult"></div>
 
-  </div>
+    </div>
 </div>
 
+<!-- ================= PERGUNTA ================= -->
+
+<div id="questionModal" class="modal hidden">
+    <div class="modalBox">
+
+        <h2>❓ Pergunta</h2>
+
+        <div id="questionText"></div>
+
+        <div id="questionOptions"></div>
+
+    </div>
+</div>
+
+<!-- ================= RESULTADO ================= -->
+
+<div id="resultModal" class="modal hidden">
+    <div class="modalBox" style="text-align:center">
+
+        <h2 id="resultTitle">🏆 Fim de jogo!</h2>
+
+        <div id="resultText"></div>
+
+        <button onclick="location.reload()"
+                style="margin-top:15px;padding:13px 25px;border-radius:12px;background:#2563eb;color:white;font-weight:bold">
+            🔄 Jogar novamente
+        </button>
+
+    </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
 
 /* =========================================================
-   CONFIGURAÇÕES
+   CONFIGURAÇÃO
 ========================================================= */
 
 const TOTAL_CASAS = 150;
-
 const TEMPO_TOTAL = 30 * 60;
-
 const MAX_JOGADORES = 11;
 
 const CORES = [
-  "#e53935",
-  "#1e88e5",
-  "#43a047",
-  "#fdd835",
-  "#8e24aa",
-  "#fb8c00",
-  "#ec407a",
-  "#00acc1",
-  "#6d4c41",
-  "#212121",
-  "#eeeeee"
+    "#ef4444",
+    "#3b82f6",
+    "#22c55e",
+    "#eab308",
+    "#a855f7",
+    "#f97316",
+    "#ec4899",
+    "#06b6d4",
+    "#92400e",
+    "#f8fafc",
+    "#111827"
 ];
 
+const NOMES_CORES = [
+    "Vermelho",
+    "Azul",
+    "Verde",
+    "Amarelo",
+    "Roxo",
+    "Laranja",
+    "Rosa",
+    "Ciano",
+    "Marrom",
+    "Branco",
+    "Preto"
+];
 
-/* =========================================================
-   PROFISSÕES
-========================================================= */
+/* 20 PROFISSÕES */
 
 const PROFISSOES = [
-  "Professor(a)",
-  "Médico(a)",
-  "Engenheiro(a)",
-  "Agricultor(a)",
-  "Biólogo(a)",
-  "Advogado(a)",
-  "Jornalista",
-  "Assistente Social",
-  "Arquiteto(a)",
-  "Pesquisador(a)",
-  "Enfermeiro(a)",
-  "Geógrafo(a)",
-  "Químico(a)",
-  "Veterinário(a)",
-  "Ambientalista",
-  "Policial",
-  "Empreendedor(a)",
-  "Líder Comunitário(a)",
-  "Urbanista",
-  "Gestor(a) Ambiental"
+    "Professor(a)",
+    "Médico(a)",
+    "Enfermeiro(a)",
+    "Engenheiro(a)",
+    "Advogado(a)",
+    "Biólogo(a)",
+    "Geógrafo(a)",
+    "Arquiteto(a)",
+    "Jornalista",
+    "Agricultor(a)",
+    "Pesquisador(a)",
+    "Assistente social",
+    "Gestor(a) ambiental",
+    "Veterinário(a)",
+    "Químico(a)",
+    "Fotógrafo(a)",
+    "Artista",
+    "Comerciante",
+    "Líder comunitário",
+    "Agente ambiental"
 ];
 
-
-/* =========================================================
-   20 ITENS
-========================================================= */
+/* 20 ITENS */
 
 const ITENS = [
-  {
-    nome:"Árvore",
-    emoji:"🌳",
-    descricao:"Ajuda a enfrentar situações relacionadas ao ambiente."
-  },
-  {
-    nome:"Denúncia",
-    emoji:"📢",
-    descricao:"Permite contestar uma situação injusta."
-  },
-  {
-    nome:"Água",
-    emoji:"💧",
-    descricao:"Ajuda em situações relacionadas à falta de água."
-  },
-  {
-    nome:"Kit de Primeiros Socorros",
-    emoji:"🩹",
-    descricao:"Ajuda a superar uma situação difícil."
-  },
-  {
-    nome:"Mapa",
-    emoji:"🗺️",
-    descricao:"Ajuda a identificar áreas afetadas."
-  },
-  {
-    nome:"Coleta Seletiva",
-    emoji:"♻️",
-    descricao:"Ajuda em problemas relacionados ao lixo."
-  },
-  {
-    nome:"Sementes",
-    emoji:"🌱",
-    descricao:"Ajuda na recuperação de áreas verdes."
-  },
-  {
-    nome:"Filtro de Água",
-    emoji:"🚰",
-    descricao:"Ajuda em situações envolvendo água contaminada."
-  },
-  {
-    nome:"Megafone",
-    emoji:"📣",
-    descricao:"Ajuda a dar voz à comunidade."
-  },
-  {
-    nome:"Documento",
-    emoji:"📄",
-    descricao:"Ajuda a registrar uma denúncia."
-  },
-  {
-    nome:"Lanterna",
-    emoji:"🔦",
-    descricao:"Ajuda a investigar problemas."
-  },
-  {
-    nome:"Capacete",
-    emoji:"⛑️",
-    descricao:"Ajuda a proteger durante uma situação de risco."
-  },
-  {
-    nome:"Cesta Básica",
-    emoji:"🧺",
-    descricao:"Ajuda uma comunidade em situação de dificuldade."
-  },
-  {
-    nome:"Placa Ambiental",
-    emoji:"⚠️",
-    descricao:"Ajuda a alertar sobre riscos ambientais."
-  },
-  {
-    nome:"Ferramentas",
-    emoji:"🛠️",
-    descricao:"Ajuda na realização de melhorias."
-  },
-  {
-    nome:"Rádio",
-    emoji:"📻",
-    descricao:"Ajuda a espalhar informações importantes."
-  },
-  {
-    nome:"Colete",
-    emoji:"🦺",
-    descricao:"Ajuda em ações comunitárias."
-  },
-  {
-    nome:"Câmera",
-    emoji:"📷",
-    descricao:"Ajuda a registrar situações."
-  },
-  {
-    nome:"Notebook",
-    emoji:"💻",
-    descricao:"Ajuda na pesquisa de informações."
-  },
-  {
-    nome:"Kit de Plantio",
-    emoji:"🌿",
-    descricao:"Ajuda na recuperação ambiental."
-  }
+    {
+        id:"arvore",
+        nome:"Árvore",
+        emoji:"🌳",
+        descricao:"Protege contra uma penalidade de problema."
+    },
+    {
+        id:"denuncia",
+        nome:"Denúncia",
+        emoji:"📢",
+        descricao:"Permite tentar novamente uma pergunta errada."
+    },
+    {
+        id:"agua",
+        nome:"Água",
+        emoji:"💧",
+        descricao:"Ao cair em problema, evita a perda e permite avançar."
+    },
+    {
+        id:"coleta",
+        nome:"Coleta seletiva",
+        emoji:"♻️",
+        descricao:"Ajuda a superar uma situação relacionada ao lixo."
+    },
+    {
+        id:"semente",
+        nome:"Semente",
+        emoji:"🌱",
+        descricao:"Ajuda na recuperação de uma área degradada."
+    },
+    {
+        id:"filtro",
+        nome:"Filtro",
+        emoji:"🚰",
+        descricao:"Ajuda contra problemas de contaminação da água."
+    },
+    {
+        id:"capacete",
+        nome:"Capacete",
+        emoji:"⛑️",
+        descricao:"Protege contra um problema ambiental."
+    },
+    {
+        id:"mapa",
+        nome:"Mapa",
+        emoji:"🗺️",
+        descricao:"Ajuda a encontrar uma solução."
+    },
+    {
+        id:"megafone",
+        nome:"Megafone",
+        emoji:"📣",
+        descricao:"Ajuda a dar voz à comunidade."
+    },
+    {
+        id:"luvas",
+        nome:"Luvas",
+        emoji:"🧤",
+        descricao:"Ajuda em ações de limpeza."
+    },
+    {
+        id:"bicicleta",
+        nome:"Bicicleta",
+        emoji:"🚲",
+        descricao:"Representa mobilidade sustentável."
+    },
+    {
+        id:"energia",
+        nome:"Energia solar",
+        emoji:"☀️",
+        descricao:"Ajuda a promover energia limpa."
+    },
+    {
+        id:"livro",
+        nome:"Livro",
+        emoji:"📚",
+        descricao:"Representa educação ambiental."
+    },
+    {
+        id:"sementes",
+        nome:"Mudas",
+        emoji:"🌿",
+        descricao:"Ajuda na criação de áreas verdes."
+    },
+    {
+        id:"kit",
+        nome:"Kit de emergência",
+        emoji:"🧰",
+        descricao:"Ajuda a comunidade durante um problema."
+    },
+    {
+        id:"telefone",
+        nome:"Telefone",
+        emoji:"📱",
+        descricao:"Facilita a comunicação de denúncias."
+    },
+    {
+        id:"documento",
+        nome:"Documento",
+        emoji:"📄",
+        descricao:"Ajuda a registrar uma situação."
+    },
+    {
+        id:"colete",
+        nome:"Colete",
+        emoji:"🦺",
+        descricao:"Representa segurança durante uma ação."
+    },
+    {
+        id:"lixeira",
+        nome:"Lixeira",
+        emoji:"🗑️",
+        descricao:"Ajuda na organização dos resíduos."
+    },
+    {
+        id:"placa",
+        nome:"Placa educativa",
+        emoji:"🪧",
+        descricao:"Ajuda na conscientização ambiental."
+    }
 ];
 
-
 /* =========================================================
-   CASAS
+   CASAS ESPECIAIS
 ========================================================= */
 
 const PROBLEMAS = {
-  7:"Uma comunidade sofre com enchentes por falta de infraestrutura.",
-  16:"Uma indústria polui uma área próxima de uma comunidade.",
-  25:"Moradores enfrentam falta de água potável.",
-  34:"A comunidade não possui saneamento adequado.",
-  43:"Poucas áreas verdes existem no bairro.",
-  52:"Resíduos são descartados próximos às casas.",
-  61:"Uma região sofre constantemente com alagamentos.",
-  70:"A poluição afeta diretamente moradores da região.",
-  79:"A coleta de lixo não atende corretamente a comunidade.",
-  88:"Uma comunidade é exposta a riscos ambientais.",
-  96:"Falta investimento público em infraestrutura ambiental.",
-  105:"Moradores vivem próximos a uma área contaminada.",
-  114:"O bairro sofre com falta de drenagem.",
-  123:"A população enfrenta problemas causados por poluição.",
-  132:"Existe desigualdade na distribuição de recursos ambientais.",
-  141:"Uma comunidade pede melhorias no saneamento."
+    7:"Uma comunidade sofre com alagamentos por falta de infraestrutura.",
+    16:"Uma indústria está contaminando o ambiente próximo a uma comunidade.",
+    25:"Moradores enfrentam falta de acesso adequado à água.",
+    34:"Uma comunidade vive próxima a uma área de descarte irregular.",
+    43:"A região possui pouca infraestrutura de saneamento.",
+    52:"Uma área vulnerável sofre com poluição do ar.",
+    61:"Uma comunidade tem poucas áreas verdes.",
+    70:"O lixo está se acumulando próximo às casas.",
+    79:"Uma comunidade sofre com enchentes frequentes.",
+    88:"A população está exposta à contaminação ambiental.",
+    97:"Uma região recebe poucos investimentos ambientais.",
+    106:"Moradores sofrem com a falta de saneamento.",
+    115:"Uma comunidade sofre com descarte irregular de resíduos.",
+    124:"A poluição está afetando uma região vulnerável.",
+    133:"A população não está sendo ouvida nas decisões ambientais.",
+    142:"Uma comunidade enfrenta problemas causados por falta de infraestrutura."
 };
-
 
 const SOLUCOES = {
-  11:"Investimento em saneamento.",
-  20:"Fiscalização ambiental.",
-  29:"Coleta regular de resíduos.",
-  38:"Políticas para prevenção de enchentes.",
-  47:"Garantia de água potável.",
-  56:"Participação da comunidade.",
-  65:"Distribuição justa de investimentos.",
-  74:"Educação ambiental.",
-  83:"Criação de áreas verdes.",
-  92:"Escuta das comunidades afetadas.",
-  101:"Recuperação de áreas contaminadas.",
-  110:"Melhoria da drenagem urbana.",
-  119:"Fiscalização de atividades poluidoras.",
-  128:"Planejamento urbano sustentável.",
-  137:"Ampliação do saneamento.",
-  146:"Ações públicas de justiça ambiental."
+    11:"Investir em saneamento básico e infraestrutura.",
+    20:"Realizar fiscalização ambiental.",
+    29:"Garantir coleta regular de resíduos.",
+    38:"Criar políticas para prevenir enchentes.",
+    47:"Garantir acesso à água potável.",
+    56:"Ouvir a participação das comunidades.",
+    65:"Distribuir investimentos ambientais de forma justa.",
+    74:"Promover educação ambiental.",
+    83:"Criar e preservar áreas verdes.",
+    92:"Ouvir as comunidades afetadas.",
+    101:"Ampliar a fiscalização contra a poluição.",
+    110:"Melhorar o sistema de coleta de lixo.",
+    119:"Garantir infraestrutura adequada.",
+    128:"Criar projetos de recuperação ambiental.",
+    137:"Promover participação comunitária.",
+    146:"Investir em justiça e igualdade ambiental."
 };
 
+const PERGUNTAS = {
 
-/* Casas de perguntas */
+    4:{
+        q:"O que é racismo ambiental?",
+        op:[
+            "Quando todas as pessoas recebem os mesmos impactos ambientais.",
+            "Quando grupos vulneráveis sofrem de forma desproporcional com problemas ambientais.",
+            "Quando uma pessoa planta uma árvore.",
+            "Quando uma cidade cria um parque."
+        ],
+        correta:1
+    },
 
-const CASAS_PERGUNTA = [
-  4,13,22,31,40,49,58,67,
-  76,85,94,98,107,116,125,
-  134,143,148
-];
+    13:{
+        q:"Por que o saneamento básico é importante?",
+        op:[
+            "Porque ajuda a garantir saúde e qualidade de vida.",
+            "Porque aumenta a poluição.",
+            "Porque elimina áreas verdes.",
+            "Porque impede a participação comunitária."
+        ],
+        correta:0
+    },
 
+    22:{
+        q:"Qual atitude ajuda a combater injustiças ambientais?",
+        op:[
+            "Ignorar comunidades afetadas.",
+            "Distribuir investimentos de maneira desigual.",
+            "Ouvir as comunidades e garantir políticas justas.",
+            "Aumentar a poluição."
+        ],
+        correta:2
+    },
+
+    31:{
+        q:"O acesso à água potável deve ser:",
+        op:[
+            "Garantido de forma justa.",
+            "Somente para algumas pessoas.",
+            "Limitado às áreas ricas.",
+            "Ignorado pelas autoridades."
+        ],
+        correta:0
+    },
+
+    40:{
+        q:"Qual situação pode ser um exemplo de injustiça ambiental?",
+        op:[
+            "Uma praça bem cuidada.",
+            "Uma comunidade vulnerável sofrendo mais com poluição.",
+            "Uma campanha de reciclagem.",
+            "Uma área verde protegida."
+        ],
+        correta:1
+    },
+
+    49:{
+        q:"A participação das comunidades nas decisões ambientais é:",
+        op:[
+            "Importante.",
+            "Desnecessária.",
+            "Proibida.",
+            "Prejudicial."
+        ],
+        correta:0
+    },
+
+    58:{
+        q:"O que pode ajudar a diminuir os impactos das enchentes?",
+        op:[
+            "Mais lixo nas ruas.",
+            "Menos árvores.",
+            "Melhor infraestrutura e planejamento.",
+            "Mais poluição."
+        ],
+        correta:2
+    },
+
+    67:{
+        q:"Por que áreas verdes são importantes?",
+        op:[
+            "Elas podem ajudar na qualidade ambiental e no bem-estar.",
+            "Elas aumentam o lixo.",
+            "Elas causam falta de água.",
+            "Elas impedem a chuva."
+        ],
+        correta:0
+    },
+
+    76:{
+        q:"Qual ação ajuda no combate à poluição?",
+        op:[
+            "Fiscalização ambiental.",
+            "Descarte irregular.",
+            "Queima de lixo.",
+            "Aumento da contaminação."
+        ],
+        correta:0
+    },
+
+    85:{
+        q:"Uma política ambiental justa deve:",
+        op:[
+            "Beneficiar apenas uma região.",
+            "Ignorar as comunidades.",
+            "Considerar as necessidades das populações afetadas.",
+            "Aumentar desigualdades."
+        ],
+        correta:2
+    },
+
+    94:{
+        q:"O que significa justiça ambiental?",
+        op:[
+            "Distribuir de forma justa os benefícios e riscos ambientais.",
+            "Concentrar problemas em comunidades vulneráveis.",
+            "Ignorar a população.",
+            "Aumentar a poluição."
+        ],
+        correta:0
+    },
+
+    103:{
+        q:"Qual ação ajuda a proteger os recursos naturais?",
+        op:[
+            "Desperdício.",
+            "Preservação e uso responsável.",
+            "Descarte irregular.",
+            "Poluição."
+        ],
+        correta:1
+    },
+
+    112:{
+        q:"O lixo deve ser:",
+        op:[
+            "Jogado em qualquer lugar.",
+            "Descartado corretamente.",
+            "Jogado nos rios.",
+            "Queimado nas ruas."
+        ],
+        correta:1
+    },
+
+    121:{
+        q:"Por que ouvir comunidades afetadas é importante?",
+        op:[
+            "Porque elas conhecem problemas e necessidades locais.",
+            "Porque impede soluções.",
+            "Porque aumenta a poluição.",
+            "Porque elimina a participação."
+        ],
+        correta:0
+    },
+
+    130:{
+        q:"Qual atitude combate desigualdades ambientais?",
+        op:[
+            "Distribuir investimentos de maneira justa.",
+            "Ignorar regiões vulneráveis.",
+            "Concentrar problemas.",
+            "Evitar políticas públicas."
+        ],
+        correta:0
+    },
+
+    139:{
+        q:"A educação ambiental pode:",
+        op:[
+            "Ajudar as pessoas a compreender e cuidar do ambiente.",
+            "Aumentar o desperdício.",
+            "Impedir a reciclagem.",
+            "Aumentar a poluição."
+        ],
+        correta:0
+    },
+
+    148:{
+        q:"Qual princípio é importante para a justiça ambiental?",
+        op:[
+            "Igualdade e participação.",
+            "Exclusão.",
+            "Desigualdade.",
+            "Silenciamento."
+        ],
+        correta:0
+    }
+};
 
 /* Casas de itens */
 
-const CASAS_ITEM = [
-  9,18,27,36,45,54,63,72,
-  81,90,99,108,117,126,135,
-  144,150
+const ITEM_CASAS = [
+    9,18,27,36,45,54,63,72,81,90,
+    99,108,117,126,135,144
 ];
 
-
 /* =========================================================
-   PERGUNTAS
-========================================================= */
-
-const PERGUNTAS = [
-
-{
- pergunta:"O que é racismo ambiental?",
- opcoes:[
-  "Uma forma de desigualdade na distribuição de riscos e benefícios ambientais",
-  "Uma competição entre bairros",
-  "Um problema exclusivamente climático",
-  "Uma forma de reciclagem"
- ],
- correta:0
-},
-
-{
- pergunta:"Qual situação pode representar racismo ambiental?",
- opcoes:[
-  "Distribuição igual de recursos",
-  "Comunidades vulneráveis sofrendo mais com poluição",
-  "Criação de parques",
-  "Coleta seletiva"
- ],
- correta:1
-},
-
-{
- pergunta:"Por que o saneamento básico é importante?",
- opcoes:[
-  "Somente para deixar as cidades bonitas",
-  "Para garantir condições adequadas de saúde e qualidade de vida",
-  "Somente para empresas",
-  "Para aumentar a poluição"
- ],
- correta:1
-},
-
-{
- pergunta:"Quem deve participar das decisões ambientais?",
- opcoes:[
-  "Somente empresas",
-  "Somente políticos",
-  "A população e os responsáveis pelas decisões",
-  "Ninguém"
- ],
- correta:2
-},
-
-{
- pergunta:"O que pode ajudar a diminuir enchentes?",
- opcoes:[
-  "Mais lixo nas ruas",
-  "Drenagem e planejamento urbano",
-  "Retirar árvores",
-  "Tampar todos os rios"
- ],
- correta:1
-},
-
-{
- pergunta:"Qual atitude contribui para a justiça ambiental?",
- opcoes:[
-  "Ignorar comunidades afetadas",
-  "Distribuir recursos de maneira desigual",
-  "Ouvir comunidades e garantir direitos",
-  "Aumentar a poluição"
- ],
- correta:2
-},
-
-{
- pergunta:"O descarte irregular de lixo pode causar:",
- opcoes:[
-  "Contaminação e doenças",
-  "Somente benefícios",
-  "Mais água potável",
-  "Mais áreas verdes"
- ],
- correta:0
-},
-
-{
- pergunta:"Uma forma de cuidar do ambiente é:",
- opcoes:[
-  "Desperdiçar água",
-  "Descartar resíduos corretamente",
-  "Poluir rios",
-  "Destruir áreas verdes"
- ],
- correta:1
-},
-
-{
- pergunta:"A justiça ambiental busca:",
- opcoes:[
-  "Aumentar desigualdades",
-  "Garantir que todas as pessoas tenham proteção ambiental",
-  "Beneficiar somente empresas",
-  "Eliminar a participação popular"
- ],
- correta:1
-},
-
-{
- pergunta:"Por que áreas verdes são importantes?",
- opcoes:[
-  "Podem melhorar a qualidade ambiental e o bem-estar",
-  "Aumentam a poluição",
-  "Impedem qualquer chuva",
-  "Servem apenas para decoração"
- ],
- correta:0
-},
-
-{
- pergunta:"O acesso à água potável é:",
- opcoes:[
-  "Um luxo",
-  "Um direito essencial",
-  "Desnecessário",
-  "Importante apenas para empresas"
- ],
- correta:1
-},
-
-{
- pergunta:"Uma denúncia ambiental deve ser:",
- opcoes:[
-  "Ignorada",
-  "Feita de forma responsável aos órgãos competentes",
-  "Espalhada sem informações",
-  "Apagada"
- ],
- correta:1
-},
-
-{
- pergunta:"Qual atitude fortalece uma comunidade?",
- opcoes:[
-  "Impedir participação",
-  "Ouvir seus moradores",
-  "Ignorar problemas",
-  "Esconder informações"
- ],
- correta:1
-},
-
-{
- pergunta:"A poluição de rios pode prejudicar:",
- opcoes:[
-  "Somente peixes",
-  "Somente plantas",
-  "Pessoas, animais e ecossistemas",
-  "Ninguém"
- ],
- correta:2
-},
-
-{
- pergunta:"O planejamento urbano pode ajudar a:",
- opcoes:[
-  "Reduzir riscos ambientais",
-  "Aumentar enchentes",
-  "Eliminar saneamento",
-  "Aumentar lixo"
- ],
- correta:0
-},
-
-{
- pergunta:"A coleta de lixo adequada ajuda a:",
- opcoes:[
-  "Evitar problemas ambientais e de saúde",
-  "Aumentar doenças",
-  "Poluir rios",
-  "Destruir áreas verdes"
- ],
- correta:0
-},
-
-{
- pergunta:"O que significa ouvir uma comunidade afetada?",
- opcoes:[
-  "Ignorar suas opiniões",
-  "Considerar suas experiências nas decisões",
-  "Retirar seus direitos",
-  "Proibir reuniões"
- ],
- correta:1
-},
-
-{
- pergunta:"A educação ambiental pode:",
- opcoes:[
-  "Estimular atitudes responsáveis",
-  "Aumentar desperdícios",
-  "Impedir participação",
-  "Aumentar poluição"
- ],
- correta:0
-},
-
-{
- pergunta:"Qual é um exemplo de prevenção ambiental?",
- opcoes:[
-  "Evitar descarte irregular",
-  "Esperar o problema acontecer",
-  "Ignorar riscos",
-  "Poluir primeiro"
- ],
- correta:0
-},
-
-{
- pergunta:"A justiça ambiental está relacionada a:",
- opcoes:[
-  "Igualdade e proteção ambiental",
-  "Aumento das desigualdades",
-  "Exclusão da população",
-  "Destruição ambiental"
- ],
- correta:0
-}
-
-];
-
-
-/* =========================================================
-   ESTADO DO JOGO
+   ESTADO
 ========================================================= */
 
 let peer = null;
@@ -960,1665 +1231,1598 @@ let conn = null;
 let connections = [];
 
 let isHost = false;
-let roomId = "";
-
+let roomCode = "";
 let myId = "";
-let myPlayer = null;
+let gameStarted = false;
+let gameEnded = false;
 
-let players = [];
+let jogadores = [];
 
-let started = false;
-let currentTurn = 0;
-
+let turno = 0;
 let tempoRestante = TEMPO_TOTAL;
 let timerInterval = null;
 
-let actionBusy = false;
+let pendingQuestion = null;
+let actionLocked = false;
 
-let perguntaAtual = null;
-let perguntaPlayerId = null;
-
-
-/* =========================================================
-   UTILITÁRIOS
-========================================================= */
-
-function random(min,max){
-  return Math.floor(Math.random()*(max-min+1))+min;
-}
-
-function shuffle(array){
-  return [...array].sort(()=>Math.random()-.5);
-}
-
-function getPlayer(id){
-  return players.find(p=>p.id===id);
-}
-
-function isMyTurn(){
-  return started &&
-         players[currentTurn] &&
-         players[currentTurn].id === myId;
-}
-
+const localPlayer = {
+    id:"",
+    nome:"",
+    cor:0,
+    posicao:0,
+    profissao:null,
+    itens:[],
+    acertos:0
+};
 
 /* =========================================================
-   PEERJS
+   UTILIDADES
 ========================================================= */
 
-function createPeer(){
-
-  peer = new Peer(undefined,{
-    debug:2,
-    config:{
-      iceServers:[
-        {urls:"stun:stun.l.google.com:19302"},
-        {urls:"stun:stun1.l.google.com:19302"}
-      ]
-    }
-  });
-
-  peer.on("open",id=>{
-    myId=id;
-
-    document.getElementById("connectionStatus").textContent=
-      "🟢 Conectado";
-  });
-
-  peer.on("connection",connection=>{
-
-    if(players.length>=MAX_JOGADORES){
-      connection.close();
-      return;
-    }
-
-    setupConnection(connection);
-  });
-
-  peer.on("error",err=>{
-    console.log(err);
-
-    document.getElementById("connectionStatus").textContent=
-      "⚠️ Erro de conexão";
-  });
+function $(id){
+    return document.getElementById(id);
 }
 
-
-function setupConnection(c){
-
-  c.on("open",()=>{
-
-    connections.push(c);
-
-    c.on("data",data=>{
-      handleData(data,c);
-    });
-
-    c.on("close",()=>{
-      connections=connections.filter(x=>x!==c);
-    });
-
-    if(isHost){
-
-      c.send({
-        type:"lobbyState",
-        players:players
-      });
-
-    }
-
-  });
-
-  c.on("error",err=>{
-    console.log(err);
-  });
+function show(id){
+    $(id).classList.remove("hidden");
 }
 
-
-/* =========================================================
-   CRIAR SALA
-========================================================= */
-
-function createRoom(){
-
-  const name=
-    document.getElementById("nameInput").value.trim();
-
-  if(!name){
-    alert("Digite seu nome.");
-    return;
-  }
-
-  if(!peer){
-    createPeer();
-  }
-
-  setTimeout(()=>{
-
-    if(!myId){
-      alert("Aguarde a conexão.");
-      return;
-    }
-
-    isHost=true;
-
-    roomId=
-      "racismo-"+Math.random().toString(36).substring(2,8);
-
-    myPlayer={
-      id:myId,
-      name:name,
-      position:1,
-      color:CORES[0],
-      profession:null,
-      items:[],
-      acertos:0
-    };
-
-    players=[myPlayer];
-
-    document.getElementById("roomArea")
-      .classList.remove("hidden");
-
-    document.getElementById("roomCode")
-      .textContent=roomId;
-
-    document.getElementById("startButton")
-      .classList.remove("hidden");
-
-    updateLobby();
-
-  },500);
+function hide(id){
+    $(id).classList.add("hidden");
 }
 
-
-/* =========================================================
-   ENTRAR NA SALA
-========================================================= */
-
-function joinRoom(){
-
-  const name=
-    document.getElementById("nameInput").value.trim();
-
-  const code=
-    document.getElementById("joinCode").value.trim();
-
-  if(!name){
-    alert("Digite seu nome.");
-    return;
-  }
-
-  if(!code){
-    alert("Digite o código da sala.");
-    return;
-  }
-
-  if(!peer){
-    createPeer();
-  }
-
-  setTimeout(()=>{
-
-    conn=peer.connect(code);
-
-    conn.on("open",()=>{
-
-      roomId=code;
-
-      conn.send({
-        type:"join",
-        name:name,
-        id:myId
-      });
-
-      document.getElementById("roomArea")
-        .classList.remove("hidden");
-
-      document.getElementById("connectionStatus")
-        .textContent="🟢 Conectado à sala";
-
-    });
-
-    conn.on("data",data=>{
-      handleData(data,conn);
-    });
-
-  },500);
+function closeModal(id){
+    hide(id);
 }
 
+function toast(text){
+    const el = $("toast");
+    el.textContent = text;
+    el.classList.add("show");
 
-/* =========================================================
-   MENSAGENS
-========================================================= */
-
-function broadcast(data){
-
-  connections.forEach(c=>{
-    if(c.open){
-      c.send(data);
-    }
-  });
-
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },2500);
 }
 
-
-function sendToHost(data){
-
-  if(conn && conn.open){
-    conn.send(data);
-  }
-
+function randomId(){
+    return Math.random().toString(36).substring(2,8);
 }
 
-
-function handleData(data,c){
-
-  if(data.type==="join" && isHost){
-
-    if(players.length>=MAX_JOGADORES){
-      c.send({
-        type:"error",
-        message:"A sala está cheia."
-      });
-      return;
-    }
-
-    if(players.some(p=>p.id===data.id))
-      return;
-
-    const color=
-      CORES[players.length % CORES.length];
-
-    players.push({
-      id:data.id,
-      name:data.name,
-      position:1,
-      color:color,
-      profession:null,
-      items:[],
-      acertos:0
-    });
-
-    c.send({
-      type:"joined",
-      yourId:data.id,
-      players:players
-    });
-
-    broadcast({
-      type:"lobbyState",
-      players:players
-    });
-
-    updateLobby();
-
-    return;
-  }
-
-
-  if(data.type==="lobbyState"){
-
-    players=data.players;
-
-    myPlayer=getPlayer(myId);
-
-    updateLobby();
-
-    return;
-  }
-
-
-  if(data.type==="start"){
-
-    players=data.players;
-
-    currentTurn=data.currentTurn;
-
-    started=true;
-
-    myPlayer=getPlayer(myId);
-
-    startInterface();
-
-    return;
-  }
-
-
-  if(data.type==="profession"){
-
-    const p=getPlayer(data.playerId);
-
-    if(p){
-      p.profession=data.profession;
-    }
-
-    updateBoard();
-    updateHUD();
-
-    return;
-  }
-
-
-  if(data.type==="state"){
-
-    players=data.players;
-    currentTurn=data.currentTurn;
-    tempoRestante=data.time;
-
-    myPlayer=getPlayer(myId);
-
-    updateBoard();
-    updateHUD();
-    updateTurn();
-
-    return;
-  }
-
-
-  if(data.type==="question"){
-
-    showQuestion(
-      data.question,
-      data.playerId
-    );
-
-    return;
-  }
-
-
-  if(data.type==="itemDraw"){
-
-    animateItemDraw(
-      data.playerId,
-      data.item
-    );
-
-    return;
-  }
-
-
-  if(data.type==="message"){
-
-    showMessage(
-      data.title,
-      data.text
-    );
-
-    return;
-  }
-
-
-  if(data.type==="timeEnd"){
-
-    finishGame();
-
-    return;
-  }
-
+function shuffle(arr){
+    return [...arr].sort(()=>Math.random()-.5);
 }
-
 
 /* =========================================================
    LOBBY
 ========================================================= */
 
-function updateLobby(){
+function createRoom(){
 
-  const div=
-    document.getElementById("lobbyPlayers");
+    const nome = $("nameInput").value.trim();
 
-  div.innerHTML="";
+    if(!nome){
+        toast("Digite seu nome.");
+        return;
+    }
 
-  players.forEach((p,i)=>{
+    localPlayer.nome = nome;
 
-    const el=document.createElement("div");
+    isHost = true;
+    myId = randomId();
 
-    el.className="playerLine";
+    roomCode = "JUSTICA-" + Math.random()
+        .toString(36)
+        .substring(2,7)
+        .toUpperCase();
 
-    el.innerHTML=
-      `<span style="color:${p.color}">●</span>
-       ${escapeHTML(p.name)}
-       ${i===0?" 👑":""}`;
+    peer = new Peer(roomCode,{
+        debug:2,
+        config:{
+            iceServers:[
+                {urls:"stun:stun.l.google.com:19302"},
+                {urls:"stun:stun1.l.google.com:19302"}
+            ]
+        }
+    });
 
-    div.appendChild(el);
+    peer.on("open",id=>{
 
-  });
+        myId = id;
 
+        localPlayer.id = id;
+        localPlayer.cor = 0;
+
+        jogadores = [structuredClone(localPlayer)];
+
+        $("roomCode").textContent = roomCode;
+
+        show("roomCodeBox");
+        show("startBtn");
+
+        $("lobbyMessage").textContent =
+            "Sala criada! Aguarde os outros jogadores.";
+
+        renderLobbyPlayers();
+
+    });
+
+    peer.on("connection",c=>{
+
+        if(jogadores.length >= MAX_JOGADORES){
+            c.close();
+            return;
+        }
+
+        connections.push(c);
+
+        c.on("open",()=>{
+            c.send({
+                type:"roomInfo",
+                jogadores:jogadores,
+                started:gameStarted
+            });
+        });
+
+        c.on("data",data=>{
+            handleHostData(c,data);
+        });
+
+        c.on("close",()=>{
+            connections = connections.filter(x=>x !== c);
+        });
+
+    });
+
+    peer.on("error",err=>{
+        console.error(err);
+        $("lobbyMessage").textContent =
+            "Erro ao criar a sala. Tente novamente.";
+    });
 }
 
+function joinRoom(){
 
-function escapeHTML(text){
+    const nome = $("nameInput").value.trim();
+    const code = $("roomInput").value.trim().toUpperCase();
 
-  return String(text)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    if(!nome){
+        toast("Digite seu nome.");
+        return;
+    }
 
+    if(!code){
+        toast("Digite o código da sala.");
+        return;
+    }
+
+    localPlayer.nome = nome;
+
+    isHost = false;
+
+    peer = new Peer({
+        debug:2,
+        config:{
+            iceServers:[
+                {urls:"stun:stun.l.google.com:19302"},
+                {urls:"stun:stun1.l.google.com:19302"}
+            ]
+        }
+    });
+
+    peer.on("open",id=>{
+
+        myId = id;
+        localPlayer.id = id;
+
+        conn = peer.connect(code,{
+            reliable:true
+        });
+
+        conn.on("open",()=>{
+            conn.send({
+                type:"join",
+                player:{
+                    id:id,
+                    nome:nome
+                }
+            });
+
+            $("lobbyMessage").textContent =
+                "Conectado! Aguardando o administrador.";
+        });
+
+        conn.on("data",data=>{
+            handleClientData(data);
+        });
+
+        conn.on("close",()=>{
+            toast("Conexão encerrada.");
+        });
+    });
+
+    peer.on("error",err=>{
+        console.error(err);
+
+        $("lobbyMessage").textContent =
+            "Não foi possível entrar na sala.";
+    });
 }
-
 
 /* =========================================================
-   INICIAR
+   HOST RECEBE DADOS
+========================================================= */
+
+function handleHostData(c,data){
+
+    if(data.type === "join"){
+
+        if(jogadores.length >= MAX_JOGADORES){
+            c.send({
+                type:"error",
+                message:"A sala está cheia."
+            });
+            return;
+        }
+
+        const cor = jogadores.length;
+
+        const player = {
+            id:data.player.id,
+            nome:data.player.nome,
+            cor:cor,
+            posicao:0,
+            profissao:null,
+            itens:[],
+            acertos:0
+        };
+
+        jogadores.push(player);
+
+        c.playerId = player.id;
+
+        broadcast({
+            type:"players",
+            jogadores:jogadores
+        });
+
+        renderLobbyPlayers();
+    }
+
+    if(data.type === "rollRequest"){
+
+        if(!gameStarted || gameEnded){
+            return;
+        }
+
+        if(data.playerId !== jogadores[turno].id){
+            return;
+        }
+
+        processRoll(data.playerId);
+    }
+
+    if(data.type === "questionAnswer"){
+
+        processQuestionAnswer(
+            data.playerId,
+            data.answer
+        );
+    }
+
+    if(data.type === "useItem"){
+
+        processUseItem(
+            data.playerId,
+            data.itemId
+        );
+    }
+}
+
+/* =========================================================
+   CLIENTE RECEBE
+========================================================= */
+
+function handleClientData(data){
+
+    if(data.type === "roomInfo"){
+
+        jogadores = data.jogadores || [];
+
+        renderLobbyPlayers();
+    }
+
+    if(data.type === "players"){
+
+        jogadores = data.jogadores || [];
+
+        renderLobbyPlayers();
+        renderPlayersHud();
+        renderBoard();
+        updateLocalHud();
+    }
+
+    if(data.type === "start"){
+
+        jogadores = data.jogadores;
+
+        startLocalGame(data.tempo);
+    }
+
+    if(data.type === "state"){
+
+        jogadores = data.jogadores;
+        turno = data.turno;
+        tempoRestante = data.tempo;
+        gameStarted = data.gameStarted;
+        gameEnded = data.gameEnded;
+
+        renderPlayersHud();
+        renderBoard();
+        updateLocalHud();
+        updateTurnText();
+    }
+
+    if(data.type === "drawProfession"){
+
+        jogadores = data.jogadores;
+
+        renderPlayersHud();
+        renderBoard();
+
+        if(data.playerId === myId){
+
+            showProfessionDraw(
+                data.profession,
+                false
+            );
+        }
+    }
+
+    if(data.type === "drawItem"){
+
+        jogadores = data.jogadores;
+
+        renderBoard();
+        updateLocalHud();
+
+        if(data.playerId === myId){
+
+            showItemDraw(
+                data.item,
+                false
+            );
+        }
+    }
+
+    if(data.type === "question"){
+
+        if(data.playerId === myId){
+
+            showQuestion(data.question);
+        }
+    }
+
+    if(data.type === "toast"){
+
+        toast(data.message);
+    }
+
+    if(data.type === "result"){
+
+        showResult(data.title,data.text);
+    }
+
+    if(data.type === "move"){
+
+        jogadores = data.jogadores;
+
+        renderBoard();
+        updateLocalHud();
+    }
+
+    if(data.type === "error"){
+
+        toast(data.message);
+    }
+}
+
+/* =========================================================
+   INÍCIO
 ========================================================= */
 
 function startGame(){
 
-  if(!isHost) return;
-
-  if(players.length<1) return;
-
-  started=true;
-
-  currentTurn=0;
-
-  tempoRestante=TEMPO_TOTAL;
-
-  broadcast({
-    type:"start",
-    players:players,
-    currentTurn:currentTurn
-  });
-
-  startInterface();
-
-  startProfessionDraw(myId);
-}
-
-
-function startInterface(){
-
-  document.getElementById("lobby")
-    .classList.add("hidden");
-
-  document.getElementById("game")
-    .classList.remove("hidden");
-
-  buildBoard();
-
-  updateBoard();
-
-  updateHUD();
-
-  updateTurn();
-
-  startTimer();
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-function startTimer(){
-
-  clearInterval(timerInterval);
-
-  timerInterval=setInterval(()=>{
-
-    if(!started) return;
-
-    if(isHost){
-
-      tempoRestante--;
-
-      if(tempoRestante<=0){
-
-        tempoRestante=0;
-
-        broadcast({
-          type:"timeEnd"
-        });
-
-        finishGame();
-
-      }else{
-
-        broadcast({
-          type:"state",
-          players:players,
-          currentTurn:currentTurn,
-          time:tempoRestante
-        });
-
-      }
-
+    if(!isHost){
+        return;
     }
 
-    updateHUD();
+    if(jogadores.length < 1){
+        return;
+    }
 
-  },1000);
+    gameStarted = true;
+    gameEnded = false;
+    tempoRestante = TEMPO_TOTAL;
+    turno = 0;
 
+    jogadores.forEach((p,i)=>{
+        p.posicao = 0;
+        p.itens = [];
+        p.acertos = 0;
+        p.profissao = PROFISSOES[
+            Math.floor(Math.random()*PROFISSOES.length)
+        ];
+    });
+
+    $("startBtn").disabled = true;
+
+    broadcast({
+        type:"start",
+        jogadores:jogadores,
+        tempo:tempoRestante
+    });
+
+    startLocalGame(tempoRestante);
+
+    setTimeout(()=>{
+        broadcastProfessionDraws();
+    },500);
 }
 
+function startLocalGame(tempo){
+
+    gameStarted = true;
+    gameEnded = false;
+
+    tempoRestante = tempo || TEMPO_TOTAL;
+
+    hide("lobby");
+    show("game");
+
+    renderBoard();
+    renderPlayersHud();
+    updateLocalHud();
+    updateTurnText();
+
+    if(timerInterval){
+        clearInterval(timerInterval);
+    }
+
+    timerInterval = setInterval(()=>{
+
+        if(!isHost){
+            return;
+        }
+
+        if(!gameStarted || gameEnded){
+            return;
+        }
+
+        tempoRestante--;
+
+        broadcastState();
+
+        if(tempoRestante <= 0){
+
+            tempoRestante = 0;
+
+            endGameByTime();
+        }
+
+    },1000);
+}
 
 /* =========================================================
-   HUD
+   PROFISSÕES
 ========================================================= */
 
-function updateHUD(){
+function broadcastProfessionDraws(){
 
-  myPlayer=getPlayer(myId);
+    if(!isHost){
+        return;
+    }
 
-  if(!myPlayer) return;
+    jogadores.forEach((p,index)=>{
 
-  document.getElementById("hudName")
-    .textContent=myPlayer.name;
+        setTimeout(()=>{
 
-  document.getElementById("hudProfession")
-    .textContent=myPlayer.profession || "Sorteando...";
+            broadcast({
+                type:"drawProfession",
+                playerId:p.id,
+                profession:p.profissao,
+                jogadores:jogadores
+            });
 
-  document.getElementById("hudPosition")
-    .textContent=
-      `${myPlayer.position} / ${TOTAL_CASAS}`;
+            if(p.id === myId){
+                showProfessionDraw(
+                    p.profissao,
+                    true
+                );
+            }
 
-  document.getElementById("hudItems")
-    .textContent=myPlayer.items.length;
+        },index*2500);
 
-  const min=
-    Math.floor(tempoRestante/60);
+    });
 
-  const sec=
-    tempoRestante%60;
-
-  document.getElementById("timer")
-    .textContent=
-      `${String(min).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
-
-  const percent=
-    Math.min(100,
-      (myPlayer.position/TOTAL_CASAS)*100);
-
-  document.getElementById("progressFill")
-    .style.width=percent+"%";
-
+    setTimeout(()=>{
+        broadcastState();
+    },jogadores.length*2500+1000);
 }
 
+function showProfessionDraw(profession,local){
 
-/* =========================================================
-   TURNO
-========================================================= */
+    show("drawModal");
 
-function updateTurn(){
+    $("drawTitle").textContent =
+        "💼 Sorteio da profissão";
 
-  const p=players[currentTurn];
+    $("drawResult").textContent = "";
 
-  if(!p) return;
+    const display = $("drawDisplay");
 
-  const text=document.getElementById("turnText");
+    display.classList.add("drawSpin");
 
-  if(p.id===myId){
+    let count = 0;
 
-    text.textContent=
-      "🎲 É a sua vez! Jogue o dado.";
+    const interval = setInterval(()=>{
 
-    document.getElementById("rollButton")
-      .disabled=actionBusy;
+        display.textContent =
+            "💼 " +
+            PROFISSOES[
+                Math.floor(Math.random()*PROFISSOES.length)
+            ];
 
-  }else{
+        count++;
 
-    text.textContent=
-      `⏳ É a vez de ${p.name}.`;
+        if(count >= 22){
 
-    document.getElementById("rollButton")
-      .disabled=true;
+            clearInterval(interval);
 
-  }
+            display.classList.remove("drawSpin");
 
+            display.textContent =
+                "💼 " + profession;
+
+            $("drawResult").textContent =
+                "Sua profissão: " + profession;
+
+            $("hudProfession").textContent = profession;
+            $("myProfession").textContent =
+                "Profissão: " + profession;
+
+            setTimeout(()=>{
+                closeModal("drawModal");
+            },1800);
+        }
+
+    },100);
 }
-
 
 /* =========================================================
    TABULEIRO
 ========================================================= */
 
-function buildBoard(){
+function renderBoard(){
 
-  const board=
-    document.getElementById("board");
+    const board = $("board");
 
-  board.innerHTML="";
-
-  for(let i=1;i<=TOTAL_CASAS;i++){
-
-    const cell=
-      document.createElement("div");
-
-    cell.className="cell";
-
-    cell.id="cell-"+i;
-
-    let icon="";
-
-    if(i===1){
-      cell.classList.add("start");
-      icon="🏁";
+    if(!board){
+        return;
     }
 
-    if(i===TOTAL_CASAS){
-      cell.classList.add("finish");
-      icon="🏆";
+    board.innerHTML = "";
+
+    for(let i=1;i<=TOTAL_CASAS;i++){
+
+        const cell = document.createElement("div");
+
+        cell.className = "cell";
+
+        if(PROBLEMAS[i]){
+            cell.classList.add("problem");
+        }
+
+        if(SOLUCOES[i]){
+            cell.classList.add("solution");
+        }
+
+        if(PERGUNTAS[i]){
+            cell.classList.add("question");
+        }
+
+        if(ITEM_CASAS.includes(i)){
+            cell.classList.add("item");
+        }
+
+        if(i === TOTAL_CASAS){
+            cell.classList.add("finish");
+        }
+
+        const num = document.createElement("span");
+        num.className = "cellNumber";
+        num.textContent = i;
+
+        cell.appendChild(num);
+
+        const icon = document.createElement("span");
+        icon.className = "cellIcon";
+
+        if(PROBLEMAS[i]) icon.textContent="⚠️";
+        else if(SOLUCOES[i]) icon.textContent="🌱";
+        else if(PERGUNTAS[i]) icon.textContent="❓";
+        else if(ITEM_CASAS.includes(i)) icon.textContent="🎁";
+        else if(i===TOTAL_CASAS) icon.textContent="🏆";
+
+        cell.appendChild(icon);
+
+        const pawns = document.createElement("div");
+        pawns.className = "pawns";
+
+        jogadores.forEach(p=>{
+
+            if(p.posicao === i){
+
+                const person = document.createElement("div");
+
+                person.className = "person";
+
+                person.style.color =
+                    CORES[p.cor];
+
+                person.title = p.nome;
+
+                person.innerHTML = `
+                    <span class="head"></span>
+                    <span class="body"></span>
+                    <span class="leg1"></span>
+                    <span class="leg2"></span>
+                `;
+
+                pawns.appendChild(person);
+            }
+
+        });
+
+        cell.appendChild(pawns);
+
+        board.appendChild(cell);
     }
-
-    if(PROBLEMAS[i]){
-      cell.classList.add("problem");
-      icon="⚠️";
-    }
-
-    if(SOLUCOES[i]){
-      cell.classList.add("solution");
-      icon="✅";
-    }
-
-    if(CASAS_PERGUNTA.includes(i)){
-      cell.classList.add("question");
-      icon="❓";
-    }
-
-    if(CASAS_ITEM.includes(i)){
-      cell.classList.add("item");
-      icon="🎁";
-    }
-
-    cell.innerHTML=
-      `<span class="cellNumber">${i}</span>
-       <div class="cellIcon">${icon}</div>
-       <div class="people" id="people-${i}"></div>`;
-
-    board.appendChild(cell);
-
-  }
-
 }
-
 
 /* =========================================================
-   ATUALIZAR PESSOAS
+   HUD
 ========================================================= */
 
-function updateBoard(){
+function renderPlayersHud(){
 
-  for(let i=1;i<=TOTAL_CASAS;i++){
+    const container = $("playersHud");
 
-    const people=
-      document.getElementById("people-"+i);
+    container.innerHTML = "";
 
-    if(people)
-      people.innerHTML="";
+    jogadores.forEach(p=>{
 
-  }
+        const el = document.createElement("div");
 
-  players.forEach(p=>{
+        el.className =
+            "playerHud " +
+            (p.id === myId ? "me" : "");
 
-    const people=
-      document.getElementById("people-"+p.position);
+        el.style.borderColor =
+            CORES[p.cor];
 
-    if(!people) return;
+        el.innerHTML = `
+            <b style="color:${CORES[p.cor]}">
+                ● ${escapeHtml(p.nome)}
+            </b>
+            <br>
+            Casa ${p.posicao}
+        `;
 
-    const person=
-      document.createElement("div");
-
-    person.className="person";
-
-    person.innerHTML=`
-      <div class="head"></div>
-      <div class="body" style="background:${p.color}"></div>
-      <div class="legs"></div>
-    `;
-
-    person.title=p.name;
-
-    people.appendChild(person);
-
-  });
-
+        container.appendChild(el);
+    });
 }
 
+function renderLobbyPlayers(){
+
+    const list = $("playersList");
+
+    if(jogadores.length === 0){
+        list.textContent = "Nenhum jogador conectado.";
+        return;
+    }
+
+    list.innerHTML = "";
+
+    jogadores.forEach(p=>{
+
+        const div = document.createElement("div");
+
+        div.className = "playerLobby";
+
+        div.innerHTML =
+            `<span style="color:${CORES[p.cor]}">●</span> ` +
+            escapeHtml(p.nome) +
+            (p.id === myId ? " <b>(você)</b>" : "");
+
+        list.appendChild(div);
+    });
+}
+
+function updateLocalHud(){
+
+    const me = jogadores.find(p=>p.id === myId);
+
+    if(!me){
+        return;
+    }
+
+    $("hudName").textContent = me.nome;
+
+    $("hudProfession").textContent =
+        me.profissao || "Sorteando...";
+
+    $("myProfession").textContent =
+        me.profissao
+            ? "Profissão: " + me.profissao
+            : "Profissão: sorteando...";
+
+    const porcentagem =
+        Math.min(100,(me.posicao/TOTAL_CASAS)*100);
+
+    $("progressFill").style.width =
+        porcentagem + "%";
+
+    $("progressText").textContent =
+        `Seu progresso: ${me.posicao} / ${TOTAL_CASAS} casas`;
+
+    const minutos =
+        Math.floor(tempoRestante/60)
+        .toString()
+        .padStart(2,"0");
+
+    const segundos =
+        (tempoRestante%60)
+        .toString()
+        .padStart(2,"0");
+
+    $("timer").textContent =
+        `${minutos}:${segundos}`;
+}
+
+function updateTurnText(){
+
+    if(!gameStarted){
+        $("turnText").textContent =
+            "Aguardando...";
+        return;
+    }
+
+    const p = jogadores[turno];
+
+    if(!p){
+        return;
+    }
+
+    if(p.id === myId){
+
+        $("turnText").textContent =
+            "🎲 É a sua vez! Jogue o dado.";
+
+        $("rollBtn").disabled =
+            gameEnded || actionLocked;
+
+    }else{
+
+        $("turnText").textContent =
+            `⏳ ${p.nome} está jogando...`;
+
+        $("rollBtn").disabled = true;
+    }
+}
 
 /* =========================================================
    DADO
 ========================================================= */
 
-async function rollDice(){
+function rollDice(){
 
-  if(!isMyTurn()) return;
+    if(!gameStarted || gameEnded){
+        return;
+    }
 
-  if(actionBusy) return;
+    const me = jogadores.find(p=>p.id===myId);
 
-  actionBusy=true;
+    if(!me){
+        return;
+    }
 
-  updateTurn();
+    if(jogadores[turno]?.id !== myId){
+        return;
+    }
 
-  const dice=
-    document.getElementById("dice");
+    if(actionLocked){
+        return;
+    }
 
-  dice.classList.remove("diceRoll");
-
-  void dice.offsetWidth;
-
-  dice.classList.add("diceRoll");
-
-  let value=1;
-
-  for(let i=0;i<8;i++){
-
-    value=random(1,6);
-
-    dice.textContent=
-      ["⚀","⚁","⚂","⚃","⚄","⚅"][value-1];
-
-    await wait(80);
-
-  }
-
-  dice.classList.remove("diceRoll");
-
-  if(isHost){
-
-    await movePlayer(myId,value);
-
-  }else{
-
-    sendToHost({
-      type:"roll",
-      playerId:myId,
-      value:value
-    });
-
-  }
-
-}
-
-
-/* =========================================================
-   MOVIMENTO
-========================================================= */
-
-async function movePlayer(id,value){
-
-  const p=getPlayer(id);
-
-  if(!p) return;
-
-  for(let i=0;i<value;i++){
-
-    if(p.position>=TOTAL_CASAS)
-      break;
-
-    p.position++;
-
-    updateBoard();
-    updateHUD();
-
-    await wait(220);
-  }
-
-  await resolveHouse(p);
-
-}
-
-
-/* =========================================================
-   RECEBER JOGADA DO JOGADOR
-========================================================= */
-
-async function processRoll(data){
-
-  if(!isHost) return;
-
-  if(!started) return;
-
-  if(players[currentTurn]?.id!==data.playerId)
-    return;
-
-  await movePlayer(
-    data.playerId,
-    data.value
-  );
-
-}
-
-
-/* =========================================================
-   RESOLVER CASA
-========================================================= */
-
-async function resolveHouse(p){
-
-  if(p.position>=TOTAL_CASAS){
-
-    broadcast({
-      type:"state",
-      players:players,
-      currentTurn:currentTurn,
-      time:tempoRestante
-    });
-
-    finishGame(p.id);
-
-    return;
-  }
-
-
-  /* PROBLEMA */
-
-  if(PROBLEMAS[p.position]){
-
-    showMessage(
-      "⚠️ Problema ambiental",
-      PROBLEMAS[p.position]
-    );
-
-    await wait(900);
-
-    p.position=
-      Math.max(1,p.position-3);
-
-    updateBoard();
-    updateHUD();
-
-    nextTurn();
-
-    return;
-  }
-
-
-  /* SOLUÇÃO */
-
-  if(SOLUCOES[p.position]){
-
-    showMessage(
-      "✅ Solução",
-      SOLUCOES[p.position]
-    );
-
-    p.acertos++;
-
-    await wait(900);
-
-    nextTurn();
-
-    return;
-  }
-
-
-  /* PERGUNTA */
-
-  if(CASAS_PERGUNTA.includes(p.position)){
+    actionLocked = true;
+    $("rollBtn").disabled = true;
 
     if(isHost){
 
-      const question=
-        PERGUNTAS[
-          random(0,PERGUNTAS.length-1)
-        ];
+        processRoll(myId);
 
-      broadcast({
-        type:"question",
-        playerId:p.id,
-        question:question
-      });
+    }else{
 
-      if(p.id===myId){
-        showQuestion(question,p.id);
-      }
+        conn.send({
+            type:"rollRequest",
+            playerId:myId
+        });
+    }
+}
 
+function processRoll(playerId){
+
+    if(!isHost){
+        return;
     }
 
-    return;
-  }
-
-
-  /* ITEM */
-
-  if(CASAS_ITEM.includes(p.position)){
-
-    const item=
-      ITENS[random(0,ITENS.length-1)];
-
-    p.items.push(item);
-
-    broadcast({
-      type:"itemDraw",
-      playerId:p.id,
-      item:item
-    });
-
-    if(p.id===myId){
-      animateItemDraw(p.id,item);
+    if(gameEnded){
+        return;
     }
 
-    await wait(1600);
+    const player =
+        jogadores.find(p=>p.id===playerId);
+
+    if(!player){
+        return;
+    }
+
+    const numero =
+        Math.floor(Math.random()*6)+1;
+
+    animateDice(numero);
+
+    setTimeout(()=>{
+
+        movePlayer(player,numero);
+
+    },650);
+}
+
+function animateDice(result){
+
+    const dice = $("dice");
+
+    dice.classList.add("diceRolling");
+
+    let count = 0;
+
+    const interval = setInterval(()=>{
+
+        dice.textContent =
+            ["⚀","⚁","⚂","⚃","⚄","⚅"]
+            [Math.floor(Math.random()*6)];
+
+        count++;
+
+        if(count >= 8){
+
+            clearInterval(interval);
+
+            dice.classList.remove("diceRolling");
+
+            dice.textContent =
+                ["⚀","⚁","⚂","⚃","⚄","⚅"]
+                [result-1];
+        }
+
+    },80);
+}
+
+/* =========================================================
+   MOVIMENTO CASA POR CASA
+========================================================= */
+
+function movePlayer(player,steps){
+
+    let moved = 0;
+
+    const interval = setInterval(()=>{
+
+        if(gameEnded){
+            clearInterval(interval);
+            return;
+        }
+
+        if(player.posicao < TOTAL_CASAS){
+            player.posicao++;
+        }
+
+        moved++;
+
+        broadcast({
+            type:"move",
+            jogadores:jogadores
+        });
+
+        if(player.id === myId){
+
+            renderBoard();
+            updateLocalHud();
+        }
+
+        if(player.posicao >= TOTAL_CASAS){
+
+            clearInterval(interval);
+
+            endGame(
+                player.nome,
+                `${player.nome} chegou à casa ${TOTAL_CASAS}!`
+            );
+
+            return;
+        }
+
+        if(moved >= steps){
+
+            clearInterval(interval);
+
+            setTimeout(()=>{
+                processLanding(player);
+            },300);
+        }
+
+    },180);
+}
+
+/* =========================================================
+   CASAS
+========================================================= */
+
+function processLanding(player){
+
+    if(gameEnded){
+        return;
+    }
+
+    if(PROBLEMAS[player.posicao]){
+
+        processProblem(player);
+        return;
+    }
+
+    if(SOLUCOES[player.posicao]){
+
+        processSolution(player);
+        return;
+    }
+
+    if(PERGUNTAS[player.posicao]){
+
+        processQuestion(player);
+        return;
+    }
+
+    if(ITEM_CASAS.includes(player.posicao)){
+
+        processItem(player);
+        return;
+    }
 
     nextTurn();
-
-    return;
-  }
-
-
-  nextTurn();
-
 }
 
-
 /* =========================================================
-   PRÓXIMO TURNO
+   PROBLEMAS
 ========================================================= */
 
-function nextTurn(){
+function processProblem(player){
 
-  if(!isHost) return;
-
-  currentTurn++;
-
-  if(currentTurn>=players.length)
-    currentTurn=0;
-
-  actionBusy=false;
-
-  broadcast({
-    type:"state",
-    players:players,
-    currentTurn:currentTurn,
-    time:tempoRestante
-  });
-
-  updateBoard();
-  updateHUD();
-  updateTurn();
-
-}
-
-
-/* =========================================================
-   RECEBER DADOS
-========================================================= */
-
-const originalHandleData=handleData;
-
-function handleData(data,c){
-
-  if(data.type==="roll"){
-
-    processRoll(data);
-
-    return;
-  }
-
-  if(data.type==="answer"){
-
-    processAnswer(data);
-
-    return;
-  }
-
-  originalHandleData(data,c);
-
-}
-
-
-/* =========================================================
-   PROFISSÃO
-========================================================= */
-
-async function startProfessionDraw(playerId){
-
-  const p=getPlayer(playerId);
-
-  if(!p) return;
-
-  const modal=
-    document.getElementById("modal");
-
-  const content=
-    document.getElementById("modalContent");
-
-  modal.classList.remove("hidden");
-
-  content.innerHTML=`
-    <div id="drawBox">
-      <h2>💼 Sorteio da profissão</h2>
-      <p>Preparando sua profissão...</p>
-      <div id="drawText">🎰</div>
-    </div>
-  `;
-
-  const drawText=
-    document.getElementById("drawText");
-
-  drawText.classList.add("drawAnimation");
-
-  for(let i=0;i<25;i++){
-
-    drawText.textContent=
-      PROFISSOES[random(0,PROFISSOES.length-1)];
-
-    await wait(90);
-
-  }
-
-  const profession=
-    PROFISSOES[random(0,PROFISSOES.length-1)];
-
-  p.profession=profession;
-
-  drawText.classList.remove("drawAnimation");
-
-  drawText.textContent=
-    profession;
-
-  content.innerHTML=`
-    <div id="drawBox">
-      <h2>💼 Sua profissão!</h2>
-      <div id="drawText">${profession}</div>
-      <p>Essa é a profissão que foi sorteada para você.</p>
-      <button onclick="closeModal()">Continuar</button>
-    </div>
-  `;
-
-  if(isHost){
+    const message =
+        "⚠️ Problema: " +
+        PROBLEMAS[player.posicao];
 
     broadcast({
-      type:"profession",
-      playerId:playerId,
-      profession:profession
+        type:"toast",
+        message:`${player.nome}: ${message}`
     });
 
-  }else{
+    if(player.itens.includes("arvore")){
 
-    sendToHost({
-      type:"professionChoice",
-      playerId:playerId,
-      profession:profession
+        player.itens =
+            player.itens.filter(x=>x!=="arvore");
+
+        broadcast({
+            type:"toast",
+            message:`🌳 ${player.nome} usou uma Árvore para se proteger!`
+        });
+
+        broadcastState();
+
+        setTimeout(nextTurn,600);
+
+        return;
+    }
+
+    if(player.itens.includes("agua")){
+
+        player.itens =
+            player.itens.filter(x=>x!=="agua");
+
+        player.posicao =
+            Math.min(TOTAL_CASAS,player.posicao+2);
+
+        broadcast({
+            type:"toast",
+            message:`💧 ${player.nome} usou Água e avançou 2 casas!`
+        });
+
+        broadcastState();
+
+        setTimeout(()=>{
+
+            if(player.posicao >= TOTAL_CASAS){
+
+                endGame(
+                    player.nome,
+                    `${player.nome} chegou à casa ${TOTAL_CASAS}!`
+                );
+
+            }else{
+                nextTurn();
+            }
+
+        },600);
+
+        return;
+    }
+
+    player.posicao =
+        Math.max(0,player.posicao-3);
+
+    broadcast({
+        type:"toast",
+        message:`⚠️ ${player.nome} voltou 3 casas.`
     });
 
-  }
+    broadcastState();
 
-  updateHUD();
-
+    setTimeout(nextTurn,700);
 }
-
 
 /* =========================================================
-   PROFISSÃO RECEBIDA PELO HOST
+   SOLUÇÕES
 ========================================================= */
 
-function processProfessionChoice(data){
+function processSolution(player){
 
-  if(!isHost) return;
+    broadcast({
+        type:"toast",
+        message:`🌱 Solução: ${SOLUCOES[player.posicao]}`
+    });
 
-  const p=getPlayer(data.playerId);
+    setTimeout(()=>{
 
-  if(!p) return;
+        player.posicao =
+            Math.min(TOTAL_CASAS,player.posicao+2);
 
-  p.profession=data.profession;
+        broadcast({
+            type:"toast",
+            message:`🌱 ${player.nome} avançou 2 casas!`
+        });
 
-  broadcast({
-    type:"profession",
-    playerId:p.id,
-    profession:p.profession
-  });
+        broadcastState();
 
+        if(player.posicao >= TOTAL_CASAS){
+
+            endGame(
+                player.nome,
+                `${player.nome} chegou à casa ${TOTAL_CASAS}!`
+            );
+
+        }else{
+
+            setTimeout(nextTurn,600);
+        }
+
+    },500);
 }
 
+/* =========================================================
+   ITENS
+========================================================= */
+
+function processItem(player){
+
+    const available =
+        ITENS.filter(item=>
+            !player.itens.includes(item.id)
+        );
+
+    if(available.length === 0){
+
+        broadcast({
+            type:"toast",
+            message:`🎒 ${player.nome} encontrou uma casa de item, mas já possui todos os itens disponíveis.`
+        });
+
+        setTimeout(nextTurn,500);
+        return;
+    }
+
+    const item =
+        available[
+            Math.floor(Math.random()*available.length)
+        ];
+
+    player.itens.push(item.id);
+
+    broadcast({
+        type:"drawItem",
+        playerId:player.id,
+        item:item,
+        jogadores:jogadores
+    });
+
+    if(player.id === myId){
+
+        showItemDraw(item,true);
+    }
+
+    broadcastState();
+
+    setTimeout(nextTurn,2500);
+}
+
+function showItemDraw(item,local){
+
+    show("drawModal");
+
+    $("drawTitle").textContent =
+        "🎁 Sorteio do item";
+
+    $("drawResult").textContent = "";
+
+    const display = $("drawDisplay");
+
+    display.classList.add("drawSpin");
+
+    let count = 0;
+
+    const interval = setInterval(()=>{
+
+        const random =
+            ITENS[
+                Math.floor(Math.random()*ITENS.length)
+            ];
+
+        display.textContent =
+            random.emoji + " " + random.nome;
+
+        count++;
+
+        if(count >= 22){
+
+            clearInterval(interval);
+
+            display.classList.remove("drawSpin");
+
+            display.textContent =
+                item.emoji + " " + item.nome;
+
+            $("drawResult").textContent =
+                "Você ganhou: " + item.nome;
+
+            setTimeout(()=>{
+                closeModal("drawModal");
+            },1800);
+        }
+
+    },100);
+}
 
 /* =========================================================
    PERGUNTAS
 ========================================================= */
 
-function showQuestion(question,playerId){
+function processQuestion(player){
 
-  if(playerId!==myId)
-    return;
-
-  perguntaAtual=question;
-  perguntaPlayerId=playerId;
-
-  const content=
-    document.getElementById("modalContent");
-
-  content.innerHTML=`
-    <h2>❓ Pergunta</h2>
-
-    <p>${escapeHTML(question.pergunta)}</p>
-
-    <div id="answers"></div>
-  `;
-
-  const answers=
-    document.getElementById("answers");
-
-  question.opcoes.forEach((opcao,index)=>{
-
-    const button=
-      document.createElement("button");
-
-    button.className="option";
-
-    button.textContent=
-      `${String.fromCharCode(65+index)}) ${opcao}`;
-
-    button.onclick=()=>{
-      answerQuestion(index);
-    };
-
-    answers.appendChild(button);
-
-  });
-
-  document.getElementById("modal")
-    .classList.remove("hidden");
-
-}
-
-
-function answerQuestion(index){
-
-  if(!perguntaAtual) return;
-
-  const correta=
-    index===perguntaAtual.correta;
-
-  if(isHost){
-
-    processAnswer({
-      playerId:myId,
-      correct:correta
-    });
-
-  }else{
-
-    sendToHost({
-      type:"answer",
-      playerId:myId,
-      correct:correta
-    });
-
-  }
-
-}
-
-
-function processAnswer(data){
-
-  if(!isHost) return;
-
-  const p=getPlayer(data.playerId);
-
-  if(!p) return;
-
-  closeModal();
-
-  if(data.correct){
-
-    p.acertos++;
-
-    p.position=
-      Math.min(
-        TOTAL_CASAS,
-        p.position+2
-      );
+    const question =
+        PERGUNTAS[player.posicao];
 
     broadcast({
-      type:"message",
-      title:"🎉 Resposta correta!",
-      text:`${p.name} avançou 2 casas.`
+        type:"question",
+        playerId:player.id,
+        question:question
     });
 
-    if(p.position>=TOTAL_CASAS){
+    if(player.id === myId){
 
-      broadcast({
-        type:"state",
-        players:players,
-        currentTurn:currentTurn,
-        time:tempoRestante
-      });
+        showQuestion(question);
+    }
+}
 
-      finishGame(p.id);
+function showQuestion(question){
 
-      return;
+    pendingQuestion = question;
+
+    show("questionModal");
+
+    $("questionText").innerHTML =
+        `<h3>${escapeHtml(question.q)}</h3>`;
+
+    const options =
+        $("questionOptions");
+
+    options.innerHTML = "";
+
+    question.op.forEach((op,index)=>{
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "questionOption";
+
+        button.textContent =
+            String.fromCharCode(65+index) +
+            ") " + op;
+
+        button.onclick = ()=>{
+            answerQuestion(index);
+        };
+
+        options.appendChild(button);
+    });
+}
+
+function answerQuestion(answer){
+
+    if(!pendingQuestion){
+        return;
     }
 
-  }else{
+    hide("questionModal");
 
-    broadcast({
-      type:"message",
-      title:"❌ Resposta incorreta",
-      text:`${p.name} permaneceu na casa.`
-    });
+    if(isHost){
 
-  }
+        processQuestionAnswer(
+            myId,
+            answer
+        );
 
-  nextTurn();
+    }else{
 
+        conn.send({
+            type:"questionAnswer",
+            playerId:myId,
+            answer:answer
+        });
+    }
 }
 
+function processQuestionAnswer(playerId,answer){
 
-/* =========================================================
-   SORTEIO DE ITEM
-========================================================= */
+    const player =
+        jogadores.find(p=>p.id===playerId);
 
-async function animateItemDraw(playerId,item){
+    if(!player || !pendingQuestion){
+        return;
+    }
 
-  if(playerId!==myId)
-    return;
+    if(answer === pendingQuestion.correta){
 
-  const modal=
-    document.getElementById("modal");
+        player.acertos++;
 
-  const content=
-    document.getElementById("modalContent");
+        player.posicao =
+            Math.min(
+                TOTAL_CASAS,
+                player.posicao+2
+            );
 
-  modal.classList.remove("hidden");
+        broadcast({
+            type:"toast",
+            message:`✅ ${player.nome} respondeu corretamente e avançou 2 casas!`
+        });
 
-  content.innerHTML=`
-    <div id="drawBox">
-      <h2>🎁 Sorteio de item</h2>
-      <p>O item está sendo sorteado...</p>
-      <div id="drawText">🎰</div>
-    </div>
-  `;
+    }else{
 
-  const drawText=
-    document.getElementById("drawText");
+        if(player.itens.includes("denuncia")){
 
-  drawText.classList.add("drawAnimation");
+            player.itens =
+                player.itens.filter(x=>x!=="denuncia");
 
-  for(let i=0;i<25;i++){
+            broadcast({
+                type:"toast",
+                message:`📢 ${player.nome} usou uma Denúncia e pode tentar novamente!`
+            });
 
-    const temp=
-      ITENS[random(0,ITENS.length-1)];
+            broadcast({
+                type:"question",
+                playerId:player.id,
+                question:pendingQuestion
+            });
 
-    drawText.textContent=
-      `${temp.emoji} ${temp.nome}`;
+            if(player.id === myId){
+                showQuestion(pendingQuestion);
+            }
 
-    await wait(80);
+            broadcastState();
 
-  }
+            return;
 
-  drawText.classList.remove("drawAnimation");
+        }else{
 
-  drawText.textContent=
-    `${item.emoji} ${item.nome}`;
+            broadcast({
+                type:"toast",
+                message:`❌ ${player.nome} errou a pergunta e permaneceu na casa.`
+            });
+        }
+    }
 
-  content.innerHTML=`
-    <div id="drawBox">
-      <h2>🎁 Você ganhou!</h2>
+    pendingQuestion = null;
 
-      <div id="drawText">
-        ${item.emoji} ${item.nome}
-      </div>
+    broadcastState();
 
-      <p>
-        O item foi adicionado à sua aba de itens.
-      </p>
+    if(player.posicao >= TOTAL_CASAS){
 
-      <button onclick="closeModal()">
-        Continuar
-      </button>
-    </div>
-  `;
+        endGame(
+            player.nome,
+            `${player.nome} chegou à casa ${TOTAL_CASAS}!`
+        );
 
+    }else{
+
+        setTimeout(nextTurn,700);
+    }
 }
 
-
 /* =========================================================
-   ABA DE ITENS
+   USO DE ITENS
 ========================================================= */
 
 function openItems(){
 
-  if(!myPlayer) return;
+    const me =
+        jogadores.find(p=>p.id===myId);
 
-  let html=`
-    <h2>🎒 Seus itens</h2>
-    <p>Itens que você possui:</p>
-  `;
+    if(!me){
+        return;
+    }
 
-  if(myPlayer.items.length===0){
+    show("itemsModal");
 
-    html+=`
-      <p class="small">
-        Você ainda não possui nenhum item.
-      </p>
-    `;
+    const grid =
+        $("itemGrid");
 
-  }else{
+    grid.innerHTML = "";
 
-    myPlayer.items.forEach((item,index)=>{
+    ITENS.forEach(item=>{
 
-      html+=`
-        <div class="itemLine">
-          <strong>
-            ${item.emoji} ${item.nome}
-          </strong>
+        const count =
+            me.itens.filter(x=>x===item.id).length;
 
-          <br>
+        const card =
+            document.createElement("div");
 
-          <span class="small">
-            ${item.descricao}
-          </span>
-        </div>
-      `;
+        card.className = "itemCard";
 
+        card.innerHTML = `
+            <div style="font-size:28px">${item.emoji}</div>
+            <b>${item.nome}</b>
+            <div class="itemCount">x${count}</div>
+            <small>${item.descricao}</small>
+        `;
+
+        grid.appendChild(card);
     });
-
-  }
-
-  document.getElementById("modalContent")
-    .innerHTML=html;
-
-  document.getElementById("modal")
-    .classList.remove("hidden");
-
 }
 
+function processUseItem(playerId,itemId){
+
+    const player =
+        jogadores.find(p=>p.id===playerId);
+
+    if(!player){
+        return;
+    }
+
+    if(!player.itens.includes(itemId)){
+        return;
+    }
+
+    /* Os itens principais são usados automaticamente
+       nos eventos correspondentes. */
+
+    broadcastState();
+}
+
+/* =========================================================
+   TURNOS
+========================================================= */
+
+function nextTurn(){
+
+    if(gameEnded){
+        return;
+    }
+
+    pendingQuestion = null;
+
+    turno++;
+
+    if(turno >= jogadores.length){
+        turno = 0;
+    }
+
+    actionLocked = false;
+
+    broadcastState();
+
+    updateTurnText();
+}
+
+function broadcastState(){
+
+    if(!isHost){
+        return;
+    }
+
+    broadcast({
+        type:"state",
+        jogadores:jogadores,
+        turno:turno,
+        tempo:tempoRestante,
+        gameStarted:gameStarted,
+        gameEnded:gameEnded
+    });
+
+    renderPlayersHud();
+    renderBoard();
+    updateLocalHud();
+    updateTurnText();
+}
+
+/* =========================================================
+   BROADCAST
+========================================================= */
+
+function broadcast(data){
+
+    if(!isHost){
+        return;
+    }
+
+    connections.forEach(c=>{
+
+        if(c && c.open){
+
+            try{
+                c.send(data);
+            }catch(e){
+                console.error(e);
+            }
+        }
+
+    });
+}
+
+/* =========================================================
+   FIM DE JOGO
+========================================================= */
+
+function endGame(winner,text){
+
+    if(gameEnded){
+        return;
+    }
+
+    gameEnded = true;
+    gameStarted = false;
+
+    if(timerInterval){
+        clearInterval(timerInterval);
+    }
+
+    broadcast({
+        type:"result",
+        title:"🏆 Temos um vencedor!",
+        text:text
+    });
+
+    showResult(
+        "🏆 Temos um vencedor!",
+        text
+    );
+}
+
+function endGameByTime(){
+
+    if(gameEnded){
+        return;
+    }
+
+    gameEnded = true;
+    gameStarted = false;
+
+    if(timerInterval){
+        clearInterval(timerInterval);
+    }
+
+    const ranking =
+        [...jogadores].sort((a,b)=>{
+
+            if(b.posicao !== a.posicao){
+                return b.posicao-a.posicao;
+            }
+
+            if(b.itens.length !== a.itens.length){
+                return b.itens.length-a.itens.length;
+            }
+
+            return b.acertos-a.acertos;
+
+        });
+
+    const vencedor = ranking[0];
+
+    const text =
+        `⏱️ O tempo acabou!<br><br>` +
+        `🏆 Vencedor: <b>${escapeHtml(vencedor.nome)}</b><br>` +
+        `📍 Casa: ${vencedor.posicao}<br>` +
+        `🎒 Itens: ${vencedor.itens.length}<br>` +
+        `✅ Acertos: ${vencedor.acertos}`;
+
+    broadcast({
+        type:"result",
+        title:"⏱️ Tempo esgotado!",
+        text:text
+    });
+
+    showResult(
+        "⏱️ Tempo esgotado!",
+        text
+    );
+}
+
+function showResult(title,text){
+
+    $("resultTitle").textContent = title;
+    $("resultText").innerHTML = text;
+
+    show("resultModal");
+}
 
 /* =========================================================
    COMO JOGAR
 ========================================================= */
 
-function openHowToPlay(){
-
-  document.getElementById("modalContent")
-    .innerHTML=`
-
-    <h2>📖 Como jogar</h2>
-
-    <h3>🎯 Objetivo</h3>
-
-    <p>
-      Chegue à <strong>casa 150</strong> antes que o tempo termine.
-      O jogador que chegar primeiro vence a partida.
-    </p>
-
-    <h3>⏱️ Tempo</h3>
-
-    <p>
-      A partida possui <strong>30 minutos</strong>.
-    </p>
-
-    <h3>🎲 Turnos</h3>
-
-    <p>
-      Cada jogador joga o dado quando chegar sua vez.
-      O número sorteado determina quantas casas você irá avançar.
-    </p>
-
-    <h3>🚶 Movimento</h3>
-
-    <p>
-      O personagem anda pelo tabuleiro uma casa de cada vez.
-    </p>
-
-    <h3>❓ Casas de pergunta</h3>
-
-    <p>
-      Ao cair em uma casa de pergunta, você deverá responder
-      uma questão sobre racismo ambiental e justiça ambiental.
-    </p>
-
-    <p>
-      Uma resposta correta permite avançar.
-    </p>
-
-    <h3>⚠️ Casas de problema</h3>
-
-    <p>
-      Algumas casas apresentam situações relacionadas ao
-      racismo ambiental e aos problemas ambientais enfrentados
-      pelas comunidades.
-    </p>
-
-    <h3>✅ Casas de solução</h3>
-
-    <p>
-      Essas casas apresentam ações que podem ajudar a combater
-      problemas ambientais e promover justiça ambiental.
-    </p>
-
-    <h3>🎁 Casas de item</h3>
-
-    <p>
-      Ao cair em uma casa de item, haverá um
-      <strong>sorteio animado</strong>.
-    </p>
-
-    <p>
-      O item sorteado ficará disponível na aba
-      <strong>🎒 Itens</strong>.
-    </p>
-
-    <h3>💼 Profissão</h3>
-
-    <p>
-      Cada jogador recebe uma profissão através de um
-      sorteio animado no início da partida.
-    </p>
-
-    <p>
-      A profissão sorteada aparece no seu HUD.
-    </p>
-
-    <h3>🏆 Se o tempo acabar</h3>
-
-    <p>
-      Se ninguém chegar à casa 150 antes do fim do tempo,
-      o vencedor será definido pelos seguintes critérios:
-    </p>
-
-    <ol>
-      <li>Quem estiver na casa mais avançada;</li>
-      <li>Se houver empate, quem tiver mais itens;</li>
-      <li>Se continuar empatado, quem tiver mais respostas corretas;</li>
-      <li>Se tudo continuar igual, haverá empate.</li>
-    </ol>
-
-    <h3>👥 Multiplayer</h3>
-
-    <p>
-      O jogo pode ser jogado com outros jogadores através
-      de uma sala multiplayer.
-    </p>
-
-    `;
-
-  document.getElementById("modal")
-    .classList.remove("hidden");
-
+function openHowTo(){
+    show("howModal");
 }
-
 
 /* =========================================================
-   MENSAGENS
+   SEGURANÇA HTML
 ========================================================= */
 
-function showMessage(title,text){
+function escapeHtml(text){
 
-  document.getElementById("modalContent")
-    .innerHTML=`
-      <h2>${title}</h2>
-      <p>${escapeHTML(text)}</p>
-      <button onclick="closeModal()">Continuar</button>
-    `;
-
-  document.getElementById("modal")
-    .classList.remove("hidden");
-
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
 }
-
-
-/* =========================================================
-   FECHAR MODAL
-========================================================= */
-
-function closeModal(){
-
-  document.getElementById("modal")
-    .classList.add("hidden");
-
-}
-
-
-/* =========================================================
-   FINAL DA PARTIDA
-========================================================= */
-
-function finishGame(winnerId=null){
-
-  if(!started) return;
-
-  clearInterval(timerInterval);
-
-  started=false;
-
-  document.getElementById("rollButton")
-    .disabled=true;
-
-  let winner=null;
-
-  if(winnerId){
-
-    winner=getPlayer(winnerId);
-
-  }else{
-
-    const ranking=
-      [...players].sort((a,b)=>{
-
-        if(b.position!==a.position)
-          return b.position-a.position;
-
-        if(b.items.length!==a.items.length)
-          return b.items.length-a.items.length;
-
-        return b.acertos-a.acertos;
-
-      });
-
-    if(ranking.length){
-
-      const top=ranking[0];
-
-      const empate=
-        ranking.filter(p=>
-          p.position===top.position &&
-          p.items.length===top.items.length &&
-          p.acertos===top.acertos
-        );
-
-      if(empate.length===1)
-        winner=top;
-
-    }
-
-  }
-
-
-  let html="<h2>🏆 Fim da partida!</h2>";
-
-  if(winner){
-
-    html+=`
-      <p>
-        <strong>${escapeHTML(winner.name)}</strong>
-        venceu a partida!
-      </p>
-
-      <p>
-        🏠 Casa: ${winner.position}<br>
-        🎒 Itens: ${winner.items.length}<br>
-        ❓ Respostas corretas: ${winner.acertos}
-      </p>
-    `;
-
-  }else{
-
-    html+=`
-      <p>
-        🤝 A partida terminou empatada!
-      </p>
-    `;
-
-  }
-
-
-  html+=`
-    <h3>📊 Resultado</h3>
-  `;
-
-
-  const ranking=
-    [...players].sort((a,b)=>{
-
-      if(b.position!==a.position)
-        return b.position-a.position;
-
-      if(b.items.length!==a.items.length)
-        return b.items.length-a.items.length;
-
-      return b.acertos-a.acertos;
-
-    });
-
-
-  ranking.forEach((p,i)=>{
-
-    html+=`
-      <div class="playerLine">
-        ${i+1}º —
-        <span style="color:${p.color}">
-          ●
-        </span>
-        ${escapeHTML(p.name)}
-        —
-        Casa ${p.position}
-        —
-        ${p.items.length} itens
-        —
-        ${p.acertos} acertos
-      </div>
-    `;
-
-  });
-
-
-  document.getElementById("modalContent")
-    .innerHTML=html;
-
-  document.getElementById("modal")
-    .classList.remove("hidden");
-
-}
-
-
-/* =========================================================
-   ESPERA
-========================================================= */
-
-function wait(ms){
-
-  return new Promise(resolve=>
-    setTimeout(resolve,ms)
-  );
-
-}
-
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-window.addEventListener("load",()=>{
-
-  createPeer();
-
-});
-
+renderLobbyPlayers();
 
 </script>
 
 </body>
-     </html>
+  </html>
