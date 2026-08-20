@@ -13,9 +13,14 @@
 body{
     margin:0;
     font-family:Arial,Helvetica,sans-serif;
-    background:#101827;
     color:white;
+    min-height:100vh;
     overflow-x:hidden;
+    background:
+        radial-gradient(circle at 10% 10%,#2563eb55,transparent 28%),
+        radial-gradient(circle at 90% 20%,#22c55e44,transparent 28%),
+        radial-gradient(circle at 50% 100%,#a855f733,transparent 35%),
+        linear-gradient(135deg,#07111f,#10233d 45%,#172554);
 }
 
 button,input{
@@ -31,7 +36,9 @@ button{
     display:none!important;
 }
 
-/* ================= LOBBY ================= */
+/* =====================================================
+LOBBY
+===================================================== */
 
 #lobby{
     min-height:100vh;
@@ -39,70 +46,91 @@ button{
     justify-content:center;
     align-items:center;
     padding:20px;
+    background:
+        radial-gradient(circle at 20% 20%,#22c55e33,transparent 25%),
+        radial-gradient(circle at 80% 80%,#3b82f633,transparent 30%);
 }
 
 .lobbyBox{
     width:100%;
-    max-width:520px;
-    background:#1c293d;
-    border-radius:22px;
-    padding:28px;
+    max-width:540px;
+    background:#111c31ee;
+    border:1px solid #ffffff18;
+    border-radius:28px;
+    padding:30px;
     text-align:center;
-    box-shadow:0 15px 50px #0008;
+    box-shadow:0 25px 80px #000b;
+    backdrop-filter:blur(15px);
 }
 
 .lobbyBox h1{
-    margin-top:0;
-    font-size:28px;
+    margin:0 0 10px;
+    font-size:30px;
 }
 
 .lobbyBox p{
     color:#cbd5e1;
+    line-height:1.5;
 }
 
 .lobbyBox input{
     width:100%;
     padding:14px;
-    border-radius:12px;
+    border-radius:14px;
     border:2px solid #334155;
-    background:#0f172a;
+    background:#07111f;
     color:white;
     margin:7px 0;
     outline:none;
+}
+
+.lobbyBox input:focus{
+    border-color:#3b82f6;
 }
 
 .lobbyBox button{
     width:100%;
     padding:14px;
     margin-top:8px;
-    border-radius:12px;
-    background:#2563eb;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
     color:white;
     font-weight:bold;
+    transition:.2s;
 }
 
 .lobbyBox button:hover{
-    filter:brightness(1.15);
+    transform:translateY(-1px);
+    filter:brightness(1.12);
+}
+
+.lobbyHelp{
+    background:#7c3aed;
 }
 
 .roomCode{
-    font-size:25px;
+    font-size:26px;
     font-weight:bold;
-    letter-spacing:4px;
+    letter-spacing:5px;
     margin:15px 0;
+    color:#facc15;
 }
 
 #playersLobby{
     margin-top:15px;
-    background:#111827;
+    background:#07111f;
     padding:12px;
-    border-radius:12px;
+    border-radius:14px;
     text-align:left;
 }
 
 .playerLobby{
-    padding:7px;
+    padding:8px;
     border-bottom:1px solid #334155;
+}
+
+.playerLobby:last-child{
+    border-bottom:0;
 }
 
 #lobbyMessage{
@@ -111,21 +139,24 @@ button{
     color:#93c5fd;
 }
 
-/* ================= GAME ================= */
+/* =====================================================
+GAME / HUD
+===================================================== */
 
 #game{
     min-height:100vh;
-    padding-bottom:30px;
+    padding-bottom:35px;
 }
 
 #hud{
     position:sticky;
     top:0;
     z-index:50;
-    background:#162235;
-    border-bottom:2px solid #334155;
+    background:#081426ee;
+    border-bottom:1px solid #ffffff18;
     padding:10px;
-    box-shadow:0 5px 20px #0006;
+    box-shadow:0 8px 30px #0009;
+    backdrop-filter:blur(15px);
 }
 
 .hudTop{
@@ -137,15 +168,17 @@ button{
 }
 
 .hudCard{
-    background:#0f172a;
-    border-radius:12px;
+    background:#111c31;
+    border:1px solid #ffffff12;
+    border-radius:13px;
     padding:8px 12px;
-    min-width:100px;
+    min-width:105px;
 }
 
 .hudLabel{
     color:#94a3b8;
-    font-size:11px;
+    font-size:10px;
+    text-transform:uppercase;
 }
 
 .hudValue{
@@ -158,16 +191,6 @@ button{
     font-size:19px;
 }
 
-#turnText{
-    text-align:center;
-    margin-top:8px;
-    padding:9px;
-    background:#0f172a;
-    border-radius:10px;
-    color:#bfdbfe;
-    font-weight:bold;
-}
-
 .hudButtons{
     display:flex;
     gap:7px;
@@ -175,13 +198,21 @@ button{
 
 .hudButtons button{
     padding:9px 12px;
-    border-radius:10px;
+    border-radius:11px;
     background:#334155;
     color:white;
     font-weight:bold;
 }
 
-/* ================= PLAYERS HUD ================= */
+#turnText{
+    text-align:center;
+    margin-top:8px;
+    padding:10px;
+    background:#111c31;
+    border-radius:11px;
+    color:#bfdbfe;
+    font-weight:bold;
+}
 
 #playersHud{
     display:flex;
@@ -194,42 +225,46 @@ button{
     flex:0 0 auto;
     padding:7px 10px;
     border-radius:10px;
-    background:#0f172a;
+    background:#111c31;
     font-size:12px;
     border:2px solid transparent;
 }
 
 .playerHud.me{
-    border-color:#facc15!important;
+    box-shadow:0 0 0 1px #facc15;
 }
 
-/* ================= BOARD ================= */
+/* =====================================================
+BOARD
+===================================================== */
 
 #boardArea{
-    max-width:1200px;
+    max-width:1250px;
     margin:auto;
-    padding:15px;
+    padding:16px;
 }
 
 #progressBox{
-    background:#1c293d;
-    padding:12px;
-    border-radius:15px;
-    margin-bottom:12px;
+    background:#111c31dd;
+    border:1px solid #ffffff15;
+    padding:13px;
+    border-radius:17px;
+    margin-bottom:14px;
+    box-shadow:0 8px 25px #0005;
 }
 
 .progressBar{
-    height:13px;
-    background:#0f172a;
+    height:14px;
+    background:#07111f;
     border-radius:20px;
     overflow:hidden;
-    margin-top:7px;
+    margin-top:8px;
 }
 
 #progressFill{
     height:100%;
     width:0%;
-    background:#22c55e;
+    background:linear-gradient(90deg,#22c55e,#84cc16,#facc15);
     transition:width:.3s;
 }
 
@@ -240,52 +275,89 @@ button{
 #board{
     display:grid;
     grid-template-columns:repeat(10,1fr);
-    gap:5px;
+    gap:6px;
+    padding:5px;
 }
 
+/* visual novo das casas */
+
 .cell{
-    min-height:72px;
-    background:#26364c;
-    border-radius:9px;
-    border:1px solid #3d4e66;
+    min-height:78px;
+    border-radius:13px;
     position:relative;
     padding:5px;
     font-size:11px;
     overflow:visible;
+    border:2px solid #ffffff12;
+    box-shadow:
+        inset 0 1px 0 #ffffff18,
+        0 5px 12px #0004;
+    transition:.2s;
+}
+
+.cell:hover{
+    transform:translateY(-2px);
+    z-index:2;
 }
 
 .cellNumber{
     position:absolute;
-    top:3px;
-    left:5px;
-    color:#cbd5e1;
+    top:4px;
+    left:6px;
     font-weight:bold;
+    color:#f8fafc;
+    text-shadow:0 1px 3px #000;
 }
 
 .cellIcon{
     position:absolute;
-    right:4px;
-    top:3px;
+    right:5px;
+    top:4px;
+    font-size:16px;
 }
 
+.cell:nth-child(4n+1){
+    background:linear-gradient(145deg,#2563eb,#1e40af);
+}
+
+.cell:nth-child(4n+2){
+    background:linear-gradient(145deg,#059669,#166534);
+}
+
+.cell:nth-child(4n+3){
+    background:linear-gradient(145deg,#7c3aed,#4c1d95);
+}
+
+.cell:nth-child(4n){
+    background:linear-gradient(145deg,#ea580c,#9a3412);
+}
+
+/* casas especiais */
+
 .cell.problem{
-    background:#54252b;
+    background:linear-gradient(145deg,#ef4444,#7f1d1d)!important;
+    border-color:#fb7185;
 }
 
 .cell.solution{
-    background:#164b35;
+    background:linear-gradient(145deg,#22c55e,#166534)!important;
+    border-color:#86efac;
 }
 
 .cell.question{
-    background:#43316b;
+    background:linear-gradient(145deg,#8b5cf6,#4c1d95)!important;
+    border-color:#c4b5fd;
 }
 
 .cell.item{
-    background:#15506a;
+    background:linear-gradient(145deg,#06b6d4,#155e75)!important;
+    border-color:#67e8f9;
 }
 
 .cell.finish{
-    background:#8a6510;
+    background:linear-gradient(145deg,#f59e0b,#92400e)!important;
+    border-color:#fde68a;
+    box-shadow:0 0 18px #facc1570;
 }
 
 .pawns{
@@ -299,17 +371,19 @@ button{
     justify-content:center;
 }
 
+/* pessoas */
+
 .person{
-    width:24px;
-    height:31px;
+    width:25px;
+    height:32px;
     position:relative;
-    filter:drop-shadow(0 2px 2px #000);
+    filter:drop-shadow(0 2px 3px #000);
 }
 
 .person .head{
     position:absolute;
-    width:10px;
-    height:10px;
+    width:11px;
+    height:11px;
     border-radius:50%;
     background:currentColor;
     left:7px;
@@ -318,12 +392,12 @@ button{
 
 .person .body{
     position:absolute;
-    width:16px;
+    width:17px;
     height:16px;
-    border-radius:8px 8px 5px 5px;
+    border-radius:9px 9px 5px 5px;
     background:currentColor;
     left:4px;
-    top:9px;
+    top:10px;
 }
 
 .person .leg1,
@@ -339,29 +413,34 @@ button{
 .person .leg1{left:5px}
 .person .leg2{right:5px}
 
-/* ================= CONTROLS ================= */
+/* =====================================================
+CONTROLES
+===================================================== */
 
 #controls{
     max-width:700px;
-    margin:15px auto;
-    padding:15px;
+    margin:18px auto;
+    padding:18px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:12px;
+    gap:13px;
+    background:#111c31cc;
+    border:1px solid #ffffff12;
+    border-radius:20px;
 }
 
 #dice{
-    width:90px;
-    height:90px;
-    border-radius:18px;
-    background:white;
+    width:95px;
+    height:95px;
+    border-radius:20px;
+    background:#f8fafc;
     color:#111827;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:45px;
-    box-shadow:0 8px 20px #0007;
+    font-size:48px;
+    box-shadow:0 10px 30px #0008;
 }
 
 .diceRolling{
@@ -377,12 +456,13 @@ button{
 }
 
 #rollBtn{
-    background:#22c55e;
+    background:linear-gradient(135deg,#16a34a,#22c55e);
     color:white;
-    padding:15px 35px;
+    padding:15px 38px;
     border-radius:14px;
     font-size:18px;
     font-weight:bold;
+    box-shadow:0 8px 20px #16a34a44;
 }
 
 #rollBtn:disabled{
@@ -391,13 +471,16 @@ button{
 }
 
 #myProfession{
-    background:#1c293d;
+    background:#172554;
+    border:1px solid #6366f1;
     padding:10px 16px;
     border-radius:12px;
     font-weight:bold;
 }
 
-/* ================= MODAIS ================= */
+/* =====================================================
+MODAIS
+===================================================== */
 
 .modal{
     position:fixed;
@@ -408,26 +491,28 @@ button{
     justify-content:center;
     align-items:center;
     padding:15px;
+    backdrop-filter:blur(5px);
 }
 
 .modalBox{
     width:100%;
-    max-width:600px;
+    max-width:620px;
     max-height:90vh;
     overflow-y:auto;
-    background:#1c293d;
-    border-radius:20px;
-    padding:22px;
+    background:#111c31;
+    border:1px solid #ffffff18;
+    border-radius:22px;
+    padding:24px;
     position:relative;
-    box-shadow:0 15px 60px #000;
+    box-shadow:0 20px 70px #000;
 }
 
 .close{
     position:absolute;
     right:12px;
     top:10px;
-    width:35px;
-    height:35px;
+    width:36px;
+    height:36px;
     border-radius:50%;
     background:#ef4444;
     color:white;
@@ -439,6 +524,10 @@ button{
     margin-top:5px;
 }
 
+.modalBox h3{
+    color:#93c5fd;
+}
+
 .itemGrid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -446,15 +535,17 @@ button{
 }
 
 .itemCard{
-    background:#0f172a;
+    background:#07111f;
     padding:12px;
-    border-radius:12px;
+    border-radius:13px;
+    border:1px solid #ffffff10;
 }
 
 .itemCount{
     font-size:22px;
     font-weight:bold;
     color:#facc15;
+    margin:4px 0;
 }
 
 .questionOption{
@@ -472,21 +563,23 @@ button{
     background:#475569;
 }
 
-/* ================= SORTEIO ================= */
+/* =====================================================
+SORTEIO
+===================================================== */
 
 #drawBox{
     text-align:center;
 }
 
 #drawDisplay{
-    min-height:110px;
+    min-height:115px;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:28px;
     font-weight:bold;
-    background:#0f172a;
-    border-radius:15px;
+    background:#07111f;
+    border-radius:16px;
     margin:15px 0;
     padding:20px;
 }
@@ -507,7 +600,9 @@ button{
     font-weight:bold;
 }
 
-/* ================= TOAST ================= */
+/* =====================================================
+TOAST
+===================================================== */
 
 #toast{
     position:fixed;
@@ -516,6 +611,7 @@ button{
     transform:translateX(-50%);
     z-index:200;
     background:#020617;
+    border:1px solid #ffffff15;
     padding:13px 18px;
     border-radius:12px;
     box-shadow:0 8px 25px #0008;
@@ -530,7 +626,9 @@ button{
     opacity:1;
 }
 
-/* ================= RESPONSIVO ================= */
+/* =====================================================
+RESPONSIVO
+===================================================== */
 
 @media(max-width:700px){
 
@@ -539,11 +637,7 @@ button{
     }
 
     .cell{
-        min-height:65px;
-    }
-
-    .hudCard{
-        min-width:90px;
+        min-height:67px;
     }
 
     .itemGrid{
@@ -554,7 +648,7 @@ button{
 @media(max-width:430px){
 
     .cell{
-        min-height:58px;
+        min-height:60px;
         font-size:9px;
     }
 
@@ -585,27 +679,21 @@ button{
 <h1>🌎 Caminhos da Justiça Ambiental</h1>
 
 <p>
-Chegue à casa <b>150</b> antes do tempo acabar!
+Chegue à casa <b>150</b> antes que os
+<b>30 minutos</b> acabem!
 </p>
 
-<input
-id="nameInput"
-maxlength="18"
-placeholder="Seu nome">
+<input id="nameInput" maxlength="18" placeholder="Seu nome">
 
-<button onclick="createRoom()">
-🏠 Criar sala
-</button>
+<button onclick="createRoom()">🏠 Criar sala</button>
+
+<button class="lobbyHelp" onclick="openHowTo()">❓ Como jogar</button>
 
 <hr style="border-color:#334155;margin:18px 0">
 
-<input
-id="roomInput"
-placeholder="Código da sala">
+<input id="roomInput" placeholder="Código da sala">
 
-<button onclick="joinRoom()">
-🚪 Entrar na sala
-</button>
+<button onclick="joinRoom()">🚪 Entrar na sala</button>
 
 <div id="roomCodeBox" class="hidden">
 
@@ -648,58 +736,27 @@ onclick="startGame()">
 <div class="hudTop">
 
 <div class="hudCard">
-
-<div class="hudLabel">
-VOCÊ
+<div class="hudLabel">Você</div>
+<div id="hudName" class="hudValue">-</div>
 </div>
-
-<div id="hudName" class="hudValue">
--
-</div>
-
-</div>
-
 
 <div class="hudCard">
-
-<div class="hudLabel">
-PROFISSÃO
+<div class="hudLabel">Profissão</div>
+<div id="hudProfession" class="hudValue">Sorteando...</div>
 </div>
-
-<div id="hudProfession" class="hudValue">
-Sorteando...
-</div>
-
-</div>
-
 
 <div class="hudCard">
-
-<div class="hudLabel">
-TEMPO
+<div class="hudLabel">Tempo</div>
+<div id="timer" class="hudValue">30:00</div>
 </div>
-
-<div id="timer" class="hudValue">
-30:00
-</div>
-
-</div>
-
 
 <div class="hudButtons">
 
-<button onclick="openItems()">
-🎒 Itens
-</button>
-
-<button onclick="openHowTo()">
-❓ Como jogar
-</button>
+<button onclick="openItems()">🎒 Itens</button>
 
 </div>
 
 </div>
-
 
 <div id="playersHud"></div>
 
@@ -719,22 +776,16 @@ Seu progresso: 0 / 150 casas
 </div>
 
 <div class="progressBar">
-
 <div id="progressFill"></div>
-
 </div>
 
 </div>
-
 
 <div id="board"></div>
 
-
 <div id="controls">
 
-<div id="dice">
-🎲
-</div>
+<div id="dice">🎲</div>
 
 <button
 id="rollBtn"
@@ -756,7 +807,9 @@ Profissão: sorteando...
 </section>
 
 
-<!-- COMO JOGAR -->
+<!-- =====================================================
+COMO JOGAR
+===================================================== -->
 
 <div id="howModal" class="modal hidden">
 
@@ -768,26 +821,24 @@ onclick="closeModal('howModal')">
 ×
 </button>
 
-<h2>
-❓ Como jogar
-</h2>
+<h2>❓ Como jogar</h2>
 
 <p>
-O objetivo é chegar à <b>casa 150</b> antes que os
-<b>30 minutos</b> acabem.
+O objetivo é chegar à <b>casa 150</b> antes dos
+<b>30 minutos</b> acabarem.
 </p>
 
 <h3>🎲 Movimento</h3>
 
 <p>
-Quando for sua vez, jogue o dado.
-Seu personagem anda uma casa por vez.
+Quando for sua vez, jogue o dado. Sua pessoa anda
+uma casa por vez pelo tabuleiro.
 </p>
 
 <h3>🏆 Vitória</h3>
 
 <p>
-Quem chegar primeiro à casa 150 vence imediatamente.
+Quem chegar primeiro à casa 150 vence.
 </p>
 
 <p>
@@ -798,44 +849,45 @@ Se o tempo acabar, o desempate será:
 <li>Quem estiver mais avançado.</li>
 <li>Quem tiver mais itens.</li>
 <li>Quem tiver mais acertos.</li>
-<li>Se continuar empatado, haverá empate.</li>
+<li>Se continuar igual, haverá empate.</li>
 </ol>
 
 <h3>💼 Profissões</h3>
 
 <p>
-No começo da partida cada jogador recebe uma profissão
-por meio de um sorteio.
-</p>
-
-<p>
-A profissão sorteada aparece no HUD.
+No início da partida cada jogador recebe uma profissão
+por meio de um sorteio. Cada profissão possui um poder
+especial que funciona durante a partida.
 </p>
 
 <h3>🎒 Itens</h3>
 
 <p>
 Durante a partida você poderá encontrar itens.
-Eles ficam disponíveis na aba <b>Itens</b>.
+Eles ficam na aba <b>Itens</b> e possuem efeitos especiais.
 </p>
 
-<h3>⚠️ Casas especiais</h3>
+<h3>⚠️ Casas de problema</h3>
 
 <p>
-Existem casas de problemas, soluções, perguntas e itens.
-Ao cair em uma delas, o evento correspondente acontece.
+Você pode sofrer uma penalidade. Alguns itens e profissões
+podem proteger você.
+</p>
+
+<h3>🌱 Casas de solução</h3>
+
+<p>
+Uma solução normalmente faz você avançar.
+Algumas profissões e itens podem aumentar esse avanço.
 </p>
 
 <h3>❓ Perguntas</h3>
 
 <p>
 As perguntas são sobre racismo ambiental.
-Uma resposta correta faz você avançar.
-</p>
-
-<p>
-Se você tiver uma <b>Denúncia</b> e errar,
-poderá tentar novamente.
+Acertar faz você avançar 2 casas.
+Errar faz você permanecer na casa, a menos que possua
+alguma habilidade ou item que permita tentar novamente.
 </p>
 
 </div>
@@ -855,9 +907,7 @@ onclick="closeModal('itemsModal')">
 ×
 </button>
 
-<h2>
-🎒 Seus itens
-</h2>
+<h2>🎒 Seus itens</h2>
 
 <div id="itemGrid" class="itemGrid"></div>
 
@@ -872,9 +922,7 @@ onclick="closeModal('itemsModal')">
 
 <div class="modalBox" id="drawBox">
 
-<h2 id="drawTitle">
-🎰 Sorteando...
-</h2>
+<h2 id="drawTitle">🎰 Sorteando...</h2>
 
 <div id="drawDisplay" class="drawSpin">
 Preparando sorteio...
@@ -893,9 +941,7 @@ Preparando sorteio...
 
 <div class="modalBox">
 
-<h2>
-❓ Pergunta
-</h2>
+<h2>❓ Pergunta</h2>
 
 <div id="questionText"></div>
 
@@ -912,9 +958,7 @@ Preparando sorteio...
 
 <div class="modalBox" style="text-align:center">
 
-<h2 id="resultTitle">
-🏆 Fim de jogo!
-</h2>
+<h2 id="resultTitle">🏆 Fim de jogo!</h2>
 
 <div id="resultText"></div>
 
@@ -946,19 +990,16 @@ font-weight:bold">
 CONFIGURAÇÃO
 ========================================================= */
 
-const TOTAL_CASAS = 150;
-
-const TEMPO_TOTAL = 30 * 60;
-
-const MAX_JOGADORES = 11;
+const TOTAL_CASAS=150;
+const TEMPO_TOTAL=30*60;
+const MAX_JOGADORES=11;
 
 
 /* =========================================================
 CORES
 ========================================================= */
 
-const CORES = [
-
+const CORES=[
 "#ef4444",
 "#3b82f6",
 "#22c55e",
@@ -970,61 +1011,143 @@ const CORES = [
 "#92400e",
 "#f8fafc",
 "#111827"
-
 ];
 
-const NOMES_CORES = [
 
-"Vermelho",
-"Azul",
-"Verde",
-"Amarelo",
-"Roxo",
-"Laranja",
-"Rosa",
-"Ciano",
-"Marrom",
-"Branco",
-"Preto"
+/* =========================================================
+PROFISSÕES E PODERES
+========================================================= */
+
+const PROFISSOES=[
+
+{
+id:"professor",
+nome:"Professor(a)",
+descricao:"Ao acertar uma pergunta, avança 1 casa extra."
+},
+
+{
+id:"medico",
+nome:"Médico(a)",
+descricao:"Evita uma penalidade de problema uma vez por partida."
+},
+
+{
+id:"enfermeiro",
+nome:"Enfermeiro(a)",
+descricao:"Quando sofrer um problema, reduz a perda de 3 para 1 casa uma vez."
+},
+
+{
+id:"engenheiro",
+nome:"Engenheiro(a)",
+descricao:"Ao cair em uma solução, avança 1 casa extra."
+},
+
+{
+id:"advogado",
+nome:"Advogado(a)",
+descricao:"Pode tentar novamente uma pergunta errada uma vez."
+},
+
+{
+id:"biologo",
+nome:"Biólogo(a)",
+descricao:"Ao conseguir Semente ou Mudas, avança 1 casa extra."
+},
+
+{
+id:"geografo",
+nome:"Geógrafo(a)",
+descricao:"Uma vez por partida, reduz uma penalidade de problema para 1 casa."
+},
+
+{
+id:"arquiteto",
+nome:"Arquiteto(a)",
+descricao:"Uma vez por partida, ao cair em solução, recebe 2 casas extras."
+},
+
+{
+id:"jornalista",
+nome:"Jornalista",
+descricao:"Pode tentar novamente uma pergunta errada uma vez."
+},
+
+{
+id:"agricultor",
+nome:"Agricultor(a)",
+descricao:"Ao receber Semente ou Mudas, avança 1 casa extra."
+},
+
+{
+id:"pesquisador",
+nome:"Pesquisador(a)",
+descricao:"Ao acertar uma pergunta, avança 1 casa extra."
+},
+
+{
+id:"assistente",
+nome:"Assistente social",
+descricao:"Evita uma penalidade de problema uma vez."
+},
+
+{
+id:"gestor",
+nome:"Gestor(a) ambiental",
+descricao:"Ao cair em solução, avança 1 casa extra."
+},
+
+{
+id:"veterinario",
+nome:"Veterinário(a)",
+descricao:"Evita um problema uma vez."
+},
+
+{
+id:"quimico",
+nome:"Químico(a)",
+descricao:"Pode neutralizar um problema de contaminação uma vez."
+},
+
+{
+id:"fotografo",
+nome:"Fotógrafo(a)",
+descricao:"Pode permanecer na casa ao invés de sofrer uma penalidade de problema uma vez."
+},
+
+{
+id:"artista",
+nome:"Artista",
+descricao:"Ao acertar pergunta, avança 1 casa extra."
+},
+
+{
+id:"comerciante",
+nome:"Comerciante",
+descricao:"Ao receber um item, avança 1 casa."
+},
+
+{
+id:"lider",
+nome:"Líder comunitário",
+descricao:"Pode tentar novamente uma pergunta errada uma vez."
+},
+
+{
+id:"agente",
+nome:"Agente ambiental",
+descricao:"Anula uma penalidade de problema uma vez."
+}
 
 ];
 
 
 /* =========================================================
-20 PROFISSÕES
+ITENS E PODERES
 ========================================================= */
 
-const PROFISSOES = [
-
-"Professor(a)",
-"Médico(a)",
-"Enfermeiro(a)",
-"Engenheiro(a)",
-"Advogado(a)",
-"Biólogo(a)",
-"Geógrafo(a)",
-"Arquiteto(a)",
-"Jornalista",
-"Agricultor(a)",
-"Pesquisador(a)",
-"Assistente social",
-"Gestor(a) ambiental",
-"Veterinário(a)",
-"Químico(a)",
-"Fotógrafo(a)",
-"Artista",
-"Comerciante",
-"Líder comunitário",
-"Agente ambiental"
-
-];
-
-
-/* =========================================================
-20 ITENS
-========================================================= */
-
-const ITENS = [
+const ITENS=[
 
 {
 id:"arvore",
@@ -1044,126 +1167,126 @@ descricao:"Permite tentar novamente uma pergunta errada."
 id:"agua",
 nome:"Água",
 emoji:"💧",
-descricao:"Ao cair em problema, evita a perda e permite avançar."
+descricao:"Ao cair em problema, evita a perda e avança 2 casas."
 },
 
 {
 id:"coleta",
 nome:"Coleta seletiva",
 emoji:"♻️",
-descricao:"Ajuda a superar uma situação relacionada ao lixo."
+descricao:"Protege contra problemas relacionados a lixo."
 },
 
 {
 id:"semente",
 nome:"Semente",
 emoji:"🌱",
-descricao:"Ajuda na recuperação de uma área degradada."
+descricao:"Ao receber, avança 1 casa."
 },
 
 {
 id:"filtro",
 nome:"Filtro",
 emoji:"🚰",
-descricao:"Ajuda contra problemas de contaminação da água."
+descricao:"Protege contra problemas de contaminação da água."
 },
 
 {
 id:"capacete",
 nome:"Capacete",
 emoji:"⛑️",
-descricao:"Protege contra um problema ambiental."
+descricao:"Protege contra qualquer problema uma vez."
 },
 
 {
 id:"mapa",
 nome:"Mapa",
 emoji:"🗺️",
-descricao:"Ajuda a encontrar uma solução."
+descricao:"Ao cair em solução, avança 1 casa extra."
 },
 
 {
 id:"megafone",
 nome:"Megafone",
 emoji:"📣",
-descricao:"Ajuda a dar voz à comunidade."
+descricao:"Permite uma nova tentativa após errar pergunta."
 },
 
 {
 id:"luvas",
 nome:"Luvas",
 emoji:"🧤",
-descricao:"Ajuda em ações de limpeza."
+descricao:"Protege contra problemas relacionados a lixo."
 },
 
 {
 id:"bicicleta",
 nome:"Bicicleta",
 emoji:"🚲",
-descricao:"Representa mobilidade sustentável."
+descricao:"Ao receber, avança 2 casas."
 },
 
 {
 id:"energia",
 nome:"Energia solar",
 emoji:"☀️",
-descricao:"Ajuda a promover energia limpa."
+descricao:"Ao cair em solução, avança 1 casa extra."
 },
 
 {
 id:"livro",
 nome:"Livro",
 emoji:"📚",
-descricao:"Representa educação ambiental."
+descricao:"Ao acertar pergunta, avança 1 casa extra."
 },
 
 {
 id:"sementes",
 nome:"Mudas",
 emoji:"🌿",
-descricao:"Ajuda na criação de áreas verdes."
+descricao:"Ao receber, avança 2 casas."
 },
 
 {
 id:"kit",
 nome:"Kit de emergência",
 emoji:"🧰",
-descricao:"Ajuda a comunidade durante um problema."
+descricao:"Evita uma penalidade de problema."
 },
 
 {
 id:"telefone",
 nome:"Telefone",
 emoji:"📱",
-descricao:"Facilita a comunicação de denúncias."
+descricao:"Permite nova tentativa após erro em pergunta."
 },
 
 {
 id:"documento",
 nome:"Documento",
 emoji:"📄",
-descricao:"Ajuda a registrar uma situação."
+descricao:"Ao cair em solução, avança 1 casa extra."
 },
 
 {
 id:"colete",
 nome:"Colete",
 emoji:"🦺",
-descricao:"Representa segurança durante uma ação."
+descricao:"Protege contra um problema uma vez."
 },
 
 {
 id:"lixeira",
 nome:"Lixeira",
 emoji:"🗑️",
-descricao:"Ajuda na organização dos resíduos."
+descricao:"Protege contra problemas relacionados ao lixo."
 },
 
 {
 id:"placa",
 nome:"Placa educativa",
 emoji:"🪧",
-descricao:"Ajuda na conscientização ambiental."
+descricao:"Ao acertar pergunta, avança 1 casa extra."
 }
 
 ];
@@ -1173,38 +1296,23 @@ descricao:"Ajuda na conscientização ambiental."
 PROBLEMAS
 ========================================================= */
 
-const PROBLEMAS = {
+const PROBLEMAS={
 
 7:"Uma comunidade sofre com alagamentos por falta de infraestrutura.",
-
 16:"Uma indústria está contaminando o ambiente próximo a uma comunidade.",
-
 25:"Moradores enfrentam falta de acesso adequado à água.",
-
 34:"Uma comunidade vive próxima a uma área de descarte irregular.",
-
 43:"A região possui pouca infraestrutura de saneamento.",
-
 52:"Uma área vulnerável sofre com poluição do ar.",
-
 61:"Uma comunidade tem poucas áreas verdes.",
-
 70:"O lixo está se acumulando próximo às casas.",
-
 79:"Uma comunidade sofre com enchentes frequentes.",
-
 88:"A população está exposta à contaminação ambiental.",
-
 97:"Uma região recebe poucos investimentos ambientais.",
-
 106:"Moradores sofrem com a falta de saneamento.",
-
 115:"Uma comunidade sofre com descarte irregular de resíduos.",
-
 124:"A poluição está afetando uma região vulnerável.",
-
 133:"A população não está sendo ouvida nas decisões ambientais.",
-
 142:"Uma comunidade enfrenta problemas causados por falta de infraestrutura."
 
 };
@@ -1214,38 +1322,23 @@ const PROBLEMAS = {
 SOLUÇÕES
 ========================================================= */
 
-const SOLUCOES = {
+const SOLUCOES={
 
 11:"Investir em saneamento básico e infraestrutura.",
-
 20:"Realizar fiscalização ambiental.",
-
 29:"Garantir coleta regular de resíduos.",
-
 38:"Criar políticas para prevenir enchentes.",
-
 47:"Garantir acesso à água potável.",
-
 56:"Ouvir a participação das comunidades.",
-
 65:"Distribuir investimentos ambientais de forma justa.",
-
 74:"Promover educação ambiental.",
-
 83:"Criar e preservar áreas verdes.",
-
 92:"Ouvir as comunidades afetadas.",
-
 101:"Ampliar a fiscalização contra a poluição.",
-
 110:"Melhorar o sistema de coleta de lixo.",
-
 119:"Garantir infraestrutura adequada.",
-
 128:"Criar projetos de recuperação ambiental.",
-
 137:"Promover participação comunitária.",
-
 146:"Investir em justiça e igualdade ambiental."
 
 };
@@ -1255,7 +1348,7 @@ const SOLUCOES = {
 PERGUNTAS
 ========================================================= */
 
-const PERGUNTAS = {
+const PERGUNTAS={
 
 4:{
 q:"O que é racismo ambiental?",
@@ -1451,11 +1544,9 @@ correta:0
 CASAS DE ITENS
 ========================================================= */
 
-const ITEM_CASAS = [
-
+const ITEM_CASAS=[
 9,18,27,36,45,54,63,72,
 81,90,99,108,117,126,135,144
-
 ];
 
 
@@ -1463,47 +1554,20 @@ const ITEM_CASAS = [
 ESTADO
 ========================================================= */
 
-let peer = null;
-
-let conn = null;
-
-let connections = [];
-
-let isHost = false;
-
-let roomCode = "";
-
-let myId = "";
-
-let gameStarted = false;
-
-let gameEnded = false;
-
-let jogadores = [];
-
-let turno = 0;
-
-let tempoRestante = TEMPO_TOTAL;
-
-let timerInterval = null;
-
-let pendingQuestion = null;
-
-let actionLocked = false;
-
-let professionDrawFinished = false;
-
-const localPlayer = {
-
-id:"",
-nome:"",
-cor:0,
-posicao:0,
-profissao:null,
-itens:[],
-acertos:0
-
-};
+let peer=null;
+let conn=null;
+let connections=[];
+let isHost=false;
+let roomCode="";
+let myId="";
+let gameStarted=false;
+let gameEnded=false;
+let jogadores=[];
+let turno=0;
+let tempoRestante=TEMPO_TOTAL;
+let timerInterval=null;
+let pendingQuestion=null;
+let actionLocked=false;
 
 
 /* =========================================================
@@ -1511,78 +1575,48 @@ UTILIDADES
 ========================================================= */
 
 function $(id){
-
 return document.getElementById(id);
-
 }
-
 
 function show(id){
-
 $(id).classList.remove("hidden");
-
 }
-
 
 function hide(id){
-
 $(id).classList.add("hidden");
-
 }
-
 
 function closeModal(id){
-
 hide(id);
-
 }
-
 
 function toast(text){
 
 const el=$("toast");
 
 el.textContent=text;
-
 el.classList.add("show");
 
 setTimeout(()=>{
-
 el.classList.remove("show");
-
 },2500);
 
 }
 
-
-function randomId(){
-
-return Math.random()
-.toString(36)
-.substring(2,8);
-
-}
-
-
 function escapeHtml(text){
 
 return String(text)
-
 .replaceAll("&","&amp;")
-
 .replaceAll("<","&lt;")
-
 .replaceAll(">","&gt;")
-
 .replaceAll('"',"&quot;")
-
 .replaceAll("'","&#039;");
 
 }
 
 
 /* =========================================================
-LOBBY
+CRIAR SALA
 ========================================================= */
 
 function createRoom(){
@@ -1590,14 +1624,9 @@ function createRoom(){
 const nome=$("nameInput").value.trim();
 
 if(!nome){
-
 toast("Digite seu nome.");
-
 return;
-
 }
-
-localPlayer.nome=nome;
 
 isHost=true;
 
@@ -1608,54 +1637,33 @@ roomCode=
 .toUpperCase();
 
 peer=new Peer(roomCode,{
-
 debug:2,
-
 config:{
-
 iceServers:[
-
 {urls:"stun:stun.l.google.com:19302"},
-
 {urls:"stun:stun1.l.google.com:19302"}
-
 ]
-
 }
-
 });
-
 
 peer.on("open",id=>{
 
 myId=id;
 
-localPlayer.id=id;
-
-localPlayer.cor=0;
-
 jogadores=[{
-
 id:id,
-
 nome:nome,
-
 cor:0,
-
 posicao:0,
-
 profissao:null,
-
 itens:[],
-
-acertos:0
-
+acertos:0,
+poderesUsados:{}
 }];
 
 $("roomCode").textContent=roomCode;
 
 show("roomCodeBox");
-
 show("startBtn");
 
 $("lobbyMessage").textContent=
@@ -1665,15 +1673,11 @@ renderLobbyPlayers();
 
 });
 
-
 peer.on("connection",c=>{
 
 if(jogadores.length>=MAX_JOGADORES){
-
 c.close();
-
 return;
-
 }
 
 connections.push(c);
@@ -1681,24 +1685,15 @@ connections.push(c);
 c.on("open",()=>{
 
 c.send({
-
 type:"roomInfo",
-
-jogadores:jogadores,
-
-started:gameStarted
-
+jogadores:jogadores
 });
 
 });
-
 
 c.on("data",data=>{
-
 handleHostData(c,data);
-
 });
-
 
 c.on("close",()=>{
 
@@ -1708,7 +1703,6 @@ connections.filter(x=>x!==c);
 });
 
 });
-
 
 peer.on("error",err=>{
 
@@ -1729,75 +1723,44 @@ ENTRAR
 function joinRoom(){
 
 const nome=$("nameInput").value.trim();
-
 const code=$("roomInput").value.trim().toUpperCase();
 
 if(!nome){
-
 toast("Digite seu nome.");
-
 return;
-
 }
 
 if(!code){
-
 toast("Digite o código da sala.");
-
 return;
-
 }
-
-localPlayer.nome=nome;
 
 isHost=false;
 
 peer=new Peer({
-
 debug:2,
-
 config:{
-
 iceServers:[
-
 {urls:"stun:stun.l.google.com:19302"},
-
 {urls:"stun:stun1.l.google.com:19302"}
-
 ]
-
 }
-
 });
-
 
 peer.on("open",id=>{
 
 myId=id;
 
-localPlayer.id=id;
-
-conn=peer.connect(code,{
-
-reliable:true
-
-});
-
+conn=peer.connect(code,{reliable:true});
 
 conn.on("open",()=>{
 
 conn.send({
-
 type:"join",
-
 player:{
-
 id:id,
-
 nome:nome
-
 }
-
 });
 
 $("lobbyMessage").textContent=
@@ -1805,22 +1768,11 @@ $("lobbyMessage").textContent=
 
 });
 
-
 conn.on("data",data=>{
-
 handleClientData(data);
-
-});
-
-
-conn.on("close",()=>{
-
-toast("Conexão encerrada.");
-
 });
 
 });
-
 
 peer.on("error",err=>{
 
@@ -1835,7 +1787,7 @@ $("lobbyMessage").textContent=
 
 
 /* =========================================================
-HOST
+HOST DATA
 ========================================================= */
 
 function handleHostData(c,data){
@@ -1845,35 +1797,24 @@ if(data.type==="join"){
 if(jogadores.length>=MAX_JOGADORES){
 
 c.send({
-
 type:"error",
-
 message:"A sala está cheia."
-
 });
 
 return;
-
 }
 
 const cor=jogadores.length;
 
 const player={
-
 id:data.player.id,
-
 nome:data.player.nome,
-
 cor:cor,
-
 posicao:0,
-
 profissao:null,
-
 itens:[],
-
-acertos:0
-
+acertos:0,
+poderesUsados:{}
 };
 
 jogadores.push(player);
@@ -1881,59 +1822,30 @@ jogadores.push(player);
 c.playerId=player.id;
 
 broadcast({
-
 type:"players",
-
 jogadores:jogadores
-
 });
 
 renderLobbyPlayers();
 
 }
 
-
 if(data.type==="rollRequest"){
 
-if(!gameStarted||gameEnded){
-
-return;
-
-}
+if(!gameStarted||gameEnded)return;
 
 if(!jogadores[turno]||
-data.playerId!==jogadores[turno].id){
-
-return;
-
-}
+data.playerId!==jogadores[turno].id)return;
 
 processRoll(data.playerId);
 
 }
 
-
 if(data.type==="questionAnswer"){
 
 processQuestionAnswer(
-
 data.playerId,
-
 data.answer
-
-);
-
-}
-
-
-if(data.type==="useItem"){
-
-processUseItem(
-
-data.playerId,
-
-data.itemId
-
 );
 
 }
@@ -1942,7 +1854,7 @@ data.itemId
 
 
 /* =========================================================
-CLIENTE
+CLIENT DATA
 ========================================================= */
 
 function handleClientData(data){
@@ -1954,9 +1866,7 @@ jogadores=data.jogadores||[];
 renderLobbyPlayers();
 
 return;
-
 }
-
 
 if(data.type==="players"){
 
@@ -1964,16 +1874,8 @@ jogadores=data.jogadores||[];
 
 renderLobbyPlayers();
 
-renderPlayersHud();
-
-renderBoard();
-
-updateLocalHud();
-
 return;
-
 }
-
 
 if(data.type==="start"){
 
@@ -1982,9 +1884,7 @@ jogadores=data.jogadores||[];
 startLocalGame(data.tempo);
 
 return;
-
 }
-
 
 if(data.type==="state"){
 
@@ -1999,49 +1899,37 @@ gameStarted=data.gameStarted;
 gameEnded=data.gameEnded;
 
 renderPlayersHud();
-
 renderBoard();
-
 updateLocalHud();
-
 updateTurnText();
 
 return;
-
 }
-
 
 if(data.type==="drawProfession"){
 
 jogadores=data.jogadores||jogadores;
 
 renderPlayersHud();
-
 renderBoard();
-
 updateLocalHud();
 
 if(data.playerId===myId){
 
 showProfessionDraw(
-
 data.profession
-
 );
 
 }
 
 return;
-
 }
-
 
 if(data.type==="drawItem"){
 
 jogadores=data.jogadores||jogadores;
 
 renderBoard();
-
 updateLocalHud();
 
 if(data.playerId===myId){
@@ -2051,9 +1939,7 @@ showItemDraw(data.item);
 }
 
 return;
-
 }
-
 
 if(data.type==="question"){
 
@@ -2064,48 +1950,35 @@ showQuestion(data.question);
 }
 
 return;
-
 }
-
 
 if(data.type==="toast"){
 
 toast(data.message);
 
 return;
-
 }
-
 
 if(data.type==="result"){
 
 showResult(
-
 data.title,
-
 data.text
-
 );
 
 return;
-
 }
-
 
 if(data.type==="move"){
 
 jogadores=data.jogadores||jogadores;
 
 renderBoard();
-
+renderPlayersHud();
 updateLocalHud();
 
-renderPlayersHud();
-
 return;
-
 }
-
 
 if(data.type==="error"){
 
@@ -2117,94 +1990,61 @@ toast(data.message);
 
 
 /* =========================================================
-INICIAR
+INICIAR PARTIDA
 ========================================================= */
 
 function startGame(){
 
-if(!isHost){
-
-return;
-
-}
-
-if(jogadores.length<1){
-
-return;
-
-}
+if(!isHost||!jogadores.length)return;
 
 gameStarted=true;
-
 gameEnded=false;
-
 tempoRestante=TEMPO_TOTAL;
-
 turno=0;
-
 actionLocked=false;
-
-
-/*
-Cada jogador recebe uma profissão.
-Não mostramos a função da profissão.
-*/
 
 jogadores.forEach(p=>{
 
 p.posicao=0;
-
 p.itens=[];
-
 p.acertos=0;
+p.poderesUsados={};
 
-p.profissao=
+const prof=
 PROFISSOES[
 Math.floor(
 Math.random()*PROFISSOES.length
 )
 ];
 
-});
+p.profissao=prof.id;
 
+});
 
 $("startBtn").disabled=true;
 
 broadcast({
-
 type:"start",
-
 jogadores:jogadores,
-
 tempo:tempoRestante
-
 });
 
 startLocalGame(tempoRestante);
 
-
-/*
-Sorteio das profissões,
-um jogador por vez.
-*/
-
 setTimeout(()=>{
-
 broadcastProfessionDraws();
-
 },700);
 
 }
 
 
 /* =========================================================
-INICIAR LOCAL
+INÍCIO LOCAL
 ========================================================= */
 
 function startLocalGame(tempo){
 
 gameStarted=true;
-
 gameEnded=false;
 
 tempoRestante=
@@ -2213,41 +2053,22 @@ typeof tempo==="number"
 :TEMPO_TOTAL;
 
 hide("lobby");
-
 show("game");
 
 renderBoard();
-
 renderPlayersHud();
-
 updateLocalHud();
-
 updateTurnText();
 
 if(timerInterval){
-
 clearInterval(timerInterval);
-
 }
-
-
-/*
-Somente o host controla o relógio.
-*/
 
 timerInterval=setInterval(()=>{
 
-if(!isHost){
+if(!isHost)return;
 
-return;
-
-}
-
-if(!gameStarted||gameEnded){
-
-return;
-
-}
+if(!gameStarted||gameEnded)return;
 
 tempoRestante--;
 
@@ -2269,52 +2090,40 @@ endGameByTime();
 
 
 /* =========================================================
-SORTEIO DE PROFISSÕES
+SORTEIO PROFISSÕES
 ========================================================= */
 
 function broadcastProfessionDraws(){
 
-if(!isHost){
-
-return;
-
-}
+if(!isHost)return;
 
 jogadores.forEach((p,index)=>{
 
 setTimeout(()=>{
 
+const prof=
+PROFISSOES.find(x=>x.id===p.profissao);
+
 broadcast({
-
 type:"drawProfession",
-
 playerId:p.id,
-
-profession:p.profissao,
-
+profession:prof,
 jogadores:jogadores
-
 });
-
 
 if(p.id===myId){
 
-showProfessionDraw(
-p.profissao
-);
+showProfessionDraw(prof);
 
 }
 
-},index*2400);
+},index*2600);
 
 });
 
-
 setTimeout(()=>{
-
 broadcastState();
-
-},jogadores.length*2400+1200);
+},jogadores.length*2600+1200);
 
 }
 
@@ -2336,13 +2145,15 @@ let count=0;
 
 const interval=setInterval(()=>{
 
-display.textContent=
-"💼 "+
+const random=
 PROFISSOES[
 Math.floor(
 Math.random()*PROFISSOES.length
 )
 ];
+
+display.textContent=
+"💼 "+random.nome;
 
 count++;
 
@@ -2353,29 +2164,24 @@ clearInterval(interval);
 display.classList.remove("drawSpin");
 
 display.textContent=
-"💼 "+profession;
+"💼 "+profession.nome;
 
 $("drawResult").textContent=
-"Você tirou: "+profession;
-
-
-/*
-A profissão aparece no HUD somente
-depois que o sorteio termina.
-*/
+"Você tirou: "+profession.nome;
 
 $("hudProfession").textContent=
-profession;
+profession.nome;
 
 $("myProfession").textContent=
-"Profissão: "+profession;
+"Profissão: "+profession.nome;
 
-professionDrawFinished=true;
+toast(
+"💼 "+profession.nome+
+": "+profession.descricao
+);
 
 setTimeout(()=>{
-
 closeModal("drawModal");
-
 },1800);
 
 }
@@ -2393,21 +2199,15 @@ function renderBoard(){
 
 const board=$("board");
 
-if(!board){
-
-return;
-
-}
+if(!board)return;
 
 board.innerHTML="";
-
 
 for(let i=1;i<=TOTAL_CASAS;i++){
 
 const cell=document.createElement("div");
 
 cell.className="cell";
-
 
 if(PROBLEMAS[i])
 cell.classList.add("problem");
@@ -2424,69 +2224,53 @@ cell.classList.add("item");
 if(i===TOTAL_CASAS)
 cell.classList.add("finish");
 
-
 const num=document.createElement("span");
 
 num.className="cellNumber";
-
 num.textContent=i;
 
 cell.appendChild(num);
-
 
 const icon=document.createElement("span");
 
 icon.className="cellIcon";
 
-
 if(PROBLEMAS[i])
 icon.textContent="⚠️";
-
 else if(SOLUCOES[i])
 icon.textContent="🌱";
-
 else if(PERGUNTAS[i])
 icon.textContent="❓";
-
 else if(ITEM_CASAS.includes(i))
 icon.textContent="🎁";
-
 else if(i===TOTAL_CASAS)
 icon.textContent="🏆";
-
+else
+icon.textContent="";
 
 cell.appendChild(icon);
-
 
 const pawns=document.createElement("div");
 
 pawns.className="pawns";
 
-
 jogadores.forEach(p=>{
 
 if(p.posicao===i){
 
-const person=
-document.createElement("div");
+const person=document.createElement("div");
 
 person.className="person";
 
-person.style.color=
-CORES[p.cor];
+person.style.color=CORES[p.cor];
 
 person.title=p.nome;
 
 person.innerHTML=`
-
 <span class="head"></span>
-
 <span class="body"></span>
-
 <span class="leg1"></span>
-
 <span class="leg2"></span>
-
 `;
 
 pawns.appendChild(person);
@@ -2495,9 +2279,7 @@ pawns.appendChild(person);
 
 });
 
-
 cell.appendChild(pawns);
-
 board.appendChild(cell);
 
 }
@@ -2515,7 +2297,6 @@ const container=$("playersHud");
 
 container.innerHTML="";
 
-
 jogadores.forEach(p=>{
 
 const el=document.createElement("div");
@@ -2524,8 +2305,10 @@ el.className=
 "playerHud "+
 (p.id===myId?"me":"");
 
-el.style.borderColor=
-CORES[p.cor];
+el.style.borderColor=CORES[p.cor];
+
+const prof=
+PROFISSOES.find(x=>x.id===p.profissao);
 
 el.innerHTML=`
 
@@ -2556,28 +2339,20 @@ list.textContent=
 "Nenhum jogador conectado.";
 
 return;
-
 }
 
 list.innerHTML="";
 
-
 jogadores.forEach(p=>{
 
-const div=
-document.createElement("div");
+const div=document.createElement("div");
 
 div.className="playerLobby";
 
 div.innerHTML=
-
 `<span style="color:${CORES[p.cor]}">●</span> `+
-
 escapeHtml(p.nome)+
-
-(p.id===myId
-?" <b>(você)</b>"
-:"");
+(p.id===myId?" <b>(você)</b>":"");
 
 list.appendChild(div);
 
@@ -2593,29 +2368,22 @@ jogadores.find(
 p=>p.id===myId
 );
 
-if(!me){
+if(!me)return;
 
-return;
+$("hudName").textContent=me.nome;
 
-}
-
-$("hudName").textContent=
-me.nome;
-
-
-/*
-Não mostra "o que a profissão faz".
-Somente o nome.
-*/
+const prof=
+PROFISSOES.find(
+x=>x.id===me.profissao
+);
 
 $("hudProfession").textContent=
-me.profissao||"Sorteando...";
+prof?prof.nome:"Sorteando...";
 
 $("myProfession").textContent=
-me.profissao
-?"Profissão: "+me.profissao
-:"Profissão: sorteando...";
-
+prof?
+"Profissão: "+prof.nome:
+"Profissão: sorteando...";
 
 const porcentagem=
 Math.min(
@@ -2626,10 +2394,8 @@ Math.min(
 $("progressFill").style.width=
 porcentagem+"%";
 
-
 $("progressText").textContent=
 `Seu progresso: ${me.posicao} / ${TOTAL_CASAS} casas`;
-
 
 const minutos=
 Math.floor(tempoRestante/60)
@@ -2661,16 +2427,11 @@ $("turnText").textContent=
 $("rollBtn").disabled=true;
 
 return;
-
 }
 
 const p=jogadores[turno];
 
-if(!p){
-
-return;
-
-}
+if(!p)return;
 
 if(p.id===myId){
 
@@ -2679,8 +2440,7 @@ $("turnText").textContent=
 
 $("rollBtn").disabled=
 gameEnded||
-actionLocked||
-!professionDrawFinished;
+actionLocked;
 
 }else{
 
@@ -2702,52 +2462,32 @@ function rollDice(){
 
 if(!gameStarted||
 gameEnded||
-actionLocked){
-
-return;
-
-}
+actionLocked)return;
 
 const me=
 jogadores.find(
 p=>p.id===myId
 );
 
-if(!me){
-
-return;
-
-}
+if(!me)return;
 
 if(!jogadores[turno]||
-jogadores[turno].id!==myId){
-
-return;
-
-}
+jogadores[turno].id!==myId)return;
 
 actionLocked=true;
 
 $("rollBtn").disabled=true;
 
-
 if(isHost){
 
 processRoll(myId);
 
-}else{
-
-if(conn&&conn.open){
+}else if(conn&&conn.open){
 
 conn.send({
-
 type:"rollRequest",
-
 playerId:myId
-
 });
-
-}
 
 }
 
@@ -2760,29 +2500,16 @@ PROCESSAR DADO
 
 function processRoll(playerId){
 
-if(!isHost||
-gameEnded){
+if(!isHost||gameEnded)return;
 
-return;
-
-}
-
-if(jogadores[turno]?.id!==playerId){
-
-return;
-
-}
+if(jogadores[turno]?.id!==playerId)return;
 
 const player=
 jogadores.find(
 p=>p.id===playerId
 );
 
-if(!player){
-
-return;
-
-}
+if(!player)return;
 
 const numero=
 Math.floor(
@@ -2790,24 +2517,16 @@ Math.random()*6
 )+1;
 
 broadcast({
-
 type:"diceResult",
-
 playerId:playerId,
-
 numero:numero
-
 });
 
 animateDice(numero);
 
-
 setTimeout(()=>{
 
-movePlayer(
-player,
-numero
-);
+movePlayer(player,numero);
 
 },650);
 
@@ -2815,7 +2534,7 @@ numero
 
 
 /* =========================================================
-ANIMAÇÃO DADO
+DADO VISUAL
 ========================================================= */
 
 function animateDice(result){
@@ -2824,19 +2543,13 @@ const dice=$("dice");
 
 dice.classList.add("diceRolling");
 
-let count=0;
-
 const faces=[
-"⚀",
-"⚁",
-"⚂",
-"⚃",
-"⚄",
-"⚅"
+"⚀","⚁","⚂","⚃","⚄","⚅"
 ];
 
-const interval=
-setInterval(()=>{
+let count=0;
+
+const interval=setInterval(()=>{
 
 dice.textContent=
 faces[
@@ -2851,9 +2564,7 @@ if(count>=8){
 
 clearInterval(interval);
 
-dice.classList.remove(
-"diceRolling"
-);
+dice.classList.remove("diceRolling");
 
 dice.textContent=
 faces[result-1];
@@ -2873,13 +2584,11 @@ function movePlayer(player,steps){
 
 let moved=0;
 
-const interval=
-setInterval(()=>{
+const interval=setInterval(()=>{
 
 if(gameEnded){
 
 clearInterval(interval);
-
 return;
 
 }
@@ -2892,52 +2601,34 @@ player.posicao++;
 
 moved++;
 
-
-/*
-Sincroniza cada casa.
-*/
-
 broadcast({
-
 type:"move",
-
 jogadores:jogadores
-
 });
 
-
 renderBoard();
-
 renderPlayersHud();
-
 updateLocalHud();
-
 
 if(player.posicao>=TOTAL_CASAS){
 
 clearInterval(interval);
 
 endGame(
-
 player.nome,
-
 `${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
-
 );
 
 return;
 
 }
 
-
 if(moved>=steps){
 
 clearInterval(interval);
 
 setTimeout(()=>{
-
 processLanding(player);
-
 },300);
 
 }
@@ -2948,21 +2639,16 @@ processLanding(player);
 
 
 /* =========================================================
-CASAS
+CASA
 ========================================================= */
 
 function processLanding(player){
 
-if(gameEnded){
-
-return;
-
-}
+if(gameEnded)return;
 
 if(PROBLEMAS[player.posicao]){
 
 processProblem(player);
-
 return;
 
 }
@@ -2970,7 +2656,6 @@ return;
 if(SOLUCOES[player.posicao]){
 
 processSolution(player);
-
 return;
 
 }
@@ -2978,7 +2663,6 @@ return;
 if(PERGUNTAS[player.posicao]){
 
 processQuestion(player);
-
 return;
 
 }
@@ -2986,7 +2670,6 @@ return;
 if(ITEM_CASAS.includes(player.posicao)){
 
 processItem(player);
-
 return;
 
 }
@@ -2997,67 +2680,54 @@ nextTurn();
 
 
 /* =========================================================
-PROBLEMAS
+PROFISSÃO
 ========================================================= */
 
-function processProblem(player){
+function getProfession(player){
 
-const message=
-"⚠️ Problema: "+
-PROBLEMAS[player.posicao];
-
-broadcast({
-
-type:"toast",
-
-message:
-`${escapeHtml(player.nome)}: ${escapeHtml(message)}`
-
-});
-
-
-/*
-Árvore
-*/
-
-if(player.itens.includes("arvore")){
-
-player.itens=
-player.itens.filter(
-x=>x!=="arvore"
+return PROFISSOES.find(
+p=>p.id===player.profissao
 );
-
-broadcast({
-
-type:"toast",
-
-message:
-`🌳 ${escapeHtml(player.nome)} usou uma Árvore para se proteger!`
-
-});
-
-broadcastState();
-
-setTimeout(
-nextTurn,
-600
-);
-
-return;
 
 }
 
 
-/*
-Água
-*/
+function useProfession(player,id){
+
+if(!player.poderesUsados)
+player.poderesUsados={};
+
+if(player.poderesUsados[id])
+return false;
+
+player.poderesUsados[id]=true;
+
+return true;
+
+}
+
+
+/* =========================================================
+PROBLEMAS + PROFISSÕES + ITENS
+========================================================= */
+
+function processProblem(player){
+
+const texto=
+PROBLEMAS[player.posicao];
+
+broadcast({
+type:"toast",
+message:
+`⚠️ ${escapeHtml(player.nome)}: ${escapeHtml(texto)}`
+});
+
+
+/* ÁGUA */
 
 if(player.itens.includes("agua")){
 
-player.itens=
-player.itens.filter(
-x=>x!=="agua"
-);
+removeItem(player,"agua");
 
 player.posicao=
 Math.min(
@@ -3066,49 +2736,283 @@ player.posicao+2
 );
 
 broadcast({
-
 type:"toast",
-
 message:
 `💧 ${escapeHtml(player.nome)} usou Água e avançou 2 casas!`
-
 });
 
-broadcastState();
-
-
-if(player.posicao>=TOTAL_CASAS){
-
-setTimeout(()=>{
-
-endGame(
-
-player.nome,
-
-`${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
-
-);
-
-},500);
-
-}else{
-
-setTimeout(
-nextTurn,
-600
-);
-
-}
-
+finishSpecialAction(player);
 return;
 
 }
 
 
-/*
-Sem proteção:
-volta 3 casas.
-*/
+/* ÁRVORE */
+
+if(player.itens.includes("arvore")){
+
+removeItem(player,"arvore");
+
+broadcast({
+type:"toast",
+message:
+`🌳 ${escapeHtml(player.nome)} usou a Árvore e evitou a penalidade!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+
+/* FILTRO */
+
+if(
+player.itens.includes("filtro") &&
+/água|contaminação/i.test(texto)
+){
+
+removeItem(player,"filtro");
+
+broadcast({
+type:"toast",
+message:
+`🚰 ${escapeHtml(player.nome)} usou o Filtro e evitou a contaminação!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+
+/* COLETA / LUVAS / LIXEIRA */
+
+if(
+/lixo|resíduos|descarte/i.test(texto)
+){
+
+for(const id of ["coleta","luvas","lixeira"]){
+
+if(player.itens.includes(id)){
+
+removeItem(player,id);
+
+broadcast({
+type:"toast",
+message:
+`♻️ ${escapeHtml(player.nome)} usou um item de limpeza e evitou o problema!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+}
+
+}
+
+
+/* KIT */
+
+if(player.itens.includes("kit")){
+
+removeItem(player,"kit");
+
+broadcast({
+type:"toast",
+message:
+`🧰 ${escapeHtml(player.nome)} usou o Kit de emergência!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+
+/* CAPACETE */
+
+if(player.itens.includes("capacete")){
+
+removeItem(player,"capacete");
+
+broadcast({
+type:"toast",
+message:
+`⛑️ ${escapeHtml(player.nome)} usou o Capacete!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+
+/* COLETE */
+
+if(player.itens.includes("colete")){
+
+removeItem(player,"colete");
+
+broadcast({
+type:"toast",
+message:
+`🦺 ${escapeHtml(player.nome)} usou o Colete!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+
+/* PROFISSÕES DE PROTEÇÃO */
+
+const prof=getProfession(player);
+
+if(prof){
+
+if(
+prof.id==="medico" &&
+useProfession(player,"medico")
+){
+
+broadcast({
+type:"toast",
+message:
+`🩺 Médico(a): ${escapeHtml(player.nome)} evitou a penalidade!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="assistente" &&
+useProfession(player,"assistente")
+){
+
+broadcast({
+type:"toast",
+message:
+`🤝 Assistente social: penalidade evitada!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="veterinario" &&
+useProfession(player,"veterinario")
+){
+
+broadcast({
+type:"toast",
+message:
+`🐾 Veterinário(a): problema neutralizado!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="agente" &&
+useProfession(player,"agente")
+){
+
+broadcast({
+type:"toast",
+message:
+`🌳 Agente ambiental: problema neutralizado!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="fotografo" &&
+useProfession(player,"fotografo")
+){
+
+broadcast({
+type:"toast",
+message:
+`📷 Fotógrafo(a): registrou o problema e permaneceu na casa!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="geografo" &&
+useProfession(player,"geografo")
+){
+
+player.posicao=
+Math.max(0,player.posicao-1);
+
+broadcast({
+type:"toast",
+message:
+`🌎 Geógrafo(a): a penalidade foi reduzida para 1 casa!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="enfermeiro" &&
+useProfession(player,"enfermeiro")
+){
+
+player.posicao=
+Math.max(0,player.posicao-1);
+
+broadcast({
+type:"toast",
+message:
+`👩‍⚕️ Enfermeiro(a): reduziu a penalidade para 1 casa!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+if(
+prof.id==="quimico" &&
+/contaminação|poluição/i.test(texto) &&
+useProfession(player,"quimico")
+){
+
+broadcast({
+type:"toast",
+message:
+`🧪 Químico(a): neutralizou a contaminação!`
+});
+
+finishSpecialAction(player);
+return;
+
+}
+
+}
+
+
+/* PENALIDADE NORMAL */
 
 player.posicao=
 Math.max(
@@ -3117,76 +3021,168 @@ player.posicao-3
 );
 
 broadcast({
-
 type:"toast",
-
 message:
 `⚠️ ${escapeHtml(player.nome)} voltou 3 casas.`
-
 });
 
 broadcastState();
 
-setTimeout(
-nextTurn,
-700
-);
+setTimeout(nextTurn,700);
 
 }
 
 
 /* =========================================================
-SOLUÇÕES
+FINAL DE EFEITO ESPECIAL
+========================================================= */
+
+function finishSpecialAction(player){
+
+broadcastState();
+
+if(player.posicao>=TOTAL_CASAS){
+
+endGame(
+player.nome,
+`${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
+);
+
+return;
+
+}
+
+setTimeout(nextTurn,700);
+
+}
+
+
+/* =========================================================
+SOLUÇÃO
 ========================================================= */
 
 function processSolution(player){
 
 broadcast({
-
 type:"toast",
-
 message:
 `🌱 Solução: ${escapeHtml(SOLUCOES[player.posicao])}`
-
 });
 
+let extra=0;
+
+const prof=getProfession(player);
+
+if(
+prof &&
+(prof.id==="engenheiro"||
+prof.id==="gestor") &&
+useProfession(player,prof.id)
+){
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`💼 ${prof.nome}: +1 casa pela solução!`
+});
+
+}
+
+if(
+prof &&
+prof.id==="arquiteto" &&
+useProfession(player,"arquiteto")
+){
+
+extra+=2;
+
+broadcast({
+type:"toast",
+message:
+`🏗️ Arquiteto(a): +2 casas extras!`
+});
+
+}
+
+
+/* MAPA */
+
+if(player.itens.includes("mapa")){
+
+removeItem(player,"mapa");
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`🗺️ Mapa: +1 casa!`
+});
+
+}
+
+
+/* ENERGIA */
+
+if(player.itens.includes("energia")){
+
+removeItem(player,"energia");
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`☀️ Energia solar: +1 casa!`
+});
+
+}
+
+
+/* DOCUMENTO */
+
+if(player.itens.includes("documento")){
+
+removeItem(player,"documento");
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`📄 Documento: +1 casa!`
+});
+
+}
 
 setTimeout(()=>{
 
 player.posicao=
 Math.min(
 TOTAL_CASAS,
-player.posicao+2
+player.posicao+2+extra
 );
 
 broadcast({
-
 type:"toast",
-
 message:
-`🌱 ${escapeHtml(player.nome)} avançou 2 casas!`
-
+`🌱 ${escapeHtml(player.nome)} avançou ${2+extra} casas!`
 });
 
 broadcastState();
 
-
 if(player.posicao>=TOTAL_CASAS){
 
 endGame(
-
 player.nome,
-
 `${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
-
 );
 
 }else{
 
-setTimeout(
-nextTurn,
-600
-);
+setTimeout(nextTurn,600);
 
 }
 
@@ -3206,27 +3202,19 @@ ITENS.filter(
 item=>!player.itens.includes(item.id)
 );
 
-
 if(!available.length){
 
 broadcast({
-
 type:"toast",
-
 message:
-`🎒 ${escapeHtml(player.nome)} encontrou uma casa de item, mas já possui todos os itens disponíveis.`
-
+`🎒 ${escapeHtml(player.nome)} já possui todos os itens disponíveis.`
 });
 
-setTimeout(
-nextTurn,
-500
-);
+setTimeout(nextTurn,500);
 
 return;
 
 }
-
 
 const item=
 available[
@@ -3235,29 +3223,16 @@ Math.random()*available.length
 )
 ];
 
-
 player.itens.push(item.id);
-
-
-/*
-Atualiza o estado antes do sorteio.
-*/
 
 broadcastState();
 
-
 broadcast({
-
 type:"drawItem",
-
 playerId:player.id,
-
 item:item,
-
 jogadores:jogadores
-
 });
-
 
 if(player.id===myId){
 
@@ -3266,10 +3241,103 @@ showItemDraw(item);
 }
 
 
-setTimeout(
-nextTurn,
-2500
+/* efeitos imediatos */
+
+let bonus=0;
+
+if(item.id==="semente"){
+
+bonus=1;
+
+}
+
+if(item.id==="bicicleta"){
+
+bonus=2;
+
+}
+
+if(item.id==="sementes"){
+
+bonus=2;
+
+}
+
+
+/* PROFISSÕES */
+
+const prof=getProfession(player);
+
+if(
+prof &&
+(prof.id==="biologo"||
+prof.id==="agricultor") &&
+(item.id==="semente"||item.id==="sementes")
+){
+
+bonus+=1;
+
+broadcast({
+type:"toast",
+message:
+`🌱 ${prof.nome}: recebeu bônus de +1 casa!`
+});
+
+}
+
+
+if(
+prof &&
+prof.id==="comerciante"
+){
+
+bonus+=1;
+
+broadcast({
+type:"toast",
+message:
+`🏪 Comerciante: +1 casa pelo item!`
+});
+
+}
+
+if(bonus>0){
+
+setTimeout(()=>{
+
+player.posicao=
+Math.min(
+TOTAL_CASAS,
+player.posicao+bonus
 );
+
+broadcast({
+type:"toast",
+message:
+`🎁 ${escapeHtml(player.nome)} avançou ${bonus} casa(s) pelo item!`
+});
+
+broadcastState();
+
+if(player.posicao>=TOTAL_CASAS){
+
+endGame(
+player.nome,
+`${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
+);
+
+}
+
+},2300);
+
+}
+
+setTimeout(()=>{
+
+if(!gameEnded)
+nextTurn();
+
+},3000);
 
 }
 
@@ -3287,17 +3355,13 @@ $("drawTitle").textContent=
 
 $("drawResult").textContent="";
 
-const display=
-$("drawDisplay");
+const display=$("drawDisplay");
 
-display.classList.add(
-"drawSpin"
-);
+display.classList.add("drawSpin");
 
 let count=0;
 
-const interval=
-setInterval(()=>{
+const interval=setInterval(()=>{
 
 const random=
 ITENS[
@@ -3307,9 +3371,7 @@ Math.random()*ITENS.length
 ];
 
 display.textContent=
-random.emoji+
-" "+
-random.nome;
+random.emoji+" "+random.nome;
 
 count++;
 
@@ -3317,23 +3379,16 @@ if(count>=22){
 
 clearInterval(interval);
 
-display.classList.remove(
-"drawSpin"
-);
+display.classList.remove("drawSpin");
 
 display.textContent=
-item.emoji+
-" "+
-item.nome;
+item.emoji+" "+item.nome;
 
 $("drawResult").textContent=
-"Você ganhou: "+
-item.nome;
+"Você ganhou: "+item.nome;
 
 setTimeout(()=>{
-
 closeModal("drawModal");
-
 },1800);
 
 }
@@ -3353,15 +3408,10 @@ const question=
 PERGUNTAS[player.posicao];
 
 broadcast({
-
 type:"question",
-
 playerId:player.id,
-
 question:question
-
 });
-
 
 if(player.id===myId){
 
@@ -3381,30 +3431,21 @@ show("questionModal");
 $("questionText").innerHTML=
 `<h3>${escapeHtml(question.q)}</h3>`;
 
-const options=
-$("questionOptions");
+const options=$("questionOptions");
 
 options.innerHTML="";
 
+question.op.forEach((op,index)=>{
 
-question.op.forEach(
-(op,index)=>{
+const button=document.createElement("button");
 
-const button=
-document.createElement("button");
-
-button.className=
-"questionOption";
+button.className="questionOption";
 
 button.textContent=
-String.fromCharCode(65+index)+
-") "+
-op;
+String.fromCharCode(65+index)+") "+op;
 
 button.onclick=()=>{
-
 answerQuestion(index);
-
 };
 
 options.appendChild(button);
@@ -3415,41 +3456,26 @@ options.appendChild(button);
 
 
 /* =========================================================
-RESPONDER
+RESPOSTA
 ========================================================= */
 
 function answerQuestion(answer){
 
-if(!pendingQuestion){
-
-return;
-
-}
+if(!pendingQuestion)return;
 
 hide("questionModal");
 
 if(isHost){
 
-processQuestionAnswer(
-myId,
-answer
-);
+processQuestionAnswer(myId,answer);
 
-}else{
-
-if(conn&&conn.open){
+}else if(conn&&conn.open){
 
 conn.send({
-
 type:"questionAnswer",
-
 playerId:myId,
-
 answer:answer
-
 });
-
-}
 
 }
 
@@ -3467,100 +3493,179 @@ jogadores.find(
 p=>p.id===playerId
 );
 
-if(!player){
-
-return;
-
-}
+if(!player)return;
 
 const question=
 PERGUNTAS[player.posicao];
 
-if(!question){
-
-return;
-
-}
-
+if(!question)return;
 
 if(answer===question.correta){
 
 player.acertos++;
 
+let extra=0;
+
+const prof=getProfession(player);
+
+if(
+prof &&
+["professor","pesquisador","artista"].includes(prof.id) &&
+useProfession(player,prof.id)
+){
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`💼 ${prof.nome}: +1 casa pelo conhecimento!`
+});
+
+}
+
+
+/* LIVRO */
+
+if(player.itens.includes("livro")){
+
+removeItem(player,"livro");
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`📚 Livro: +1 casa extra!`
+});
+
+}
+
+
+/* PLACA */
+
+if(player.itens.includes("placa")){
+
+removeItem(player,"placa");
+
+extra+=1;
+
+broadcast({
+type:"toast",
+message:
+`🪧 Placa educativa: +1 casa extra!`
+});
+
+}
+
 player.posicao=
 Math.min(
 TOTAL_CASAS,
-player.posicao+2
+player.posicao+2+extra
 );
 
 broadcast({
-
 type:"toast",
-
 message:
-`✅ ${escapeHtml(player.nome)} respondeu corretamente e avançou 2 casas!`
-
+`✅ ${escapeHtml(player.nome)} acertou e avançou ${2+extra} casas!`
 });
 
 broadcastState();
 
-
 if(player.posicao>=TOTAL_CASAS){
 
 endGame(
-
 player.nome,
-
 `${escapeHtml(player.nome)} chegou à casa ${TOTAL_CASAS}!`
-
 );
 
 return;
 
 }
 
-
-setTimeout(
-nextTurn,
-700
-);
+setTimeout(nextTurn,700);
 
 return;
 
 }
 
 
-/*
-Resposta errada
-*/
+/* =========================================================
+ERRO + NOVA TENTATIVA
+========================================================= */
+
+let retry=false;
 
 if(player.itens.includes("denuncia")){
 
-player.itens=
-player.itens.filter(
-x=>x!=="denuncia"
-);
+removeItem(player,"denuncia");
+
+retry=true;
 
 broadcast({
-
 type:"toast",
-
 message:
-`📢 ${escapeHtml(player.nome)} usou uma Denúncia e pode tentar novamente!`
-
+`📢 Denúncia: ${escapeHtml(player.nome)} ganhou outra tentativa!`
 });
 
+}
+
+const prof=getProfession(player);
+
+if(
+!retry &&
+prof &&
+["advogado","jornalista","lider"].includes(prof.id) &&
+useProfession(player,prof.id)
+){
+
+retry=true;
 
 broadcast({
-
-type:"question",
-
-playerId:player.id,
-
-question:question
-
+type:"toast",
+message:
+`💼 ${prof.nome}: nova tentativa concedida!`
 });
 
+}
+
+if(player.itens.includes("megafone")&&!retry){
+
+removeItem(player,"megafone");
+
+retry=true;
+
+broadcast({
+type:"toast",
+message:
+`📣 Megafone: nova tentativa!`
+});
+
+}
+
+if(player.itens.includes("telefone")&&!retry){
+
+removeItem(player,"telefone");
+
+retry=true;
+
+broadcast({
+type:"toast",
+message:
+`📱 Telefone: nova tentativa!`
+});
+
+}
+
+if(retry){
+
+broadcastState();
+
+broadcast({
+type:"question",
+playerId:player.id,
+question:question
+});
 
 if(player.id===myId){
 
@@ -3568,35 +3673,43 @@ showQuestion(question);
 
 }
 
-broadcastState();
-
 return;
 
 }
 
-
 broadcast({
-
 type:"toast",
-
 message:
-`❌ ${escapeHtml(player.nome)} errou a pergunta e permaneceu na casa.`
-
+`❌ ${escapeHtml(player.nome)} errou e permaneceu na casa.`
 });
 
 broadcastState();
 
-
-setTimeout(
-nextTurn,
-700
-);
+setTimeout(nextTurn,700);
 
 }
 
 
 /* =========================================================
-ITENS — ABA
+REMOVER ITEM
+========================================================= */
+
+function removeItem(player,id){
+
+const index=
+player.itens.indexOf(id);
+
+if(index!==-1){
+
+player.itens.splice(index,1);
+
+}
+
+}
+
+
+/* =========================================================
+ABA DE ITENS
 ========================================================= */
 
 function openItems(){
@@ -3606,19 +3719,13 @@ jogadores.find(
 p=>p.id===myId
 );
 
-if(!me){
-
-return;
-
-}
+if(!me)return;
 
 show("itemsModal");
 
-const grid=
-$("itemGrid");
+const grid=$("itemGrid");
 
 grid.innerHTML="";
-
 
 ITENS.forEach(item=>{
 
@@ -3627,17 +3734,9 @@ me.itens.filter(
 x=>x===item.id
 ).length;
 
-const card=
-document.createElement("div");
+const card=document.createElement("div");
 
-card.className=
-"itemCard";
-
-
-/*
-Aqui mostramos as informações dos itens
-somente na aba Itens.
-*/
+card.className="itemCard";
 
 card.innerHTML=`
 
@@ -3645,9 +3744,7 @@ card.innerHTML=`
 ${item.emoji}
 </div>
 
-<b>
-${escapeHtml(item.nome)}
-</b>
+<b>${escapeHtml(item.nome)}</b>
 
 <div class="itemCount">
 x${count}
@@ -3667,50 +3764,12 @@ grid.appendChild(card);
 
 
 /* =========================================================
-USO DE ITEM
-========================================================= */
-
-function processUseItem(playerId,itemId){
-
-const player=
-jogadores.find(
-p=>p.id===playerId
-);
-
-if(!player){
-
-return;
-
-}
-
-if(!player.itens.includes(itemId)){
-
-return;
-
-}
-
-
-/*
-Os itens principais são usados
-automaticamente nos eventos.
-*/
-
-broadcastState();
-
-}
-
-
-/* =========================================================
 TURNOS
 ========================================================= */
 
 function nextTurn(){
 
-if(gameEnded){
-
-return;
-
-}
+if(gameEnded)return;
 
 pendingQuestion=null;
 
@@ -3737,35 +3796,20 @@ ESTADO
 
 function broadcastState(){
 
-if(!isHost){
-
-return;
-
-}
+if(!isHost)return;
 
 broadcast({
-
 type:"state",
-
 jogadores:jogadores,
-
 turno:turno,
-
 tempo:tempoRestante,
-
 gameStarted:gameStarted,
-
 gameEnded:gameEnded
-
 });
 
-
 renderPlayersHud();
-
 renderBoard();
-
 updateLocalHud();
-
 updateTurnText();
 
 }
@@ -3777,17 +3821,12 @@ BROADCAST
 
 function broadcast(data){
 
-if(!isHost){
-
-return;
-
-}
+if(!isHost)return;
 
 connections=
 connections.filter(
 c=>c&&c.open
 );
-
 
 connections.forEach(c=>{
 
@@ -3807,141 +3846,91 @@ console.error(e);
 
 
 /* =========================================================
-FIM DE JOGO
+FIM
 ========================================================= */
 
 function endGame(winner,text){
 
-if(gameEnded){
-
-return;
-
-}
+if(gameEnded)return;
 
 gameEnded=true;
-
 gameStarted=false;
-
 actionLocked=true;
 
 if(timerInterval){
 
-clearInterval(
-timerInterval
-);
+clearInterval(timerInterval);
 
 }
 
-
 broadcast({
-
 type:"result",
-
 title:"🏆 Temos um vencedor!",
-
 text:text
-
 });
 
-
 showResult(
-
 "🏆 Temos um vencedor!",
-
 text
-
 );
 
 }
 
 
 /* =========================================================
-TEMPO ESGOTADO
+TEMPO
 ========================================================= */
 
 function endGameByTime(){
 
-if(!isHost||
-gameEnded){
-
-return;
-
-}
+if(!isHost||gameEnded)return;
 
 gameEnded=true;
-
 gameStarted=false;
-
 tempoRestante=0;
-
 actionLocked=true;
 
 if(timerInterval){
 
-clearInterval(
-timerInterval
-);
+clearInterval(timerInterval);
 
 }
-
 
 const ranking=
-[...jogadores].sort(
-(a,b)=>{
+[...jogadores].sort((a,b)=>{
 
-if(b.posicao!==a.posicao){
-
+if(b.posicao!==a.posicao)
 return b.posicao-a.posicao;
 
-}
-
-if(b.itens.length!==a.itens.length){
-
+if(b.itens.length!==a.itens.length)
 return b.itens.length-a.itens.length;
 
-}
-
-if(b.acertos!==a.acertos){
-
+if(b.acertos!==a.acertos)
 return b.acertos-a.acertos;
-
-}
 
 return 0;
 
 });
 
-
-const vencedor=
-ranking[0];
-
+const vencedor=ranking[0];
 
 let empate=false;
 
-
 if(ranking.length>1){
 
-const segundo=
-ranking[1];
+const segundo=ranking[1];
 
-if(
+empate=
 vencedor.posicao===
 segundo.posicao&&
 vencedor.itens.length===
 segundo.itens.length&&
 vencedor.acertos===
-segundo.acertos
-){
-
-empate=true;
+segundo.acertos;
 
 }
-
-}
-
 
 let text;
-
 
 if(empate){
 
@@ -3963,17 +3952,11 @@ text=
 
 }
 
-
 broadcast({
-
 type:"result",
-
 title:"⏱️ Tempo esgotado!",
-
 text:text
-
 });
-
 
 showResult(
 "⏱️ Tempo esgotado!",
@@ -3989,11 +3972,9 @@ RESULTADO
 
 function showResult(title,text){
 
-$("resultTitle").textContent=
-title;
+$("resultTitle").textContent=title;
 
-$("resultText").innerHTML=
-text;
+$("resultText").innerHTML=text;
 
 show("resultModal");
 
