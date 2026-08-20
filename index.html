@@ -46,14 +46,11 @@ LOBBY
     justify-content:center;
     align-items:center;
     padding:20px;
-    background:
-        radial-gradient(circle at 20% 20%,#22c55e33,transparent 25%),
-        radial-gradient(circle at 80% 80%,#3b82f633,transparent 30%);
 }
 
 .lobbyBox{
     width:100%;
-    max-width:540px;
+    max-width:560px;
     background:#111c31ee;
     border:1px solid #ffffff18;
     border-radius:28px;
@@ -63,14 +60,32 @@ LOBBY
     backdrop-filter:blur(15px);
 }
 
+.logoGame{
+    font-size:58px;
+    margin-bottom:5px;
+}
+
 .lobbyBox h1{
-    margin:0 0 10px;
+    margin:0 0 8px;
     font-size:30px;
 }
 
 .lobbyBox p{
     color:#cbd5e1;
     line-height:1.5;
+}
+
+.rulesPreview{
+    margin:18px 0;
+    padding:14px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#172554,#0f766e);
+    border:1px solid #ffffff18;
+    text-align:left;
+}
+
+.rulesPreview div{
+    margin:6px 0;
 }
 
 .lobbyBox input{
@@ -105,7 +120,7 @@ LOBBY
 }
 
 .lobbyHelp{
-    background:#7c3aed;
+    background:linear-gradient(135deg,#7c3aed,#a855f7)!important;
 }
 
 .roomCode{
@@ -145,7 +160,7 @@ GAME / HUD
 
 #game{
     min-height:100vh;
-    padding-bottom:35px;
+    padding-bottom:40px;
 }
 
 #hud{
@@ -160,15 +175,14 @@ GAME / HUD
 }
 
 .hudTop{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    display:grid;
+    grid-template-columns:repeat(4,1fr) auto;
     gap:8px;
-    flex-wrap:wrap;
+    align-items:stretch;
 }
 
 .hudCard{
-    background:#111c31;
+    background:linear-gradient(145deg,#16233c,#0f172a);
     border:1px solid #ffffff12;
     border-radius:13px;
     padding:8px 12px;
@@ -194,6 +208,7 @@ GAME / HUD
 .hudButtons{
     display:flex;
     gap:7px;
+    flex-wrap:wrap;
 }
 
 .hudButtons button{
@@ -204,13 +219,17 @@ GAME / HUD
     font-weight:bold;
 }
 
+.hudButtons button:hover{
+    background:#475569;
+}
+
 #turnText{
     text-align:center;
     margin-top:8px;
     padding:10px;
-    background:#111c31;
+    background:linear-gradient(90deg,#172554,#0f766e);
     border-radius:11px;
-    color:#bfdbfe;
+    color:#dbeafe;
     font-weight:bold;
 }
 
@@ -223,7 +242,8 @@ GAME / HUD
 
 .playerHud{
     flex:0 0 auto;
-    padding:7px 10px;
+    min-width:150px;
+    padding:8px 10px;
     border-radius:10px;
     background:#111c31;
     font-size:12px;
@@ -231,7 +251,11 @@ GAME / HUD
 }
 
 .playerHud.me{
-    box-shadow:0 0 0 1px #facc15;
+    box-shadow:0 0 0 2px #facc15;
+}
+
+.playerHudTurn{
+    background:#172554;
 }
 
 /* =====================================================
@@ -239,26 +263,43 @@ BOARD
 ===================================================== */
 
 #boardArea{
-    max-width:1250px;
+    max-width:1300px;
     margin:auto;
     padding:16px;
 }
 
 #progressBox{
-    background:#111c31dd;
+    background:linear-gradient(145deg,#111c31ee,#172554dd);
     border:1px solid #ffffff15;
-    padding:13px;
+    padding:14px;
     border-radius:17px;
     margin-bottom:14px;
     box-shadow:0 8px 25px #0005;
 }
 
+.progressTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+#progressText{
+    font-weight:bold;
+}
+
+#progressPercent{
+    color:#facc15;
+    font-weight:bold;
+}
+
 .progressBar{
-    height:14px;
+    height:15px;
     background:#07111f;
     border-radius:20px;
     overflow:hidden;
-    margin-top:8px;
+    margin-top:9px;
+    border:1px solid #ffffff10;
 }
 
 #progressFill{
@@ -268,52 +309,56 @@ BOARD
     transition:width:.3s;
 }
 
-#progressText{
-    font-weight:bold;
-}
+/* visual novo */
 
 #board{
     display:grid;
     grid-template-columns:repeat(10,1fr);
-    gap:6px;
-    padding:5px;
+    gap:7px;
+    padding:8px;
+    border-radius:24px;
+    background:
+        linear-gradient(145deg,#020617cc,#0f172acc);
+    border:2px solid #ffffff12;
+    box-shadow:
+        0 20px 50px #0008,
+        inset 0 0 30px #ffffff05;
 }
 
-/* visual novo das casas */
-
 .cell{
-    min-height:78px;
-    border-radius:13px;
+    min-height:82px;
+    border-radius:15px;
     position:relative;
     padding:5px;
     font-size:11px;
     overflow:visible;
     border:2px solid #ffffff12;
     box-shadow:
-        inset 0 1px 0 #ffffff18,
-        0 5px 12px #0004;
+        inset 0 1px 0 #ffffff22,
+        0 5px 12px #0005;
     transition:.2s;
 }
 
 .cell:hover{
-    transform:translateY(-2px);
+    transform:translateY(-3px) scale(1.01);
     z-index:2;
 }
 
 .cellNumber{
     position:absolute;
-    top:4px;
-    left:6px;
+    top:5px;
+    left:7px;
     font-weight:bold;
     color:#f8fafc;
     text-shadow:0 1px 3px #000;
+    font-size:12px;
 }
 
 .cellIcon{
     position:absolute;
-    right:5px;
+    right:6px;
     top:4px;
-    font-size:16px;
+    font-size:17px;
 }
 
 .cell:nth-child(4n+1){
@@ -331,8 +376,6 @@ BOARD
 .cell:nth-child(4n){
     background:linear-gradient(145deg,#ea580c,#9a3412);
 }
-
-/* casas especiais */
 
 .cell.problem{
     background:linear-gradient(145deg,#ef4444,#7f1d1d)!important;
@@ -357,14 +400,33 @@ BOARD
 .cell.finish{
     background:linear-gradient(145deg,#f59e0b,#92400e)!important;
     border-color:#fde68a;
-    box-shadow:0 0 18px #facc1570;
+    box-shadow:
+        0 0 18px #facc1570,
+        inset 0 0 15px #fef3c720;
+}
+
+.cellStart{
+    box-shadow:
+        0 0 15px #38bdf855,
+        inset 0 0 10px #38bdf822;
+}
+
+.cellLegend{
+    position:absolute;
+    bottom:5px;
+    left:6px;
+    right:6px;
+    text-align:center;
+    font-size:9px;
+    color:#ffffffcc;
+    font-weight:bold;
 }
 
 .pawns{
     position:absolute;
     left:3px;
     right:3px;
-    bottom:4px;
+    bottom:17px;
     display:flex;
     flex-wrap:wrap;
     gap:2px;
@@ -378,6 +440,11 @@ BOARD
     height:32px;
     position:relative;
     filter:drop-shadow(0 2px 3px #000);
+    transition:.2s;
+}
+
+.person:hover{
+    transform:scale(1.15);
 }
 
 .person .head{
@@ -414,20 +481,41 @@ BOARD
 .person .leg2{right:5px}
 
 /* =====================================================
+LEGENDA
+===================================================== */
+
+.boardLegend{
+    margin-top:12px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.legendItem{
+    padding:7px 10px;
+    border-radius:10px;
+    background:#111c31;
+    border:1px solid #ffffff12;
+    font-size:11px;
+}
+
+/* =====================================================
 CONTROLES
 ===================================================== */
 
 #controls{
-    max-width:700px;
+    max-width:760px;
     margin:18px auto;
     padding:18px;
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:13px;
-    background:#111c31cc;
+    background:linear-gradient(145deg,#111c31dd,#172554cc);
     border:1px solid #ffffff12;
     border-radius:20px;
+    box-shadow:0 15px 35px #0005;
 }
 
 #dice{
@@ -470,12 +558,29 @@ CONTROLES
     cursor:not-allowed;
 }
 
-#myProfession{
-    background:#172554;
+.professionHudBox{
+    width:100%;
+    background:#07111f;
     border:1px solid #6366f1;
-    padding:10px 16px;
-    border-radius:12px;
+    border-radius:15px;
+    padding:12px;
+}
+
+.professionHudTitle{
+    color:#a5b4fc;
+    font-size:11px;
+    text-transform:uppercase;
+}
+
+#myProfession{
     font-weight:bold;
+    font-size:17px;
+}
+
+#myProfessionPower{
+    color:#cbd5e1;
+    font-size:13px;
+    margin-top:4px;
 }
 
 /* =====================================================
@@ -486,20 +591,20 @@ MODAIS
     position:fixed;
     inset:0;
     z-index:100;
-    background:#000b;
+    background:#000c;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:15px;
-    backdrop-filter:blur(5px);
+    backdrop-filter:blur(6px);
 }
 
 .modalBox{
     width:100%;
-    max-width:620px;
+    max-width:650px;
     max-height:90vh;
     overflow-y:auto;
-    background:#111c31;
+    background:linear-gradient(145deg,#111c31,#172554);
     border:1px solid #ffffff18;
     border-radius:22px;
     padding:24px;
@@ -520,12 +625,28 @@ MODAIS
     font-size:20px;
 }
 
+.close:hover{
+    background:#dc2626;
+}
+
 .modalBox h2{
     margin-top:5px;
 }
 
 .modalBox h3{
     color:#93c5fd;
+}
+
+.modalBox li{
+    margin:8px 0;
+    color:#dbeafe;
+}
+
+.howIntro{
+    background:#07111f;
+    border-radius:15px;
+    padding:14px;
+    border-left:4px solid #22c55e;
 }
 
 .itemGrid{
@@ -571,6 +692,12 @@ SORTEIO
     text-align:center;
 }
 
+.drawPlayer{
+    color:#93c5fd;
+    font-size:14px;
+    margin-top:-5px;
+}
+
 #drawDisplay{
     min-height:115px;
     display:flex;
@@ -597,6 +724,25 @@ SORTEIO
 #drawResult{
     font-size:24px;
     color:#facc15;
+    font-weight:bold;
+}
+
+#drawPower{
+    margin-top:12px;
+    padding:14px;
+    background:#07111f;
+    border:1px solid #6366f1;
+    border-radius:14px;
+    color:#dbeafe;
+    line-height:1.5;
+}
+
+.drawContinue{
+    margin-top:14px;
+    padding:12px 25px;
+    border-radius:12px;
+    background:#2563eb;
+    color:white;
     font-weight:bold;
 }
 
@@ -630,6 +776,21 @@ TOAST
 RESPONSIVO
 ===================================================== */
 
+@media(max-width:850px){
+
+    .hudTop{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hudButtons{
+        grid-column:1/-1;
+    }
+
+    .hudButtons button{
+        flex:1;
+    }
+}
+
 @media(max-width:700px){
 
     #board{
@@ -642,6 +803,10 @@ RESPONSIVO
 
     .itemGrid{
         grid-template-columns:1fr;
+    }
+
+    .lobbyBox{
+        padding:22px;
     }
 }
 
@@ -666,34 +831,67 @@ RESPONSIVO
     .hudValue{
         font-size:13px;
     }
+
+    #drawDisplay{
+        font-size:22px;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<!-- =====================================================
+LOBBY
+===================================================== -->
+
 <section id="lobby">
 
 <div class="lobbyBox">
 
-<h1>🌎 Caminhos da Justiça Ambiental</h1>
+<div class="logoGame">🌎</div>
+
+<h1>Caminhos da Justiça Ambiental</h1>
 
 <p>
-Chegue à casa <b>150</b> antes que os
-<b>30 minutos</b> acabem!
+Um jogo educativo sobre justiça ambiental,
+racismo ambiental e participação comunitária.
 </p>
 
-<input id="nameInput" maxlength="18" placeholder="Seu nome">
+<div class="rulesPreview">
 
-<button onclick="createRoom()">🏠 Criar sala</button>
+<div>🏆 <b>Objetivo:</b> chegar à casa 150.</div>
+<div>⏱️ <b>Tempo:</b> 30 minutos.</div>
+<div>🎲 <b>Turnos:</b> jogue o dado quando for sua vez.</div>
+<div>💼 <b>Profissões:</b> cada jogador recebe um poder.</div>
+<div>🎒 <b>Itens:</b> encontre itens e use seus poderes.</div>
 
-<button class="lobbyHelp" onclick="openHowTo()">❓ Como jogar</button>
+</div>
+
+<input
+id="nameInput"
+maxlength="18"
+placeholder="Seu nome">
+
+<button onclick="createRoom()">
+🏠 Criar sala
+</button>
+
+<button
+class="lobbyHelp"
+onclick="openHowTo()">
+❓ COMO JOGAR
+</button>
 
 <hr style="border-color:#334155;margin:18px 0">
 
-<input id="roomInput" placeholder="Código da sala">
+<input
+id="roomInput"
+placeholder="Código da sala">
 
-<button onclick="joinRoom()">🚪 Entrar na sala</button>
+<button onclick="joinRoom()">
+🚪 Entrar na sala
+</button>
 
 <div id="roomCodeBox" class="hidden">
 
@@ -705,7 +903,7 @@ Chegue à casa <b>150</b> antes que os
 
 <div id="playersLobby">
 
-<b>Jogadores:</b>
+<b>👥 Jogadores:</b>
 
 <div id="playersList">
 Nenhum jogador conectado.
@@ -729,6 +927,10 @@ onclick="startGame()">
 </section>
 
 
+<!-- =====================================================
+JOGO
+===================================================== -->
+
 <section id="game" class="hidden">
 
 <div id="hud">
@@ -736,23 +938,30 @@ onclick="startGame()">
 <div class="hudTop">
 
 <div class="hudCard">
-<div class="hudLabel">Você</div>
+<div class="hudLabel">👤 Você</div>
 <div id="hudName" class="hudValue">-</div>
 </div>
 
 <div class="hudCard">
-<div class="hudLabel">Profissão</div>
+<div class="hudLabel">💼 Profissão</div>
 <div id="hudProfession" class="hudValue">Sorteando...</div>
 </div>
 
 <div class="hudCard">
-<div class="hudLabel">Tempo</div>
+<div class="hudLabel">📍 Casa</div>
+<div id="hudPosition" class="hudValue">0 / 150</div>
+</div>
+
+<div class="hudCard">
+<div class="hudLabel">⏱️ Tempo</div>
 <div id="timer" class="hudValue">30:00</div>
 </div>
 
 <div class="hudButtons">
 
 <button onclick="openItems()">🎒 Itens</button>
+
+<button onclick="openHowTo()">❓ Como jogar</button>
 
 </div>
 
@@ -771,8 +980,16 @@ Aguardando...
 
 <div id="progressBox">
 
+<div class="progressTop">
+
 <div id="progressText">
 Seu progresso: 0 / 150 casas
+</div>
+
+<div id="progressPercent">
+0%
+</div>
+
 </div>
 
 <div class="progressBar">
@@ -782,6 +999,16 @@ Seu progresso: 0 / 150 casas
 </div>
 
 <div id="board"></div>
+
+<div class="boardLegend">
+
+<div class="legendItem">⚠️ Problema</div>
+<div class="legendItem">🌱 Solução</div>
+<div class="legendItem">❓ Pergunta</div>
+<div class="legendItem">🎁 Item</div>
+<div class="legendItem">🏆 Chegada</div>
+
+</div>
 
 <div id="controls">
 
@@ -796,8 +1023,20 @@ disabled>
 
 </button>
 
+<div class="professionHudBox">
+
+<div class="professionHudTitle">
+💼 Sua profissão
+</div>
+
 <div id="myProfession">
 Profissão: sorteando...
+</div>
+
+<div id="myProfessionPower">
+Poder: sorteando...
+</div>
+
 </div>
 
 </div>
@@ -823,79 +1062,105 @@ onclick="closeModal('howModal')">
 
 <h2>❓ Como jogar</h2>
 
+<div class="howIntro">
+
+<b>🌎 Objetivo</b>
+
 <p>
-O objetivo é chegar à <b>casa 150</b> antes dos
-<b>30 minutos</b> acabarem.
+Chegue à <b>casa 150</b> antes que os
+<b>30 minutos</b> acabem.
 </p>
+
+</div>
 
 <h3>🎲 Movimento</h3>
 
 <p>
-Quando for sua vez, jogue o dado. Sua pessoa anda
-uma casa por vez pelo tabuleiro.
+Quando for sua vez, clique em <b>Jogar dado</b>.
+O resultado determina quantas casas você irá andar.
+Sua pessoa se movimenta <b>uma casa por vez</b>.
 </p>
-
-<h3>🏆 Vitória</h3>
-
-<p>
-Quem chegar primeiro à casa 150 vence.
-</p>
-
-<p>
-Se o tempo acabar, o desempate será:
-</p>
-
-<ol>
-<li>Quem estiver mais avançado.</li>
-<li>Quem tiver mais itens.</li>
-<li>Quem tiver mais acertos.</li>
-<li>Se continuar igual, haverá empate.</li>
-</ol>
 
 <h3>💼 Profissões</h3>
 
 <p>
-No início da partida cada jogador recebe uma profissão
-por meio de um sorteio. Cada profissão possui um poder
-especial que funciona durante a partida.
+No começo da partida, cada jogador recebe uma profissão
+por meio de um sorteio.
+</p>
+
+<p>
+A profissão possui um <b>poder especial</b> que pode ajudar
+durante a partida. O poder e a profissão serão mostrados
+no sorteio e também no HUD.
 </p>
 
 <h3>🎒 Itens</h3>
 
 <p>
-Durante a partida você poderá encontrar itens.
-Eles ficam na aba <b>Itens</b> e possuem efeitos especiais.
+Durante a partida existem casas de itens.
+Ao cair nelas, você recebe um item.
 </p>
 
-<h3>⚠️ Casas de problema</h3>
-
 <p>
-Você pode sofrer uma penalidade. Alguns itens e profissões
-podem proteger você.
+Abra <b>🎒 Itens</b> para ver seus itens e seus poderes.
 </p>
 
-<h3>🌱 Casas de solução</h3>
+<h3>⚠️ Problemas</h3>
 
 <p>
-Uma solução normalmente faz você avançar.
+Casas vermelhas representam problemas ambientais.
+Normalmente elas fazem o jogador voltar casas.
+Algumas profissões e itens podem proteger você.
+</p>
+
+<h3>🌱 Soluções</h3>
+
+<p>
+Casas verdes representam soluções.
+Ao cair nelas, você avança casas.
 Algumas profissões e itens podem aumentar esse avanço.
 </p>
 
 <h3>❓ Perguntas</h3>
 
 <p>
-As perguntas são sobre racismo ambiental.
-Acertar faz você avançar 2 casas.
-Errar faz você permanecer na casa, a menos que possua
-alguma habilidade ou item que permita tentar novamente.
+As perguntas abordam temas relacionados ao
+<b>racismo ambiental e à justiça ambiental</b>.
 </p>
 
-</div>
+<ul>
+<li>✅ Acertou: avança 2 casas.</li>
+<li>❌ Errou: permanece na casa.</li>
+<li>📢 Alguns itens e profissões permitem uma nova tentativa.</li>
+</ul>
+
+<h3>🏆 Vitória</h3>
+
+<p>
+Quem chegar primeiro à casa <b>150</b> vence imediatamente.
+</p>
+
+<h3>⏱️ Se o tempo acabar</h3>
+
+<p>
+O vencedor será definido nesta ordem:
+</p>
+
+<ol>
+<li>📍 Quem estiver mais avançado.</li>
+<li>🎒 Quem tiver mais itens.</li>
+<li>✅ Quem tiver mais acertos.</li>
+<li>🤝 Se tudo continuar igual, haverá empate.</li>
+</ol>
 
 </div>
 
+</div>
 
-<!-- ITENS -->
+
+<!-- =====================================================
+ITENS
+===================================================== -->
 
 <div id="itemsModal" class="modal hidden">
 
@@ -916,13 +1181,19 @@ onclick="closeModal('itemsModal')">
 </div>
 
 
-<!-- SORTEIO -->
+<!-- =====================================================
+SORTEIO
+===================================================== -->
 
 <div id="drawModal" class="modal hidden">
 
 <div class="modalBox" id="drawBox">
 
-<h2 id="drawTitle">🎰 Sorteando...</h2>
+<h2 id="drawTitle">
+🎰 Sorteando...
+</h2>
+
+<div id="drawPlayer" class="drawPlayer"></div>
 
 <div id="drawDisplay" class="drawSpin">
 Preparando sorteio...
@@ -930,12 +1201,25 @@ Preparando sorteio...
 
 <div id="drawResult"></div>
 
-</div>
+<div id="drawPower"></div>
+
+<button
+id="drawContinue"
+class="drawContinue hidden"
+onclick="closeDraw()">
+
+Continuar ▶️
+
+</button>
 
 </div>
 
+</div>
 
-<!-- PERGUNTA -->
+
+<!-- =====================================================
+PERGUNTA
+===================================================== -->
 
 <div id="questionModal" class="modal hidden">
 
@@ -952,13 +1236,17 @@ Preparando sorteio...
 </div>
 
 
-<!-- RESULTADO -->
+<!-- =====================================================
+RESULTADO
+===================================================== -->
 
 <div id="resultModal" class="modal hidden">
 
 <div class="modalBox" style="text-align:center">
 
-<h2 id="resultTitle">🏆 Fim de jogo!</h2>
+<h2 id="resultTitle">
+🏆 Fim de jogo!
+</h2>
 
 <div id="resultText"></div>
 
@@ -1015,7 +1303,7 @@ const CORES=[
 
 
 /* =========================================================
-PROFISSÕES E PODERES
+PROFISSÕES
 ========================================================= */
 
 const PROFISSOES=[
@@ -1023,120 +1311,140 @@ const PROFISSOES=[
 {
 id:"professor",
 nome:"Professor(a)",
+emoji:"🧑‍🏫",
 descricao:"Ao acertar uma pergunta, avança 1 casa extra."
 },
 
 {
 id:"medico",
 nome:"Médico(a)",
+emoji:"🩺",
 descricao:"Evita uma penalidade de problema uma vez por partida."
 },
 
 {
 id:"enfermeiro",
 nome:"Enfermeiro(a)",
+emoji:"👩‍⚕️",
 descricao:"Quando sofrer um problema, reduz a perda de 3 para 1 casa uma vez."
 },
 
 {
 id:"engenheiro",
 nome:"Engenheiro(a)",
+emoji:"👷",
 descricao:"Ao cair em uma solução, avança 1 casa extra."
 },
 
 {
 id:"advogado",
 nome:"Advogado(a)",
+emoji:"⚖️",
 descricao:"Pode tentar novamente uma pergunta errada uma vez."
 },
 
 {
 id:"biologo",
 nome:"Biólogo(a)",
+emoji:"🔬",
 descricao:"Ao conseguir Semente ou Mudas, avança 1 casa extra."
 },
 
 {
 id:"geografo",
 nome:"Geógrafo(a)",
+emoji:"🌎",
 descricao:"Uma vez por partida, reduz uma penalidade de problema para 1 casa."
 },
 
 {
 id:"arquiteto",
 nome:"Arquiteto(a)",
+emoji:"🏗️",
 descricao:"Uma vez por partida, ao cair em solução, recebe 2 casas extras."
 },
 
 {
 id:"jornalista",
 nome:"Jornalista",
+emoji:"📰",
 descricao:"Pode tentar novamente uma pergunta errada uma vez."
 },
 
 {
 id:"agricultor",
 nome:"Agricultor(a)",
+emoji:"👨‍🌾",
 descricao:"Ao receber Semente ou Mudas, avança 1 casa extra."
 },
 
 {
 id:"pesquisador",
 nome:"Pesquisador(a)",
+emoji:"🧪",
 descricao:"Ao acertar uma pergunta, avança 1 casa extra."
 },
 
 {
 id:"assistente",
 nome:"Assistente social",
+emoji:"🤝",
 descricao:"Evita uma penalidade de problema uma vez."
 },
 
 {
 id:"gestor",
 nome:"Gestor(a) ambiental",
+emoji:"🌱",
 descricao:"Ao cair em solução, avança 1 casa extra."
 },
 
 {
 id:"veterinario",
 nome:"Veterinário(a)",
+emoji:"🐾",
 descricao:"Evita um problema uma vez."
 },
 
 {
 id:"quimico",
 nome:"Químico(a)",
+emoji:"🧪",
 descricao:"Pode neutralizar um problema de contaminação uma vez."
 },
 
 {
 id:"fotografo",
 nome:"Fotógrafo(a)",
+emoji:"📷",
 descricao:"Pode permanecer na casa ao invés de sofrer uma penalidade de problema uma vez."
 },
 
 {
 id:"artista",
 nome:"Artista",
+emoji:"🎨",
 descricao:"Ao acertar pergunta, avança 1 casa extra."
 },
 
 {
 id:"comerciante",
 nome:"Comerciante",
+emoji:"🏪",
 descricao:"Ao receber um item, avança 1 casa."
 },
 
 {
 id:"lider",
 nome:"Líder comunitário",
+emoji:"🗣️",
 descricao:"Pode tentar novamente uma pergunta errada uma vez."
 },
 
 {
 id:"agente",
 nome:"Agente ambiental",
+emoji:"🌳",
 descricao:"Anula uma penalidade de problema uma vez."
 }
 
@@ -1144,7 +1452,7 @@ descricao:"Anula uma penalidade de problema uma vez."
 
 
 /* =========================================================
-ITENS E PODERES
+ITENS
 ========================================================= */
 
 const ITENS=[
@@ -1888,7 +2196,7 @@ return;
 
 if(data.type==="state"){
 
-jogadores=data.jogadores||[];
+jogadores=data.jogadores||jogadores;
 
 turno=data.turno;
 
@@ -1917,7 +2225,8 @@ updateLocalHud();
 if(data.playerId===myId){
 
 showProfessionDraw(
-data.profession
+data.profession,
+data.playerName||""
 );
 
 }
@@ -1980,6 +2289,17 @@ updateLocalHud();
 return;
 }
 
+if(data.type==="diceResult"){
+
+if(data.playerId===myId){
+animateDice(data.numero);
+}else{
+animateDice(data.numero);
+}
+
+return;
+}
+
 if(data.type==="error"){
 
 toast(data.message);
@@ -2033,7 +2353,7 @@ startLocalGame(tempoRestante);
 
 setTimeout(()=>{
 broadcastProfessionDraws();
-},700);
+},500);
 
 }
 
@@ -2107,35 +2427,44 @@ PROFISSOES.find(x=>x.id===p.profissao);
 broadcast({
 type:"drawProfession",
 playerId:p.id,
+playerName:p.nome,
 profession:prof,
 jogadores:jogadores
 });
 
 if(p.id===myId){
 
-showProfessionDraw(prof);
+showProfessionDraw(prof,p.nome);
 
 }
 
-},index*2600);
+},index*3000);
 
 });
 
 setTimeout(()=>{
 broadcastState();
-},jogadores.length*2600+1200);
+},jogadores.length*3000+1800);
 
 }
 
 
-function showProfessionDraw(profession){
+function showProfessionDraw(profession,playerName="Você"){
 
 show("drawModal");
 
 $("drawTitle").textContent=
 "💼 Sorteio da profissão";
 
+$("drawPlayer").textContent=
+"🎯 Jogador: "+playerName;
+
 $("drawResult").textContent="";
+
+$("drawPower").innerHTML=
+"";
+
+$("drawContinue").classList.add("hidden");
 
 const display=$("drawDisplay");
 
@@ -2153,7 +2482,7 @@ Math.random()*PROFISSOES.length
 ];
 
 display.textContent=
-"💼 "+random.nome;
+random.emoji+" "+random.nome;
 
 count++;
 
@@ -2164,30 +2493,46 @@ clearInterval(interval);
 display.classList.remove("drawSpin");
 
 display.textContent=
-"💼 "+profession.nome;
+profession.emoji+" "+profession.nome;
 
 $("drawResult").textContent=
 "Você tirou: "+profession.nome;
+
+$("drawPower").innerHTML=`
+<div style="font-size:16px;font-weight:bold;color:#a5b4fc">
+⭐ Poder da profissão
+</div>
+
+<div style="margin-top:6px">
+${escapeHtml(profession.descricao)}
+</div>
+`;
 
 $("hudProfession").textContent=
 profession.nome;
 
 $("myProfession").textContent=
-"Profissão: "+profession.nome;
+profession.emoji+" "+profession.nome;
+
+$("myProfessionPower").textContent=
+"Poder: "+profession.descricao;
+
+$("drawContinue").classList.remove("hidden");
 
 toast(
 "💼 "+profession.nome+
 ": "+profession.descricao
 );
 
-setTimeout(()=>{
-closeModal("drawModal");
-},1800);
-
 }
 
 },100);
 
+}
+
+
+function closeDraw(){
+hide("drawModal");
 }
 
 
@@ -2224,6 +2569,9 @@ cell.classList.add("item");
 if(i===TOTAL_CASAS)
 cell.classList.add("finish");
 
+if(i===1)
+cell.classList.add("cellStart");
+
 const num=document.createElement("span");
 
 num.className="cellNumber";
@@ -2245,6 +2593,8 @@ else if(ITEM_CASAS.includes(i))
 icon.textContent="🎁";
 else if(i===TOTAL_CASAS)
 icon.textContent="🏆";
+else if(i===1)
+icon.textContent="🚩";
 else
 icon.textContent="";
 
@@ -2280,6 +2630,31 @@ pawns.appendChild(person);
 });
 
 cell.appendChild(pawns);
+
+if(i===1){
+
+const label=document.createElement("div");
+
+label.className="cellLegend";
+
+label.textContent="INÍCIO";
+
+cell.appendChild(label);
+
+}
+
+if(i===TOTAL_CASAS){
+
+const label=document.createElement("div");
+
+label.className="cellLegend";
+
+label.textContent="CHEGADA";
+
+cell.appendChild(label);
+
+}
+
 board.appendChild(cell);
 
 }
@@ -2303,7 +2678,8 @@ const el=document.createElement("div");
 
 el.className=
 "playerHud "+
-(p.id===myId?"me":"");
+(p.id===myId?"me ":"")+
+(jogadores[turno]?.id===p.id?"playerHudTurn":"");
 
 el.style.borderColor=CORES[p.cor];
 
@@ -2318,7 +2694,15 @@ el.innerHTML=`
 
 <br>
 
-Casa ${p.posicao}
+📍 Casa ${p.posicao}
+
+<br>
+
+🎒 ${p.itens.length} item(s)
+
+<br>
+
+✅ ${p.acertos} acerto(s)
 
 `;
 
@@ -2378,12 +2762,22 @@ x=>x.id===me.profissao
 );
 
 $("hudProfession").textContent=
-prof?prof.nome:"Sorteando...";
+prof?
+prof.emoji+" "+prof.nome:
+"Sorteando...";
 
 $("myProfession").textContent=
 prof?
-"Profissão: "+prof.nome:
+prof.emoji+" "+prof.nome:
 "Profissão: sorteando...";
+
+$("myProfessionPower").textContent=
+prof?
+"Poder: "+prof.descricao:
+"Poder: sorteando...";
+
+$("hudPosition").textContent=
+`${me.posicao} / ${TOTAL_CASAS}`;
 
 const porcentagem=
 Math.min(
@@ -2396,6 +2790,9 @@ porcentagem+"%";
 
 $("progressText").textContent=
 `Seu progresso: ${me.posicao} / ${TOTAL_CASAS} casas`;
+
+$("progressPercent").textContent=
+Math.floor(porcentagem)+"%";
 
 const minutos=
 Math.floor(tempoRestante/60)
@@ -2450,6 +2847,8 @@ $("turnText").textContent=
 $("rollBtn").disabled=true;
 
 }
+
+renderPlayersHud();
 
 }
 
@@ -2708,7 +3107,7 @@ return true;
 
 
 /* =========================================================
-PROBLEMAS + PROFISSÕES + ITENS
+PROBLEMAS
 ========================================================= */
 
 function processProblem(player){
@@ -2721,9 +3120,6 @@ type:"toast",
 message:
 `⚠️ ${escapeHtml(player.nome)}: ${escapeHtml(texto)}`
 });
-
-
-/* ÁGUA */
 
 if(player.itens.includes("agua")){
 
@@ -2746,9 +3142,6 @@ return;
 
 }
 
-
-/* ÁRVORE */
-
 if(player.itens.includes("arvore")){
 
 removeItem(player,"arvore");
@@ -2764,9 +3157,6 @@ return;
 
 }
 
-
-/* FILTRO */
-
 if(
 player.itens.includes("filtro") &&
 /água|contaminação/i.test(texto)
@@ -2777,7 +3167,7 @@ removeItem(player,"filtro");
 broadcast({
 type:"toast",
 message:
-`🚰 ${escapeHtml(player.nome)} usou o Filtro e evitou a contaminação!`
+`🚰 ${escapeHtml(player.nome)} usou o Filtro!`
 });
 
 finishSpecialAction(player);
@@ -2785,12 +3175,7 @@ return;
 
 }
 
-
-/* COLETA / LUVAS / LIXEIRA */
-
-if(
-/lixo|resíduos|descarte/i.test(texto)
-){
+if(/lixo|resíduos|descarte/i.test(texto)){
 
 for(const id of ["coleta","luvas","lixeira"]){
 
@@ -2801,7 +3186,7 @@ removeItem(player,id);
 broadcast({
 type:"toast",
 message:
-`♻️ ${escapeHtml(player.nome)} usou um item de limpeza e evitou o problema!`
+`♻️ ${escapeHtml(player.nome)} usou um item de limpeza!`
 });
 
 finishSpecialAction(player);
@@ -2812,9 +3197,6 @@ return;
 }
 
 }
-
-
-/* KIT */
 
 if(player.itens.includes("kit")){
 
@@ -2831,9 +3213,6 @@ return;
 
 }
 
-
-/* CAPACETE */
-
 if(player.itens.includes("capacete")){
 
 removeItem(player,"capacete");
@@ -2848,9 +3227,6 @@ finishSpecialAction(player);
 return;
 
 }
-
-
-/* COLETE */
 
 if(player.itens.includes("colete")){
 
@@ -2867,9 +3243,6 @@ return;
 
 }
 
-
-/* PROFISSÕES DE PROTEÇÃO */
-
 const prof=getProfession(player);
 
 if(prof){
@@ -2882,7 +3255,7 @@ useProfession(player,"medico")
 broadcast({
 type:"toast",
 message:
-`🩺 Médico(a): ${escapeHtml(player.nome)} evitou a penalidade!`
+`🩺 Médico(a): penalidade evitada!`
 });
 
 finishSpecialAction(player);
@@ -2946,7 +3319,7 @@ useProfession(player,"fotografo")
 broadcast({
 type:"toast",
 message:
-`📷 Fotógrafo(a): registrou o problema e permaneceu na casa!`
+`📷 Fotógrafo(a): permaneceu na casa!`
 });
 
 finishSpecialAction(player);
@@ -2965,7 +3338,7 @@ Math.max(0,player.posicao-1);
 broadcast({
 type:"toast",
 message:
-`🌎 Geógrafo(a): a penalidade foi reduzida para 1 casa!`
+`🌎 Geógrafo(a): perdeu apenas 1 casa!`
 });
 
 finishSpecialAction(player);
@@ -2984,7 +3357,7 @@ Math.max(0,player.posicao-1);
 broadcast({
 type:"toast",
 message:
-`👩‍⚕️ Enfermeiro(a): reduziu a penalidade para 1 casa!`
+`👩‍⚕️ Enfermeiro(a): perdeu apenas 1 casa!`
 });
 
 finishSpecialAction(player);
@@ -3011,9 +3384,6 @@ return;
 
 }
 
-
-/* PENALIDADE NORMAL */
-
 player.posicao=
 Math.max(
 0,
@@ -3034,7 +3404,7 @@ setTimeout(nextTurn,700);
 
 
 /* =========================================================
-FINAL DE EFEITO ESPECIAL
+FINAL ESPECIAL
 ========================================================= */
 
 function finishSpecialAction(player){
@@ -3082,12 +3452,6 @@ useProfession(player,prof.id)
 
 extra+=1;
 
-broadcast({
-type:"toast",
-message:
-`💼 ${prof.nome}: +1 casa pela solução!`
-});
-
 }
 
 if(
@@ -3098,62 +3462,26 @@ useProfession(player,"arquiteto")
 
 extra+=2;
 
-broadcast({
-type:"toast",
-message:
-`🏗️ Arquiteto(a): +2 casas extras!`
-});
-
 }
-
-
-/* MAPA */
 
 if(player.itens.includes("mapa")){
 
 removeItem(player,"mapa");
-
 extra+=1;
 
-broadcast({
-type:"toast",
-message:
-`🗺️ Mapa: +1 casa!`
-});
-
 }
-
-
-/* ENERGIA */
 
 if(player.itens.includes("energia")){
 
 removeItem(player,"energia");
-
 extra+=1;
 
-broadcast({
-type:"toast",
-message:
-`☀️ Energia solar: +1 casa!`
-});
-
 }
-
-
-/* DOCUMENTO */
 
 if(player.itens.includes("documento")){
 
 removeItem(player,"documento");
-
 extra+=1;
-
-broadcast({
-type:"toast",
-message:
-`📄 Documento: +1 casa!`
-});
 
 }
 
@@ -3240,31 +3568,13 @@ showItemDraw(item);
 
 }
 
-
-/* efeitos imediatos */
-
 let bonus=0;
 
-if(item.id==="semente"){
+if(item.id==="semente")bonus=1;
 
-bonus=1;
+if(item.id==="bicicleta")bonus=2;
 
-}
-
-if(item.id==="bicicleta"){
-
-bonus=2;
-
-}
-
-if(item.id==="sementes"){
-
-bonus=2;
-
-}
-
-
-/* PROFISSÕES */
+if(item.id==="sementes")bonus=2;
 
 const prof=getProfession(player);
 
@@ -3277,27 +3587,11 @@ prof.id==="agricultor") &&
 
 bonus+=1;
 
-broadcast({
-type:"toast",
-message:
-`🌱 ${prof.nome}: recebeu bônus de +1 casa!`
-});
-
 }
 
-
-if(
-prof &&
-prof.id==="comerciante"
-){
+if(prof&&prof.id==="comerciante"){
 
 bonus+=1;
-
-broadcast({
-type:"toast",
-message:
-`🏪 Comerciante: +1 casa pelo item!`
-});
 
 }
 
@@ -3353,7 +3647,14 @@ show("drawModal");
 $("drawTitle").textContent=
 "🎁 Sorteio do item";
 
+$("drawPlayer").textContent=
+"🎯 Você encontrou um item!";
+
 $("drawResult").textContent="";
+
+$("drawPower").innerHTML="";
+
+$("drawContinue").classList.add("hidden");
 
 const display=$("drawDisplay");
 
@@ -3387,9 +3688,17 @@ item.emoji+" "+item.nome;
 $("drawResult").textContent=
 "Você ganhou: "+item.nome;
 
-setTimeout(()=>{
-closeModal("drawModal");
-},1800);
+$("drawPower").innerHTML=`
+<div style="font-size:16px;font-weight:bold;color:#67e8f9">
+⭐ Poder do item
+</div>
+
+<div style="margin-top:6px">
+${escapeHtml(item.descricao)}
+</div>
+`;
+
+$("drawContinue").classList.remove("hidden");
 
 }
 
@@ -3516,45 +3825,19 @@ useProfession(player,prof.id)
 
 extra+=1;
 
-broadcast({
-type:"toast",
-message:
-`💼 ${prof.nome}: +1 casa pelo conhecimento!`
-});
-
 }
-
-
-/* LIVRO */
 
 if(player.itens.includes("livro")){
 
 removeItem(player,"livro");
-
 extra+=1;
 
-broadcast({
-type:"toast",
-message:
-`📚 Livro: +1 casa extra!`
-});
-
 }
-
-
-/* PLACA */
 
 if(player.itens.includes("placa")){
 
 removeItem(player,"placa");
-
 extra+=1;
-
-broadcast({
-type:"toast",
-message:
-`🪧 Placa educativa: +1 casa extra!`
-});
 
 }
 
@@ -3589,24 +3872,12 @@ return;
 
 }
 
-
-/* =========================================================
-ERRO + NOVA TENTATIVA
-========================================================= */
-
 let retry=false;
 
 if(player.itens.includes("denuncia")){
 
 removeItem(player,"denuncia");
-
 retry=true;
-
-broadcast({
-type:"toast",
-message:
-`📢 Denúncia: ${escapeHtml(player.nome)} ganhou outra tentativa!`
-});
 
 }
 
@@ -3621,39 +3892,19 @@ useProfession(player,prof.id)
 
 retry=true;
 
-broadcast({
-type:"toast",
-message:
-`💼 ${prof.nome}: nova tentativa concedida!`
-});
-
 }
 
 if(player.itens.includes("megafone")&&!retry){
 
 removeItem(player,"megafone");
-
 retry=true;
-
-broadcast({
-type:"toast",
-message:
-`📣 Megafone: nova tentativa!`
-});
 
 }
 
 if(player.itens.includes("telefone")&&!retry){
 
 removeItem(player,"telefone");
-
 retry=true;
-
-broadcast({
-type:"toast",
-message:
-`📱 Telefone: nova tentativa!`
-});
 
 }
 
@@ -3709,7 +3960,7 @@ player.itens.splice(index,1);
 
 
 /* =========================================================
-ABA DE ITENS
+ITENS
 ========================================================= */
 
 function openItems(){
@@ -3997,6 +4248,11 @@ INICIALIZAÇÃO
 ========================================================= */
 
 renderLobbyPlayers();
+
+/* Abre o Como Jogar automaticamente antes da partida. */
+setTimeout(()=>{
+openHowTo();
+},400);
 
 </script>
 
