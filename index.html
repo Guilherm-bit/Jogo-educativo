@@ -4,495 +4,4017 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Caminhos da Justiça Ambiental</title>
+
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100vh;font-family:Arial,sans-serif;}
-body{color:#1a2e1a;background:radial-gradient(circle at 10% 15%,#86efac 0%,transparent 35%),radial-gradient(circle at 90% 20%,#93c5fd 0%,transparent 35%),radial-gradient(circle at 50% 90%,#fef08a 0%,transparent 35%),linear-gradient(180deg,#dcfce7,#e0f2fe,#fef9c3);background-attachment:fixed;}
-button,input{font:inherit;border:0;border-radius:12px;}
-button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:white;font-weight:bold;transition:transform 0.15s,opacity 0.15s;}
-button:hover{transform:scale(1.03);opacity:0.95;}
-button:active{transform:scale(0.98);}
-.hidden{display:none !important;}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-#lobby{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;}
-.lobbyBox{max-width:560px;width:100%;background:#ffffffdd;border:2px solid #22c55e40;border-radius:28px;padding:30px;text-align:center;box-shadow:0 25px 80px #00000022;backdrop-filter:blur(15px);}
-.lobbyBox h1{color:#166534;margin-bottom:15px;}
-.lobbyBox input{width:100%;padding:14px;margin:8px 0;border:2px solid #94a3b8;outline:none;transition:border-color 0.2s;}
-.lobbyBox input:focus{border-color:#22c55e;}
-.roomCode{font-size:26px;font-weight:bold;letter-spacing:5px;color:#ca8a04;margin:15px 0;}
-#playersLobby{margin-top:15px;text-align:left;}
-#startBtn{margin-top:15px;padding:12px 30px;font-size:16px;}
+html,body{
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+}
 
-#boardArea{max-width:1450px;margin:0 auto;padding:20px;position:relative;z-index:1;}
-#progressBox{background:#ffffffdd;border:2px solid #22c55e40;border-radius:17px;padding:14px;margin-bottom:14px;}
-.progressBar{height:15px;background:#e5e7eb;border-radius:20px;overflow:hidden;margin-top:8px;}
-#progressFill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#84cc16,#facc15);transition:.3s;}
+body{
+    color:#17351d;
+    background:
+        radial-gradient(circle at 10% 10%,#86efac 0%,transparent 32%),
+        radial-gradient(circle at 90% 15%,#93c5fd 0%,transparent 32%),
+        radial-gradient(circle at 50% 90%,#fef08a 0%,transparent 35%),
+        linear-gradient(180deg,#dcfce7,#e0f2fe,#fefce8);
+    background-attachment:fixed;
+}
 
-#board{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;padding:12px;border-radius:20px;background:linear-gradient(135deg,#a67c52,#8b5a2b,#a67c52);box-shadow:inset 0 0 20px #5c3a21,0 10px 30px rgba(0,0,0,0.25);}
+button,input{
+    font:inherit;
+    border:0;
+    border-radius:12px;
+}
 
-.cell{min-height:75px;border-radius:8px;position:relative;padding:4px;border:2px solid #5c3a21;box-shadow:inset 0 2px 4px rgba(255,255,255,0.3),inset 0 -2px 4px rgba(0,0,0,0.2);background:linear-gradient(145deg,#d9b38c,#c49a6c);display:flex;flex-direction:column;justify-content:space-between;}
-.cellNumber{font-weight:bold;font-size:13px;color:#3d2314;padding:2px 4px;align-self:flex-start;}
-.cellIcon{align-self:center;font-size:18px;}
-.cellType{font-size:9px;color:#5c3a21;padding:0 4px 2px;text-align:center;}
+button{
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(135deg,#15803d,#22c55e);
+    transition:.15s;
+}
 
-.cell.problem{background:linear-gradient(145deg,#f87171,#ef4444);border-color:#b91c1c;}
-.cell.solution{background:linear-gradient(145deg,#86efac,#22c55e);border-color:#15803d;}
-.cell.question{background:linear-gradient(145deg,#c4b5fd,#8b5cf6);border-color:#6d28d9;}
-.cell.item{background:linear-gradient(145deg,#67e8f9,#22d3ee);border-color:#0891b2;}
-.cell.finish{background:linear-gradient(145deg,#fcd34d,#f59e0b);border-color:#b45309;box-shadow:inset 0 0 10px #fef08a;}
+button:hover{
+    transform:scale(1.02);
+}
 
-.pawns{position:absolute;bottom:4px;right:4px;display:flex;flex-wrap:wrap;gap:2px;justify-content:flex-end;}
-.person{width:22px;height:28px;position:relative;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4));}
-.person .head{position:absolute;width:9px;height:9px;border-radius:50%;background:currentColor;left:6px;top:0;}
-.person .body{position:absolute;width:14px;height:14px;border-radius:8px 8px 4px 4px;background:currentColor;left:4px;top:8px;}
-.person .leg1,.person .leg2{position:absolute;width:4px;height:7px;background:currentColor;top:20px;border-radius:3px;}
-.person .leg1{left:4px;}.person .leg2{right:4px;}
+button:active{
+    transform:scale(.98);
+}
 
-.boardLegend{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
-.legendItem{padding:7px 10px;border-radius:10px;background:#ffffffdd;border:1px solid #22c55e40;font-size:11px;color:#1e293b;}
+button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
+}
 
-#bottomHud{position:relative;margin:30px auto 50px;max-width:1450px;background:#ffffffdd;border:2px solid #22c55e50;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);padding:20px;backdrop-filter:blur(10px);}
-#hudPlayers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:15px;}
-.playerCard{background:linear-gradient(145deg,#f0fdf4,#e0f2fe);border:2px solid #22c55e30;border-radius:12px;padding:12px;}
-.playerCard.me{border-color:#facc15;box-shadow:0 0 8px #facc1540;}
-.playerColor{width:18px;height:18px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:8px;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.3);}
-.playerName{font-weight:bold;font-size:15px;}
-.playerStats{font-size:12px;color:#4b5563;margin-top:5px;line-height:1.6;}
-.playerStats span{font-weight:bold;color:#1e293b;}
+.hidden{
+    display:none!important;
+}
 
-.hudActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.hudActions button{padding:12px 20px;border-radius:12px;font-size:15px;min-width:140px;}
-#rollBtn{background:linear-gradient(135deg,#15803d,#22c55e) !important;}
-#itemsBtn{background:linear-gradient(135deg,#0891b2,#22d3ee) !important;}
-#profBtn{background:linear-gradient(135deg,#7c3aed,#a855f7) !important;}
-.hudActions button:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+/* =========================
+   LOBBY
+========================= */
 
-#turnText{text-align:center;margin-top:15px;padding:10px;background:linear-gradient(90deg,#15803d,#0d9488);border-radius:10px;color:#fff;font-weight:bold;}
-#dice{width:80px;height:80px;border-radius:15px;background:#fff;border:3px solid #22c55e;display:flex;justify-content:center;align-items:center;font-size:40px;margin:0 auto 10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-.diceRolling{animation:diceRoll 0.5s infinite;}
-@keyframes diceRoll{0%{transform:rotate(0) scale(1);}50%{transform:rotate(180deg) scale(1.1);}100%{transform:rotate(360deg) scale(1);}}
+#lobby{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
 
-.modal{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.4);display:flex;justify-content:center;align-items:center;padding:15px;backdrop-filter:blur(6px);}
-.modalBox{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;background:#fff;border:2px solid #22c55e40;border-radius:20px;padding:24px;box-shadow:0 20px 70px rgba(0,0,0,0.2);color:#1e293b;position:relative;}
-.close{position:absolute;right:12px;top:10px;width:36px;height:36px;border-radius:50%;background:#ef4444;color:#fff;font-weight:bold;font-size:20px;border:none;}
-.modalBox h2{margin-top:5px;color:#166534;text-align:center;}
-.itemGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px;}
-.itemCard{background:#f0fdf4;padding:12px;border-radius:10px;border:1px solid #22c55e30;text-align:center;}
-.profDisplay{text-align:center;padding:20px;background:#f0fdf4;border-radius:12px;border:2px solid #8b5cf6;margin-top:15px;}
-.profEmoji{font-size:50px;}
-.profName{font-size:22px;font-weight:bold;color:#8b5cf6;margin:10px 0;}
-.questionOption{display:block;width:100%;padding:12px;margin:8px 0;border-radius:10px;background:#e2e8f0;color:#1e293b;text-align:left;border:none;}
-.questionOption:hover{background:#cbd5e1;}
-#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);z-index:250;background:#fff;border:2px solid #22c55e50;padding:12px 20px;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.15);opacity:0;pointer-events:none;transition:.25s;text-align:center;color:#1e293b;}
-#toast.show{opacity:1;}
+.lobbyBox{
+    width:100%;
+    max-width:560px;
+    padding:30px;
+    text-align:center;
+    border-radius:28px;
+    background:rgba(255,255,255,.9);
+    border:2px solid rgba(34,197,94,.25);
+    box-shadow:0 25px 80px rgba(0,0,0,.18);
+    backdrop-filter:blur(15px);
+}
 
-@media(max-width:768px){#board{grid-template-columns:repeat(5,1fr);gap:4px;}.cell{min-height:60px;}#hudPlayers{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){#hudPlayers{grid-template-columns:1fr;}.hudActions button{min-width:100px;padding:10px;}}
+.lobbyIcon{
+    font-size:55px;
+    margin-bottom:8px;
+}
+
+.lobbyBox h1{
+    color:#166534;
+    margin-bottom:10px;
+}
+
+.lobbyBox p{
+    color:#475569;
+    line-height:1.5;
+}
+
+.lobbyBox input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    border:2px solid #cbd5e1;
+    outline:none;
+}
+
+.lobbyBox input:focus{
+    border-color:#22c55e;
+}
+
+.lobbyButtons{
+    display:grid;
+    gap:8px;
+    margin-top:8px;
+}
+
+.roomCode{
+    font-size:26px;
+    font-weight:bold;
+    letter-spacing:5px;
+    color:#a16207;
+    margin:12px 0;
+}
+
+#playersLobby{
+    margin-top:18px;
+    padding:14px;
+    border-radius:14px;
+    background:#f0fdf4;
+    text-align:left;
+}
+
+#playersList{
+    margin-top:8px;
+}
+
+.lobbyPlayer{
+    padding:7px;
+    border-bottom:1px solid #dcfce7;
+}
+
+#startBtn{
+    width:100%;
+    margin-top:12px;
+    padding:13px;
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+/* =========================
+   JOGO
+========================= */
+
+#game{
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+#boardArea{
+    width:100%;
+    max-width:1450px;
+    margin:auto;
+    padding:14px;
+}
+
+/* =========================
+   TOPO
+========================= */
+
+#gameTop{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:12px;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.topCard{
+    padding:12px;
+    border-radius:17px;
+    background:rgba(255,255,255,.9);
+    border:2px solid rgba(34,197,94,.25);
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    backdrop-filter:blur(10px);
+}
+
+#timerBox{
+    text-align:center;
+}
+
+#timer{
+    font-size:28px;
+    font-weight:bold;
+    color:#166534;
+}
+
+#progressBox{
+    text-align:right;
+}
+
+.progressBar{
+    height:13px;
+    background:#e5e7eb;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+#progressFill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#16a34a,#84cc16,#eab308);
+    transition:.3s;
+}
+
+/* =========================
+   TABULEIRO
+========================= */
+
+#board{
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:6px;
+    padding:12px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#9a6b3f,#7c4f29,#a67c52);
+    box-shadow:
+        inset 0 0 25px rgba(55,30,10,.8),
+        0 12px 35px rgba(0,0,0,.22);
+}
+
+.cell{
+    position:relative;
+    min-height:75px;
+    padding:4px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    border-radius:9px;
+    border:2px solid #68421f;
+    background:linear-gradient(145deg,#dfbd96,#cda77d);
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,.35),
+        inset 0 -3px 5px rgba(0,0,0,.2);
+}
+
+.cellNumber{
+    font-size:12px;
+    font-weight:bold;
+    color:#402613;
+}
+
+.cellIcon{
+    min-height:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+}
+
+.cellType{
+    min-height:11px;
+    text-align:center;
+    font-size:8px;
+    color:#4b2e19;
+}
+
+.cell.problem{
+    background:linear-gradient(145deg,#fca5a5,#ef4444);
+    border-color:#b91c1c;
+}
+
+.cell.solution{
+    background:linear-gradient(145deg,#bbf7d0,#22c55e);
+    border-color:#15803d;
+}
+
+.cell.question{
+    background:linear-gradient(145deg,#ddd6fe,#8b5cf6);
+    border-color:#6d28d9;
+}
+
+.cell.item{
+    background:linear-gradient(145deg,#a5f3fc,#22d3ee);
+    border-color:#0891b2;
+}
+
+.cell.finish{
+    background:linear-gradient(145deg,#fef08a,#f59e0b);
+    border-color:#b45309;
+}
+
+.pawns{
+    position:absolute;
+    right:3px;
+    bottom:2px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:1px;
+    z-index:5;
+}
+
+.person{
+    width:21px;
+    height:28px;
+    position:relative;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.45));
+}
+
+.person .head{
+    position:absolute;
+    top:0;
+    left:6px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:currentColor;
+}
+
+.person .body{
+    position:absolute;
+    top:8px;
+    left:3px;
+    width:15px;
+    height:14px;
+    border-radius:8px 8px 4px 4px;
+    background:currentColor;
+}
+
+.person .leg1,
+.person .leg2{
+    position:absolute;
+    top:20px;
+    width:4px;
+    height:8px;
+    border-radius:3px;
+    background:currentColor;
+}
+
+.person .leg1{
+    left:4px;
+}
+
+.person .leg2{
+    right:4px;
+}
+
+/* =========================
+   LEGENDA
+========================= */
+
+.boardLegend{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:10px;
+}
+
+.legendItem{
+    padding:7px 10px;
+    border-radius:10px;
+    background:rgba(255,255,255,.9);
+    font-size:11px;
+}
+
+/* =========================
+   HUD
+========================= */
+
+#bottomHud{
+    width:100%;
+    max-width:1450px;
+    margin:15px auto 0;
+    padding:15px;
+    background:rgba(255,255,255,.92);
+    border:2px solid rgba(34,197,94,.25);
+    border-radius:22px;
+    box-shadow:0 12px 40px rgba(0,0,0,.12);
+    backdrop-filter:blur(12px);
+}
+
+#hudMain{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:15px;
+    align-items:center;
+}
+
+#diceArea{
+    text-align:center;
+}
+
+#dice{
+    width:82px;
+    height:82px;
+    margin:0 auto 8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:18px;
+    background:white;
+    border:3px solid #22c55e;
+    box-shadow:0 6px 18px rgba(0,0,0,.18);
+    font-size:42px;
+}
+
+.diceRolling{
+    animation:diceRoll .45s infinite;
+}
+
+@keyframes diceRoll{
+    0%{transform:rotate(0) scale(1)}
+    50%{transform:rotate(180deg) scale(1.1)}
+    100%{transform:rotate(360deg) scale(1)}
+}
+
+#hudPlayers{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:8px;
+}
+
+.playerCard{
+    padding:10px;
+    border-radius:13px;
+    background:linear-gradient(145deg,#f0fdf4,#e0f2fe);
+    border:2px solid rgba(34,197,94,.18);
+}
+
+.playerCard.me{
+    border-color:#eab308;
+    box-shadow:0 0 9px rgba(234,179,8,.25);
+}
+
+.playerColor{
+    display:inline-block;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    vertical-align:middle;
+    margin-right:6px;
+    border:2px solid white;
+    box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+
+.playerName{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.playerStats{
+    margin-top:5px;
+    font-size:11px;
+    line-height:1.55;
+    color:#475569;
+}
+
+.playerStats span{
+    font-weight:bold;
+    color:#1e293b;
+}
+
+.hudActions{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+
+.hudActions button{
+    min-width:140px;
+    padding:12px 16px;
+}
+
+#itemsBtn{
+    background:linear-gradient(135deg,#0891b2,#22d3ee);
+}
+
+#profBtn{
+    background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+#howGameBtn{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+#turnText{
+    margin-top:12px;
+    padding:11px;
+    border-radius:11px;
+    color:white;
+    text-align:center;
+    font-weight:bold;
+    background:linear-gradient(90deg,#15803d,#0d9488);
+}
+
+/* =========================
+   MODAIS
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+    background:rgba(0,0,0,.48);
+    backdrop-filter:blur(6px);
+}
+
+.modalBox{
+    position:relative;
+    width:100%;
+    max-width:520px;
+    max-height:90vh;
+    overflow-y:auto;
+    padding:24px;
+    border-radius:20px;
+    background:white;
+    color:#1e293b;
+    box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.modalBox h2{
+    color:#166534;
+    text-align:center;
+}
+
+.close{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#ef4444;
+    font-size:20px;
+}
+
+.howContent{
+    margin-top:18px;
+    line-height:1.8;
+}
+
+.howContent p{
+    margin-bottom:8px;
+}
+
+.itemGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+
+.itemCard{
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+}
+
+.itemEmoji{
+    font-size:30px;
+}
+
+.itemName{
+    margin-top:5px;
+    font-weight:bold;
+}
+
+.itemDesc{
+    margin-top:4px;
+    color:#64748b;
+    font-size:11px;
+}
+
+.profDisplay{
+    margin-top:15px;
+    padding:22px;
+    text-align:center;
+    border-radius:14px;
+    background:#faf5ff;
+    border:2px solid #a855f7;
+}
+
+.profEmoji{
+    font-size:55px;
+}
+
+.profName{
+    margin:8px 0;
+    color:#7c3aed;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.profDesc{
+    color:#475569;
+    line-height:1.6;
+}
+
+.questionText{
+    margin:20px 0;
+    font-size:18px;
+    font-weight:bold;
+    line-height:1.5;
+}
+
+.questionOption{
+    display:block;
+    width:100%;
+    margin:8px 0;
+    padding:13px;
+    text-align:left;
+    color:#1e293b;
+    background:#e2e8f0;
+}
+
+.questionOption:hover{
+    background:#cbd5e1;
+}
+
+.drawBox{
+    text-align:center;
+    padding:15px;
+}
+
+.drawEmoji{
+    font-size:65px;
+    margin:10px;
+}
+
+.drawName{
+    min-height:30px;
+    font-size:22px;
+    font-weight:bold;
+    color:#7c3aed;
+}
+
+.drawAnimation{
+    animation:pulse .12s infinite alternate;
+}
+
+@keyframes pulse{
+    from{transform:scale(1)}
+    to{transform:scale(1.08)}
+}
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    z-index:300;
+    max-width:90%;
+    padding:12px 20px;
+    transform:translateX(-50%);
+    opacity:0;
+    pointer-events:none;
+    border-radius:13px;
+    background:white;
+    border:2px solid rgba(34,197,94,.35);
+    box-shadow:0 8px 30px rgba(0,0,0,.2);
+    text-align:center;
+    transition:.25s;
+}
+
+#toast.show{
+    opacity:1;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:900px){
+
+    #gameTop{
+        grid-template-columns:1fr 1fr;
+    }
+
+    #progressBox{
+        grid-column:1/-1;
+        text-align:left;
+    }
+
+    #hudMain{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    #board{
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
+        padding:8px;
+    }
+
+    .cell{
+        min-height:62px;
+    }
+
+    .cellNumber{
+        font-size:10px;
+    }
+
+    .cellIcon{
+        font-size:16px;
+    }
+
+    .cellType{
+        font-size:7px;
+    }
+
+    .person{
+        transform:scale(.82);
+        transform-origin:bottom right;
+    }
+
+    #hudPlayers{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:480px){
+
+    #boardArea{
+        padding:6px;
+    }
+
+    #board{
+        gap:3px;
+        padding:5px;
+    }
+
+    .cell{
+        min-height:56px;
+        border-width:1px;
+    }
+
+    .hudActions button{
+        min-width:105px;
+        padding:10px 7px;
+        font-size:12px;
+    }
+
+    #hudPlayers{
+        grid-template-columns:1fr;
+    }
+
+    .itemGrid{
+        grid-template-columns:1fr 1fr;
+    }
+}
 </style>
 </head>
+
 <body>
 
+<!-- =====================================================
+     LOBBY
+===================================================== -->
+
 <section id="lobby">
+
 <div class="lobbyBox">
-<div style="font-size:50px;">🌎</div>
+
+<div class="lobbyIcon">🌎</div>
+
 <h1>Caminhos da Justiça Ambiental</h1>
-<p>Jogo sobre justiça ambiental e participação comunitária.</p>
-<input id="nameInput" maxlength="18" placeholder="Seu nome">
-<button id="createBtn" onclick="createRoom()">🏠 Criar sala</button>
-<button id="howBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);margin-top:8px;" onclick="openHowTo()">❓ Como jogar</button>
-<hr style="border-color:#cbd5e1;margin:15px 0">
-<input id="roomInput" placeholder="Código da sala">
-<button id="joinBtn" onclick="joinRoom()">🚪 Entrar na sala</button>
-<div id="roomCodeBox" class="hidden"><p>Código da sala:</p><div id="roomCode" class="roomCode"></div></div>
-<div id="playersLobby"><b>👥 Jogadores:</b><div id="playersList">Nenhum jogador conectado.</div></div>
-<button id="startBtn" class="hidden" onclick="startGame()">▶️ Começar partida</button>
-<div id="lobbyMessage"></div>
+
+<p>
+Jogo educativo sobre justiça ambiental,
+participação comunitária e combate ao racismo ambiental.
+</p>
+
+<input
+    id="nameInput"
+    maxlength="18"
+    placeholder="Seu nome"
+>
+
+<div class="lobbyButtons">
+
+<button onclick="createRoom()">
+🏠 Criar sala
+</button>
+
+<button
+    onclick="openHowTo()"
+    style="background:linear-gradient(135deg,#7c3aed,#a855f7)"
+>
+❓ Como jogar
+</button>
+
 </div>
+
+<hr style="border:0;border-top:1px solid #cbd5e1;margin:16px 0">
+
+<input
+    id="roomInput"
+    placeholder="Código da sala"
+>
+
+<button
+    onclick="joinRoom()"
+    style="width:100%;padding:13px"
+>
+🚪 Entrar na sala
+</button>
+
+<div id="roomCodeBox" class="hidden">
+
+<p style="margin-top:14px">
+Código da sala:
+</p>
+
+<div
+    id="roomCode"
+    class="roomCode"
+></div>
+
+</div>
+
+<div id="playersLobby">
+
+<b>👥 Jogadores:</b>
+
+<div id="playersList">
+Nenhum jogador conectado.
+</div>
+
+</div>
+
+<button
+    id="startBtn"
+    class="hidden"
+    onclick="startGame()"
+>
+▶️ Começar partida
+</button>
+
+<div
+    id="lobbyMessage"
+    style="margin-top:12px;color:#166534;font-weight:bold"
+></div>
+
+</div>
+
 </section>
+
+
+<!-- =====================================================
+     JOGO
+===================================================== -->
 
 <section id="game" class="hidden">
+
 <div id="boardArea">
-<div id="progressBox">
-<div style="display:flex;justify-content:space-between;"><span id="progressText">Progresso: 0/150</span><span id="progressPercent" style="color:#ca8a04;font-weight:bold;">0%</span></div>
-<div class="progressBar"><div id="progressFill"></div></div>
+
+<div id="gameTop">
+
+<div class="topCard">
+
+<div style="font-size:12px;color:#64748b">
+🎯 OBJETIVO
 </div>
+
+<div style="font-weight:bold;color:#166534">
+Chegar à casa 150
+</div>
+
+</div>
+
+<div
+    class="topCard"
+    id="timerBox"
+>
+
+<div style="font-size:11px;color:#64748b">
+⏱️ TEMPO
+</div>
+
+<div id="timer">
+30:00
+</div>
+
+</div>
+
+<div
+    class="topCard"
+    id="progressBox"
+>
+
+<div style="display:flex;justify-content:space-between">
+
+<span id="progressText">
+Seu progresso: 0/150
+</span>
+
+<span
+    id="progressPercent"
+    style="font-weight:bold;color:#ca8a04"
+>
+0%
+</span>
+
+</div>
+
+<div class="progressBar">
+
+<div id="progressFill"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <div id="board"></div>
+
+
 <div class="boardLegend">
-<div class="legendItem" style="background:#fef2f2;border-color:#ef4444;">⚠️ Problema</div>
-<div class="legendItem" style="background:#f0fdf4;border-color:#22c55e;">🌱 Solução</div>
-<div class="legendItem" style="background:#faf5ff;border-color:#8b5cf6;">❓ Pergunta</div>
-<div class="legendItem" style="background:#e0f2fe;border-color:#22d3ee;">🎁 Item</div>
-<div class="legendItem" style="background:#fef9c3;border-color:#f59e0b;">🏆 Chegada</div>
+
+<div class="legendItem">
+⚠️ Problema
 </div>
+
+<div class="legendItem">
+🌱 Solução
 </div>
+
+<div class="legendItem">
+❓ Pergunta
+</div>
+
+<div class="legendItem">
+🎁 Item
+</div>
+
+<div class="legendItem">
+🏆 Chegada
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     HUD
+===================================================== -->
 
 <div id="bottomHud">
-<div id="dice">🎲</div>
+
+<div id="hudMain">
+
+<div id="diceArea">
+
+<div id="dice">
+🎲
+</div>
+
+<div id="diceResult">
+Clique para jogar
+</div>
+
+</div>
+
 <div id="hudPlayers"></div>
+
+</div>
+
 <div class="hudActions">
-<button id="rollBtn" onclick="rollDice()">🎲 Girar Dado</button>
-<button id="itemsBtn" onclick="openItems()">🎒 Ver Itens</button>
-<button id="profBtn" onclick="openProfession()">💼 Ver Profissão</button>
+
+<button
+    id="rollBtn"
+    onclick="rollDice()"
+>
+🎲 Girar Dado
+</button>
+
+<button
+    id="itemsBtn"
+    onclick="openItems()"
+>
+🎒 Ver Itens
+</button>
+
+<button
+    id="profBtn"
+    onclick="openProfession()"
+>
+💼 Ver Profissão
+</button>
+
+<button
+    id="howGameBtn"
+    onclick="openHowTo()"
+>
+❓ Como Jogar
+</button>
+
 </div>
-<div id="turnText">Aguardando jogadores...</div>
+
+<div id="turnText">
+Aguardando jogadores...
 </div>
+
+</div>
+
 </section>
 
-<div id="howModal" class="modal hidden">
+
+<!-- =====================================================
+     COMO JOGAR
+===================================================== -->
+
+<div
+    id="howModal"
+    class="modal hidden"
+>
+
 <div class="modalBox">
-<button class="close" onclick="closeModal('howModal')">×</button>
+
+<button
+    class="close"
+    onclick="closeModal('howModal')"
+>
+×
+</button>
+
 <h2>❓ Como Jogar</h2>
-<div style="margin-top:15px;line-height:1.8;">
-<p><b>🎲 Objetivo:</b> Chegar à casa 150 primeiro!</p>
-<p><b>⚠️ Problema:</b> Volta casas</p>
-<p><b>🌱 Solução:</b> Avança casas</p>
-<p><b>❓ Pergunta:</b> Acertou = +2 | Errou = fica</p>
-<p><b>🎁 Item:</b> Ganha poder especial</p>
-<p><b>💼 Profissão:</b> Poder único por partida</p>
-</div>
-</div>
+
+<div class="howContent">
+
+<p>
+<b>🎯 Objetivo:</b>
+chegar à casa 150.
+</p>
+
+<p>
+<b>⏱️ Tempo:</b>
+a partida dura 30 minutos.
+</p>
+
+<p>
+<b>🎲 Dado:</b>
+jogue o dado e avance o número sorteado.
+</p>
+
+<p>
+<b>🚶 Movimento:</b>
+o jogador anda uma casa por vez.
+</p>
+
+<p>
+<b>⚠️ Problema:</b>
+pode fazer você perder casas.
+Alguns itens e profissões protegem o jogador.
+</p>
+
+<p>
+<b>🌱 Solução:</b>
+faz o jogador avançar.
+</p>
+
+<p>
+<b>❓ Pergunta:</b>
+acertou = avança 2 casas.
+Errou = permanece na casa.
+</p>
+
+<p>
+<b>🎁 Item:</b>
+receba um item especial ao cair em uma casa de item.
+</p>
+
+<p>
+<b>💼 Profissão:</b>
+cada jogador recebe uma profissão no começo da partida.
+</p>
+
+<p>
+<b>🏆 Vitória:</b>
+quem chegar à casa 150 vence imediatamente.
+</p>
+
+<p>
+Se o tempo acabar, vence quem estiver mais avançado.
+Em caso de empate:
+</p>
+
+<p>
+1️⃣ Mais itens<br>
+2️⃣ Mais respostas corretas<br>
+3️⃣ Empate
+</p>
+
 </div>
 
-<div id="itemsModal" class="modal hidden">
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ITENS
+===================================================== -->
+
+<div
+    id="itemsModal"
+    class="modal hidden"
+>
+
 <div class="modalBox">
-<button class="close" onclick="closeModal('itemsModal')">×</button>
+
+<button
+    class="close"
+    onclick="closeModal('itemsModal')"
+>
+×
+</button>
+
 <h2>🎒 Seus Itens</h2>
-<div id="itemGrid" class="itemGrid"></div>
-</div>
+
+<div
+    id="itemGrid"
+    class="itemGrid"
+></div>
+
 </div>
 
-<div id="professionModal" class="modal hidden">
+</div>
+
+
+<!-- =====================================================
+     PROFISSÃO
+===================================================== -->
+
+<div
+    id="professionModal"
+    class="modal hidden"
+>
+
 <div class="modalBox">
-<button class="close" onclick="closeModal('professionModal')">×</button>
+
+<button
+    class="close"
+    onclick="closeModal('professionModal')"
+>
+×
+</button>
+
 <h2>💼 Sua Profissão</h2>
+
 <div id="profInfo"></div>
-</div>
+
 </div>
 
-<div id="questionModal" class="modal hidden">
+</div>
+
+
+<!-- =====================================================
+     SORTEIO DA PROFISSÃO
+===================================================== -->
+
+<div
+    id="professionDrawModal"
+    class="modal hidden"
+>
+
 <div class="modalBox">
-<h2>❓ Pergunta</h2>
-<div id="questionText" style="font-size:18px;margin:20px 0;"></div>
-<div id="questionOpts"></div>
-</div>
+
+<h2>🎰 Sorteando profissão...</h2>
+
+<div class="drawBox">
+
+<div
+    id="drawProfEmoji"
+    class="drawEmoji"
+>
+💼
 </div>
 
-<div id="resultModal" class="modal hidden">
-<div class="modalBox" style="text-align:center">
-<h2 id="resultTitle">🏆 Fim de Jogo!</h2>
-<div id="resultText" style="margin:20px 0;font-size:16px;line-height:1.8;"></div>
-<button onclick="location.reload()" style="padding:12px 30px;background:#2563eb;color:#fff;border-radius:10px;font-weight:bold;border:none;">🔄 Jogar Novamente</button>
+<div
+    id="drawProfName"
+    class="drawName drawAnimation"
+>
+Sorteando...
 </div>
+
 </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     SORTEIO DO ITEM
+===================================================== -->
+
+<div
+    id="itemDrawModal"
+    class="modal hidden"
+>
+
+<div class="modalBox">
+
+<h2>🎁 Sorteando item...</h2>
+
+<div class="drawBox">
+
+<div
+    id="drawItemEmoji"
+    class="drawEmoji"
+>
+🎁
+</div>
+
+<div
+    id="drawItemName"
+    class="drawName drawAnimation"
+>
+Sorteando...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     PERGUNTA
+===================================================== -->
+
+<div
+    id="questionModal"
+    class="modal hidden"
+>
+
+<div class="modalBox">
+
+<h2>❓ Pergunta</h2>
+
+<div
+    id="questionText"
+    class="questionText"
+></div>
+
+<div id="questionOpts"></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RESULTADO
+===================================================== -->
+
+<div
+    id="resultModal"
+    class="modal hidden"
+>
+
+<div
+    class="modalBox"
+    style="text-align:center"
+>
+
+<h2>
+🏆 Fim de Jogo!
+</h2>
+
+<div
+    id="resultText"
+    style="margin:20px 0;line-height:1.8"
+></div>
+
+<button
+    onclick="location.reload()"
+    style="padding:13px 28px;background:#2563eb"
+>
+🔄 Jogar novamente
+</button>
+
+</div>
+
+</div>
+
 
 <div id="toast"></div>
 
+
 <script>
-const TOTAL_CASAS=150,TEMPO_TOTAL=30*60,MAX_JOGADORES=11;
-const CORES=["#ef4444","#3b82f6","#22c55e","#eab308","#a855f7","#f97316","#ec4899","#06b6d4","#84cc16","#f59e0b","#6366f1"];
 
-const PROFISSOES=[
-{id:"professor",nome:"Professor(a)",emoji:"🧑‍🏫",desc:"Acertando pergunta → +1 casa extra"},
-{id:"medico",nome:"Médico(a)",emoji:"🩺",desc:"Evita 1 penalidade de problema"},
-{id:"engenheiro",nome:"Engenheiro(a)",emoji:"👷",desc:"Solução → +1 casa extra"},
-{id:"advogado",nome:"Advogado(a)",emoji:"⚖️",desc:"1 nova tentativa após erro"},
-{id:"biologo",nome:"Biólogo(a)",emoji:"🔬",desc:"Semente/Mudas → +1 extra"},
-{id:"jornalista",nome:"Jornalista",emoji:"📰",desc:"1 nova tentativa após erro"},
-{id:"agricultor",nome:"Agricultor(a)",emoji:"👨‍🌾",desc:"Semente/Mudas → +1 extra"},
-{id:"pesquisador",nome:"Pesquisador(a)",emoji:"🧪",desc:"Acertando pergunta → +1 extra"},
-{id:"lider",nome:"Líder Comunitário",emoji:"🗣️",desc:"1 nova tentativa após erro"},
-{id:"agente",nome:"Agente Ambiental",emoji:"🌳",desc:"Anula 1 penalidade de problema"}
+/* =====================================================
+   CONFIGURAÇÕES
+===================================================== */
+
+const TOTAL_CASAS = 150;
+
+const TEMPO_TOTAL = 30 * 60;
+
+const MAX_JOGADORES = 11;
+
+const TEMPO_PASSO = 180;
+
+const TEMPO_ACAO = 500;
+
+const TEMPO_MENSAGEM = 1200;
+
+
+/* =====================================================
+   CORES
+===================================================== */
+
+const CORES = [
+    "#ef4444",
+    "#3b82f6",
+    "#22c55e",
+    "#eab308",
+    "#a855f7",
+    "#f97316",
+    "#ec4899",
+    "#06b6d4",
+    "#84cc16",
+    "#f59e0b",
+    "#6366f1"
 ];
 
-const ITENS=[
-{id:"arvore",nome:"Árvore",emoji:"🌳",desc:"Protege de 1 problema"},
-{id:"denuncia",nome:"Denúncia",emoji:"📢",desc:"Nova tentativa em pergunta"},
-{id:"agua",nome:"Água",emoji:"💧",desc:"Evita penalidade + +2 casas"},
-{id:"semente",nome:"Semente",emoji:"🌱",desc:"+1 casa"},
-{id:"filtro",nome:"Filtro",emoji:"🚰",desc:"Protege de contaminação"},
-{id:"mapa",nome:"Mapa",emoji:"🗺️",desc:"Solução → +1 extra"},
-{id:"megafone",nome:"Megafone",emoji:"📣",desc:"Nova tentativa em pergunta"},
-{id:"luvas",nome:"Luvas",emoji:"🧤",desc:"Protege de problema de lixo"},
-{id:"bicicleta",nome:"Bicicleta",emoji:"🚲",desc:"+2 casas"},
-{id:"energia",nome:"Energia Solar",emoji:"☀️",desc:"Solução → +1 extra"},
-{id:"livro",nome:"Livro",emoji:"📚",desc:"Acertando pergunta → +1 extra"},
-{id:"sementes",nome:"Mudas",emoji:"🌿",desc:"+2 casas"},
-{id:"kit",nome:"Kit Emergência",emoji:"🧰",desc:"Evita 1 penalidade"},
-{id:"documento",nome:"Documento",emoji:"📄",desc:"Solução → +1 extra"},
-{id:"lixeira",nome:"Lixeira",emoji:"🗑️",desc:"Protege de problema de lixo"}
-];
 
-const PROBLEMAS={7:"Alagamentos por falta de infraestrutura",16:"Indústria contamina região",25:"Falta de água potável",34:"Descarte irregular próximo",43:"Pouco saneamento",52:"Poluição do ar",61:"Poucas áreas verdes",70:"Lixo acumulado",79:"Enchentes frequentes",88:"Contaminação ambiental",97:"Poucos investimentos",106:"Falta de saneamento",115:"Descarte irregular",124:"Poluição afeta região",133:"População não é ouvida",142:"Falta de infraestrutura"};
-const SOLUCOES={11:"Investir em saneamento",20:"Fiscalização ambiental",29:"Coleta de resíduos",38:"Prevenir enchentes",47:"Garantir água potável",56:"Ouvir comunidades",65:"Investir de forma justa",74:"Educação ambiental",83:"Preservar áreas verdes",92:"Ouvir afetados",101:"Combater poluição",110:"Melhorar coleta de lixo",119:"Infraestrutura adequada",128:"Recuperação ambiental",137:"Participação comunitária",146:"Justiça ambiental para todos"};
-const PERGUNTAS={4:{q:"O que é racismo ambiental?",op:["Todos recebem igualmente","Grupos vulneráveis sofrem mais","Plantar árvores","Criar parques"],correta:1},13:{q:"Por que saneamento é importante?",op:["Garante saúde e qualidade de vida","Aumenta poluição","Elimina áreas verdes","Impede participação"],correta:0},22:{q:"Como combater injustiças?",op:["Ignorar afetados","Investir desigualmente","Ouvir e criar políticas justas","Aumentar poluição"],correta:2},31:{q:"A água deve ser:",op:["Garantida a todos","Só para ricos","Limitada","Ignorada"],correta:0},49:{q:"Participação comunitária é:",op:["Importante","Desnecessária","Proibida","Ruim"],correta:0},94:{q:"Justiça ambiental significa:",op:["Distribuir riscos e benefícios de forma justa","Concentrar problemas em pobres","Ignorar população","Aumentar poluição"],correta:0},148:{q:"Princípio da justiça ambiental:",op:["Igualdade e participação","Exclusão","Desigualdade","Silenciamento"],correta:0}};
-const ITEM_CASAS=[9,18,27,36,45,54,63,72,81,90,99,108,117,126,135,144];
+/* =====================================================
+   PROFISSÕES
+===================================================== */
 
-let peer=null,conn=null,connections=[],isHost=false,roomCode="",myId="",gameStarted=false,gameEnded=false;
-let jogadores=[],turno=0,tempoRestante=TEMPO_TOTAL,timerInterval=null,pendingQuestion=null,actionLocked=false;
+const PROFISSOES = [
 
-function $(id){return document.getElementById(id)}
-function show(id){$(id).classList.remove("hidden")}
-function hide(id){$(id).classList.add("hidden")}
-function closeModal(id){hide(id)}
-function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
-function toast(text){const e=$("toast");e.textContent=text;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2500)}
-function renderLobbyPlayers(){
-  const list = $("playersList");
-  list.innerHTML = jogadores.map(p=>`<div style="padding:5px 0;">● ${escapeHtml(p.nome)}</div>`).join("");
+{
+id:"professor",
+nome:"Professor(a)",
+emoji:"🧑‍🏫",
+desc:"Ao acertar uma pergunta, avança 1 casa extra."
+},
+
+{
+id:"medico",
+nome:"Médico(a)",
+emoji:"🩺",
+desc:"Pode evitar uma penalidade de problema uma vez."
+},
+
+{
+id:"engenheiro",
+nome:"Engenheiro(a)",
+emoji:"👷",
+desc:"Ao cair em uma solução, recebe +1 casa extra."
+},
+
+{
+id:"advogado",
+nome:"Advogado(a)",
+emoji:"⚖️",
+desc:"Pode ter uma nova tentativa após errar uma pergunta."
+},
+
+{
+id:"biologo",
+nome:"Biólogo(a)",
+emoji:"🔬",
+desc:"Semente e Mudas recebem +1 casa extra."
+},
+
+{
+id:"jornalista",
+nome:"Jornalista",
+emoji:"📰",
+desc:"Pode ter uma nova tentativa após errar uma pergunta."
+},
+
+{
+id:"agricultor",
+nome:"Agricultor(a)",
+emoji:"👨‍🌾",
+desc:"Semente e Mudas recebem +1 casa extra."
+},
+
+{
+id:"pesquisador",
+nome:"Pesquisador(a)",
+emoji:"🧪",
+desc:"Ao acertar pergunta, recebe +1 casa."
+},
+
+{
+id:"lider",
+nome:"Líder Comunitário",
+emoji:"🗣️",
+desc:"Pode ter uma nova tentativa após erro."
+},
+
+{
+id:"agente",
+nome:"Agente Ambiental",
+emoji:"🌳",
+desc:"Pode anular uma penalidade de problema uma vez."
+},
+
+{
+id:"assistente",
+nome:"Assistente Social",
+emoji:"🤝",
+desc:"Pode evitar uma penalidade de problema uma vez."
+},
+
+{
+id:"arquiteto",
+nome:"Arquiteto(a)",
+emoji:"📐",
+desc:"Soluções podem dar +1 casa."
+},
+
+{
+id:"quimico",
+nome:"Químico(a)",
+emoji:"⚗️",
+desc:"Pode evitar uma penalidade ambiental."
+},
+
+{
+id:"nutricionista",
+nome:"Nutricionista",
+emoji:"🥗",
+desc:"Água encontrada pode dar +1 casa."
+},
+
+{
+id:"defensor",
+nome:"Defensor(a) Ambiental",
+emoji:"🛡️",
+desc:"Pode anular uma penalidade de problema."
+},
+
+{
+id:"tecnico",
+nome:"Técnico Ambiental",
+emoji:"🧰",
+desc:"Soluções podem dar +1 casa."
+},
+
+{
+id:"comunicador",
+nome:"Comunicador(a)",
+emoji:"📣",
+desc:"Pode conseguir nova tentativa em pergunta."
+},
+
+{
+id:"sanitarista",
+nome:"Sanitarista",
+emoji:"🚰",
+desc:"Água e soluções podem dar bônus."
+},
+
+{
+id:"gestor",
+nome:"Gestor(a) Público",
+emoji:"🏛️",
+desc:"Soluções podem dar +1 casa."
+},
+
+{
+id:"voluntario",
+nome:"Voluntário(a)",
+emoji:"❤️",
+desc:"Pode evitar uma penalidade de problema."
 }
+
+];
+
+
+/* =====================================================
+   ITENS
+===================================================== */
+
+const ITENS = [
+
+{
+id:"arvore",
+nome:"Árvore",
+emoji:"🌳",
+desc:"Protege contra 1 problema."
+},
+
+{
+id:"denuncia",
+nome:"Denúncia",
+emoji:"📢",
+desc:"Permite nova tentativa após erro."
+},
+
+{
+id:"agua",
+nome:"Água",
+emoji:"💧",
+desc:"Evita a penalidade e permite avançar 2 casas."
+},
+
+{
+id:"semente",
+nome:"Semente",
+emoji:"🌱",
+desc:"Avança 1 casa."
+},
+
+{
+id:"filtro",
+nome:"Filtro",
+emoji:"🚰",
+desc:"Protege contra um problema."
+},
+
+{
+id:"mapa",
+nome:"Mapa",
+emoji:"🗺️",
+desc:"Solução recebe +1 casa."
+},
+
+{
+id:"megafone",
+nome:"Megafone",
+emoji:"📣",
+desc:"Nova tentativa em pergunta."
+},
+
+{
+id:"luvas",
+nome:"Luvas",
+emoji:"🧤",
+desc:"Protege contra problema de lixo."
+},
+
+{
+id:"bicicleta",
+nome:"Bicicleta",
+emoji:"🚲",
+desc:"Avança 2 casas."
+},
+
+{
+id:"energia",
+nome:"Energia Solar",
+emoji:"☀️",
+desc:"Solução recebe +1 casa."
+},
+
+{
+id:"livro",
+nome:"Livro",
+emoji:"📚",
+desc:"Acertar pergunta recebe +1 casa."
+},
+
+{
+id:"sementes",
+nome:"Mudas",
+emoji:"🌿",
+desc:"Avança 2 casas."
+},
+
+{
+id:"kit",
+nome:"Kit Emergência",
+emoji:"🧰",
+desc:"Evita uma penalidade."
+},
+
+{
+id:"documento",
+nome:"Documento",
+emoji:"📄",
+desc:"Solução recebe +1 casa."
+},
+
+{
+id:"lixeira",
+nome:"Lixeira",
+emoji:"🗑️",
+desc:"Protege contra problema de lixo."
+},
+
+{
+id:"capacete",
+nome:"Capacete",
+emoji:"⛑️",
+desc:"Protege contra um problema."
+},
+
+{
+id:"colete",
+nome:"Colete Ambiental",
+emoji:"🦺",
+desc:"Evita uma penalidade."
+},
+
+{
+id:"compostagem",
+nome:"Compostagem",
+emoji:"♻️",
+desc:"Avança 1 casa."
+},
+
+{
+id:"painel",
+nome:"Painel Solar",
+emoji:"🔆",
+desc:"Solução recebe +1 casa."
+},
+
+{
+id:"horta",
+nome:"Horta Comunitária",
+emoji:"🥬",
+desc:"Avança 2 casas."
+}
+
+];
+
+
+/* =====================================================
+   PROBLEMAS
+===================================================== */
+
+const PROBLEMAS = {
+
+7:"Alagamentos por falta de infraestrutura",
+
+16:"Indústria contamina a região",
+
+25:"Falta de água potável",
+
+34:"Descarte irregular próximo",
+
+43:"Pouco saneamento",
+
+52:"Poluição do ar",
+
+61:"Poucas áreas verdes",
+
+70:"Lixo acumulado",
+
+79:"Enchentes frequentes",
+
+88:"Contaminação ambiental",
+
+97:"Poucos investimentos",
+
+106:"Falta de saneamento",
+
+115:"Descarte irregular",
+
+124:"Poluição afeta a região",
+
+133:"População não é ouvida",
+
+142:"Falta de infraestrutura"
+
+};
+
+
+/* =====================================================
+   SOLUÇÕES
+===================================================== */
+
+const SOLUCOES = {
+
+11:"Investir em saneamento",
+
+20:"Fiscalização ambiental",
+
+29:"Coleta regular de resíduos",
+
+38:"Prevenir enchentes",
+
+47:"Garantir água potável",
+
+56:"Ouvir as comunidades",
+
+65:"Investir de forma justa",
+
+74:"Educação ambiental",
+
+83:"Preservar áreas verdes",
+
+92:"Ouvir comunidades afetadas",
+
+101:"Combater a poluição",
+
+110:"Melhorar coleta de lixo",
+
+119:"Infraestrutura adequada",
+
+128:"Recuperação ambiental",
+
+137:"Participação comunitária",
+
+146:"Justiça ambiental para todos"
+
+};
+
+
+/* =====================================================
+   PERGUNTAS
+===================================================== */
+
+const PERGUNTAS = {
+
+4:{
+q:"O que é racismo ambiental?",
+op:[
+"Todos recebem os mesmos problemas",
+"Grupos vulneráveis sofrem mais com problemas ambientais",
+"Plantar árvores",
+"Criar parques"
+],
+correta:1
+},
+
+13:{
+q:"Por que o saneamento é importante?",
+op:[
+"Garante saúde e qualidade de vida",
+"Aumenta a poluição",
+"Elimina áreas verdes",
+"Impede a participação"
+],
+correta:0
+},
+
+22:{
+q:"Como combater injustiças ambientais?",
+op:[
+"Ignorar os afetados",
+"Investir de forma desigual",
+"Ouvir as comunidades e criar políticas justas",
+"Aumentar a poluição"
+],
+correta:2
+},
+
+31:{
+q:"A água potável deve ser:",
+op:[
+"Garantida a todos",
+"Somente para pessoas ricas",
+"Limitada",
+"Ignorada"
+],
+correta:0
+},
+
+40:{
+q:"O que ajuda a reduzir enchentes?",
+op:[
+"Mais lixo nas ruas",
+"Infraestrutura e áreas verdes",
+"Retirar árvores",
+"Entupir canais"
+],
+correta:1
+},
+
+49:{
+q:"A participação comunitária é:",
+op:[
+"Importante para decisões ambientais",
+"Desnecessária",
+"Proibida",
+"Prejudicial"
+],
+correta:0
+},
+
+58:{
+q:"Uma solução para o descarte irregular é:",
+op:[
+"Espalhar mais lixo",
+"Melhorar coleta e fiscalização",
+"Ignorar o problema",
+"Poluir rios"
+],
+correta:1
+},
+
+67:{
+q:"Justiça ambiental busca:",
+op:[
+"Distribuir riscos e benefícios de forma justa",
+"Concentrar poluição em comunidades pobres",
+"Excluir moradores",
+"Ignorar problemas"
+],
+correta:0
+},
+
+76:{
+q:"Áreas verdes podem:",
+op:[
+"Ajudar no conforto ambiental e reduzir impactos",
+"Aumentar o lixo",
+"Impedir a chuva",
+"Eliminar rios"
+],
+correta:0
+},
+
+85:{
+q:"Quem deve participar das decisões ambientais?",
+op:[
+"Apenas empresas",
+"Apenas políticos",
+"As comunidades afetadas também",
+"Ninguém"
+],
+correta:2
+},
+
+94:{
+q:"O que significa justiça ambiental?",
+op:[
+"Distribuir riscos e benefícios de forma justa",
+"Concentrar problemas em bairros pobres",
+"Ignorar a população",
+"Aumentar a poluição"
+],
+correta:0
+},
+
+103:{
+q:"Por que a fiscalização ambiental é importante?",
+op:[
+"Para prevenir e combater danos ambientais",
+"Para aumentar a poluição",
+"Para retirar árvores",
+"Para impedir participação"
+],
+correta:0
+},
+
+112:{
+q:"Qual atitude ajuda uma comunidade afetada?",
+op:[
+"Ouvir seus moradores",
+"Silenciar moradores",
+"Ignorar reclamações",
+"Esconder problemas"
+],
+correta:0
+},
+
+121:{
+q:"O lixo acumulado pode causar:",
+op:[
+"Problemas ambientais e de saúde",
+"Mais áreas verdes",
+"Água mais limpa",
+"Menos poluição"
+],
+correta:0
+},
+
+130:{
+q:"Uma política ambiental justa deve:",
+op:[
+"Considerar as comunidades afetadas",
+"Ignorar moradores",
+"Beneficiar somente uma região",
+"Concentrar riscos"
+],
+correta:0
+},
+
+139:{
+q:"O que é participação comunitária?",
+op:[
+"Moradores ajudarem nas decisões que afetam suas comunidades",
+"Impedir moradores de falar",
+"Ignorar comunidades",
+"Decidir tudo sozinho"
+],
+correta:0
+},
+
+148:{
+q:"Um princípio da justiça ambiental é:",
+op:[
+"Igualdade e participação",
+"Exclusão",
+"Desigualdade",
+"Silenciamento"
+],
+correta:0
+}
+
+};
+
+
+/* =====================================================
+   CASAS DE ITENS
+===================================================== */
+
+const ITEM_CASAS = [
+9,18,27,36,45,54,63,72,
+81,90,99,108,117,126,135,144
+];
+
+
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
+
+let peer=null;
+
+let conn=null;
+
+let connections=[];
+
+let isHost=false;
+
+let roomCode="";
+
+let myId="";
+
+let gameStarted=false;
+
+let gameEnded=false;
+
+let jogadores=[];
+
+let turno=0;
+
+let tempoRestante=TEMPO_TOTAL;
+
+let timerInterval=null;
+
+let pendingQuestion=null;
+
+let actionLocked=false;
+
+let animationToken=0;
+
+
+/* =====================================================
+   FUNÇÕES BÁSICAS
+===================================================== */
+
+function $(id){
+    return document.getElementById(id);
+}
+
+function show(id){
+    $(id).classList.remove("hidden");
+}
+
+function hide(id){
+    $(id).classList.add("hidden");
+}
+
+function closeModal(id){
+    hide(id);
+}
+
+function escapeHtml(text){
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;");
+}
+
+function toast(text){
+
+    const e=$("toast");
+
+    e.textContent=text;
+
+    e.classList.add("show");
+
+    clearTimeout(e._timer);
+
+    e._timer=setTimeout(()=>{
+        e.classList.remove("show");
+    },TEMPO_MENSAGEM);
+}
+
+
+/* =====================================================
+   LOBBY
+===================================================== */
+
+function renderLobbyPlayers(){
+
+    const list=$("playersList");
+
+    if(!jogadores.length){
+
+        list.innerHTML="Nenhum jogador conectado.";
+
+        return;
+    }
+
+    list.innerHTML=jogadores.map(p=>{
+
+        const admin=p.id===jogadores[0]?.id;
+
+        return `
+        <div class="lobbyPlayer">
+            ${admin?"👑":"👤"}
+            ${escapeHtml(p.nome)}
+            ${admin?" — administrador":""}
+        </div>
+        `;
+
+    }).join("");
+}
+
+
+/* =====================================================
+   COMO JOGAR
+===================================================== */
 
 function openHowTo(){
-  show("howModal");
+    show("howModal");
 }
+
+
+/* =====================================================
+   CRIAR SALA
+===================================================== */
 
 function createRoom(){
-  const n=$("nameInput").value.trim();
-  if(!n)return toast("Digite seu nome");
-  
-  isHost=true;
-  roomCode="JUSTICA-"+Math.random().toString(36).substring(2,7).toUpperCase();
-  
-  peer = new Peer(roomCode, {
-    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
-  });
-  
-  peer.on("open", id => {
-    myId = id;
-    jogadores = [{id, nome:n, cor:0, posicao:0, profissao:null, itens:[], acertos:0, denuncias:0, poderesUsados:{}}];
-    $("roomCode").textContent = roomCode;
-    show("roomCodeBox");
-    show("startBtn");
-    renderLobbyPlayers();
-    toast("Sala criada! Código: " + roomCode);
-  });
-  
-  peer.on("connection", c => {
-    if(jogadores.length >= MAX_JOGADORES) {
-      c.close();
-      return;
+
+    const nome=$("nameInput").value.trim();
+
+    if(!nome){
+
+        toast("Digite seu nome.");
+
+        return;
     }
-    connections.push(c);
-    c.on("open", () => c.send({type:"roomInfo", jogadores}));
-    c.on("data", d => handleHostData(c, d));
-  });
-  
-  peer.on("error", err => {
-    toast("Erro de conexão: " + err.type);
-  });
+
+    isHost=true;
+
+    roomCode=
+        "JUSTICA-"+
+        Math.random()
+        .toString(36)
+        .substring(2,7)
+        .toUpperCase();
+
+    peer=new Peer(roomCode,{
+
+        debug:2,
+
+        config:{
+            iceServers:[
+                {
+                    urls:"stun:stun.l.google.com:19302"
+                },
+                {
+                    urls:"stun:stun1.l.google.com:19302"
+                }
+            ]
+        }
+
+    });
+
+    peer.on("open",id=>{
+
+        myId=id;
+
+        jogadores=[
+            criarJogador(
+                id,
+                nome,
+                0
+            )
+        ];
+
+        $("roomCode").textContent=roomCode;
+
+        show("roomCodeBox");
+
+        show("startBtn");
+
+        renderLobbyPlayers();
+
+        $("lobbyMessage").textContent=
+            "Compartilhe o código com os outros jogadores.";
+
+        toast("Sala criada!");
+
+    });
+
+    peer.on("connection",c=>{
+
+        if(jogadores.length>=MAX_JOGADORES){
+
+            c.close();
+
+            return;
+        }
+
+        connections.push(c);
+
+        c.on("open",()=>{
+
+            c.send({
+                type:"roomInfo",
+                jogadores:jogadores
+            });
+
+        });
+
+        c.on("data",data=>{
+            handleHostData(c,data);
+        });
+
+        c.on("close",()=>{
+
+            connections=
+                connections.filter(x=>x!==c);
+
+        });
+
+    });
+
+    peer.on("error",err=>{
+
+        toast("Erro de conexão: "+err.type);
+
+    });
 }
+
+
+/* =====================================================
+   ENTRAR NA SALA
+===================================================== */
 
 function joinRoom(){
-  const n=$("nameInput").value.trim(), c=$("roomInput").value.trim().toUpperCase();
-  if(!n)return toast("Digite seu nome");
-  if(!c)return toast("Digite o código da sala");
-  
-  isHost=false;
-  peer = new Peer({
-    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
-  });
-  
-  peer.on("open", id => {
-    myId = id;
-    conn = peer.connect(c, { reliable:true });
-    
-    conn.on("open", () => {
-      conn.send({type:"join", player:{id, nome:n}});
+
+    const nome=$("nameInput").value.trim();
+
+    const codigo=
+        $("roomInput").value.trim().toUpperCase();
+
+    if(!nome){
+
+        toast("Digite seu nome.");
+
+        return;
+    }
+
+    if(!codigo){
+
+        toast("Digite o código da sala.");
+
+        return;
+    }
+
+    isHost=false;
+
+    peer=new Peer({
+
+        debug:2,
+
+        config:{
+            iceServers:[
+                {
+                    urls:"stun:stun.l.google.com:19302"
+                },
+                {
+                    urls:"stun:stun1.l.google.com:19302"
+                }
+            ]
+        }
+
     });
-    
-    conn.on("data", handleClientData);
-    
-    conn.on("error", err => {
-      toast("Não foi possível entrar na sala! Verifique o código.");
+
+    peer.on("open",id=>{
+
+        myId=id;
+
+        conn=peer.connect(
+            codigo,
+            {
+                reliable:true
+            }
+        );
+
+        conn.on("open",()=>{
+
+            conn.send({
+
+                type:"join",
+
+                player:{
+                    id:id,
+                    nome:nome
+                }
+
+            });
+
+            $("lobbyMessage").textContent=
+                "Conectado. Aguarde o administrador iniciar.";
+
+        });
+
+        conn.on("data",handleClientData);
+
+        conn.on("close",()=>{
+
+            toast("Conexão com a sala perdida.");
+
+        });
+
+        conn.on("error",()=>{
+
+            toast("Erro na conexão.");
+
+        });
+
     });
-  });
-  
-  peer.on("error", err => {
-    toast("Erro de conexão: " + err.type);
-  });
+
+    peer.on("error",err=>{
+
+        toast("Não foi possível entrar: "+err.type);
+
+    });
 }
 
-function broadcast(d){if(isHost)connections.forEach(c=>c.send(d))}
+
+/* =====================================================
+   CRIAR JOGADOR
+===================================================== */
+
+function criarJogador(id,nome,cor){
+
+    return {
+
+        id:id,
+
+        nome:nome,
+
+        cor:cor,
+
+        posicao:0,
+
+        profissao:null,
+
+        itens:[],
+
+        acertos:0,
+
+        denuncias:0,
+
+        poderesUsados:{},
+
+        movimentoExtra:0
+
+    };
+
+}
+
+
+/* =====================================================
+   BROADCAST
+===================================================== */
+
+function broadcast(data){
+
+    if(!isHost)return;
+
+    connections.forEach(c=>{
+
+        try{
+
+            if(c.open){
+                c.send(data);
+            }
+
+        }catch(e){}
+
+    });
+}
+
+
+/* =====================================================
+   DADOS DO HOST
+===================================================== */
+
 function handleHostData(c,data){
-  if(data.type==="join"){
-    if(jogadores.length>=MAX_JOGADORES)return c.send({type:"error",message:"Sala cheia"});
-    const p={id:data.player.id,nome:data.player.nome,cor:jogadores.length,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}};
-    jogadores.push(p);
-    broadcast({type:"players",jogadores});
-    renderLobbyPlayers();
-    toast(p.nome + " entrou na sala!");
-  }
-  if(data.type==="rollRequest"&&!actionLocked&&jogadores[turno]?.id===data.playerId)processRoll(data.playerId);
-  if(data.type==="questionAnswer")processQuestionAnswer(data.playerId,data.answer);
+
+    if(!data)return;
+
+    if(data.type==="join"){
+
+        if(jogadores.length>=MAX_JOGADORES){
+
+            c.send({
+                type:"error",
+                message:"Sala cheia."
+            });
+
+            return;
+        }
+
+        if(jogadores.some(p=>p.id===data.player.id)){
+
+            return;
+        }
+
+        const novo=
+            criarJogador(
+                data.player.id,
+                data.player.nome,
+                jogadores.length
+            );
+
+        jogadores.push(novo);
+
+        renderLobbyPlayers();
+
+        broadcast({
+            type:"players",
+            jogadores:jogadores
+        });
+
+        toast(
+            novo.nome+
+            " entrou na sala!"
+        );
+
+        return;
+    }
+
+    if(data.type==="rollRequest"){
+
+        if(
+            !gameStarted ||
+            gameEnded ||
+            actionLocked ||
+            jogadores[turno]?.id!==data.playerId
+        ){
+            return;
+        }
+
+        processRoll(
+            data.playerId,
+            Number(data.valor)
+        );
+
+        return;
+    }
+
+    if(data.type==="questionAnswer"){
+
+        processQuestionAnswer(
+            data.playerId,
+            Number(data.answer)
+        );
+
+        return;
+    }
+
 }
-function handleClientData(d){
-  if(d.type==="players"){jogadores=d.jogadores;renderLobbyPlayers()}
-  if(d.type==="start"){jogadores=d.jogadores;startLocalGame(d.tempo)}
-  if(d.type==="state"){jogadores=d.jogadores;turno=d.turno;tempoRestante=d.tempo;renderBoard();renderHud()}
-  if(d.type==="question"){pendingQuestion=d.q;showQuestionModal()}
-  if(d.type==="endGame"){showResultModal(d.result)}
+
+
+/* =====================================================
+   DADOS DOS CLIENTES
+===================================================== */
+
+function handleClientData(data){
+
+    if(!data)return;
+
+    if(data.type==="players"){
+
+        jogadores=data.jogadores;
+
+        renderLobbyPlayers();
+
+        return;
+    }
+
+    if(data.type==="start"){
+
+        jogadores=data.jogadores;
+
+        startLocalGame(
+            data.tempo
+        );
+
+        return;
+    }
+
+    if(data.type==="state"){
+
+        jogadores=data.jogadores;
+
+        turno=data.turno;
+
+        tempoRestante=data.tempo;
+
+        renderBoard();
+
+        renderHud();
+
+        updateTimer();
+
+        return;
+    }
+
+    if(data.type==="question"){
+
+        pendingQuestion=data.question;
+
+        if(
+            pendingQuestion.playerId===myId
+        ){
+
+            showQuestionModal();
+
+        }
+
+        return;
+    }
+
+    if(data.type==="endGame"){
+
+        gameEnded=true;
+
+        showResultModal(
+            data.result
+        );
+
+        return;
+    }
+
+    if(data.type==="toast"){
+
+        toast(data.message);
+
+        return;
+    }
+
 }
+
+
+/* =====================================================
+   INICIAR PARTIDA
+===================================================== */
+
 function startGame(){
-  if(jogadores.length<1)return toast("Precisa de pelo menos 1 jogador");
-  jogadores.forEach(p=>{p.profissao=PROFISSOES[Math.floor(Math.random()*PROFISSOES.length)]});
-  broadcast({type:"start",jogadores,tempo:TEMPO_TOTAL});
-  startLocalGame(TEMPO_TOTAL);
+
+    if(!isHost)return;
+
+    if(jogadores.length<1){
+
+        toast("É necessário pelo menos um jogador.");
+
+        return;
+    }
+
+    jogadores.forEach(p=>{
+
+        const indice=
+            Math.floor(
+                Math.random()*
+                PROFISSOES.length
+            );
+
+        p.profissao={
+            ...PROFISSOES[indice]
+        };
+
+    });
+
+    turno=0;
+
+    tempoRestante=TEMPO_TOTAL;
+
+    gameStarted=true;
+
+    broadcast({
+
+        type:"start",
+
+        jogadores:jogadores,
+
+        tempo:TEMPO_TOTAL
+
+    });
+
+    startLocalGame(
+        TEMPO_TOTAL
+    );
+
+    setTimeout(()=>{
+
+        broadcastState();
+
+        mostrarSorteioProfissoes();
+
+    },300);
+
 }
+
+
+/* =====================================================
+   INÍCIO LOCAL
+===================================================== */
+
 function startLocalGame(tempo){
-  gameStarted=true;
-  hide("lobby");
-  show("game");
-  tempoRestante=tempo;
-  renderBoard();
-  renderHud();
-  timerInterval=setInterval(()=>{tempoRestante--;if(tempoRestante<=0)endGame("Tempo esgotado!")},1000);
-  if(isHost)jogarTurno();
+
+    gameStarted=true;
+
+    gameEnded=false;
+
+    tempoRestante=tempo;
+
+    hide("lobby");
+
+    show("game");
+
+    renderBoard();
+
+    renderHud();
+
+    updateTimer();
+
+    clearInterval(timerInterval);
+
+    timerInterval=setInterval(()=>{
+
+        if(gameEnded)return;
+
+        if(isHost){
+
+            tempoRestante--;
+
+            updateTimer();
+
+            if(
+                tempoRestante<=0
+            ){
+
+                tempoRestante=0;
+
+                endGame(
+                    "⏱️ O tempo acabou!"
+                );
+
+                return;
+            }
+
+            if(
+                tempoRestante%5===0
+            ){
+
+                broadcastState();
+
+            }
+
+        }
+
+    },1000);
+
 }
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function updateTimer(){
+
+    const minutos=
+        Math.floor(
+            tempoRestante/60
+        )
+        .toString()
+        .padStart(2,"0");
+
+    const segundos=
+        Math.max(
+            0,
+            tempoRestante%60
+        )
+        .toString()
+        .padStart(2,"0");
+
+    $("timer").textContent=
+        minutos+":"+segundos;
+}
+
+
+/* =====================================================
+   ESTADO
+===================================================== */
+
+function broadcastState(){
+
+    if(!isHost)return;
+
+    broadcast({
+
+        type:"state",
+
+        jogadores:jogadores,
+
+        turno:turno,
+
+        tempo:tempoRestante
+
+    });
+
+}
+
+
+/* =====================================================
+   TABULEIRO
+===================================================== */
 
 function renderBoard(){
-  const b=$("board");b.innerHTML="";
-  for(let i=1;i<=TOTAL_CASAS;i++){
-    let cls="",icon="",tipo="";
-    if(PROBLEMAS[i]){cls="problem";icon="⚠️";tipo="Problema"}
-    else if(SOLUCOES[i]){cls="solution";icon="🌱";tipo="Solução"}
-    else if(PERGUNTAS[i]){cls="question";icon="❓";tipo="Pergunta"}
-    else if(ITEM_CASAS.includes(i)){cls="item";icon="🎁";tipo="Item"}
-    else if(i===TOTAL_CASAS){cls="finish";icon="🏆";tipo="Chegada"}
-    const ps=jogadores.filter(p=>p.posicao===i).map(p=>`<div class="person" style="color:${CORES[p.cor]}"><div class="head"></div><div class="body"></div><div class="leg1"></div><div class="leg2"></div></div>`).join("");
-    b.innerHTML+=`<div class="cell ${cls}"><span class="cellNumber">${i}</span><span class="cellIcon">${icon}</span><span class="cellType">${tipo}</span><div class="pawns">${ps}</div></div>`;
-  }
-}
-function renderHud(){
-  const me=jogadores.find(p=>p.id===myId);
-  if(me){
-    const pct=(me.posicao/TOTAL_CASAS*100).toFixed(1);
-    $("progressPercent").textContent=`${pct}%`;
-    $("progressFill").style.width=`${pct}%`;
-    $("progressText").textContent=`Seu progresso: ${me.posicao}/${TOTAL_CASAS}`;
-  }
-  $("hudPlayers").innerHTML=jogadores.map(p=>`<div class="playerCard ${p.id===myId?'me':''}"><div style="display:flex;align-items:center;"><span class="playerColor" style="background:${CORES[p.cor]}"></span><span class="playerName">${escapeHtml(p.nome)}</span></div><div class="playerStats">📍 Casa: <span>${p.posicao}</span><br>✅ Acertos: <span>${p.acertos}</span><br>📢 Denúncias: <span>${p.denuncias}</span><br>🎒 Itens: <span>${p.itens.length}</span></div></div>`).join("");
-  $("turnText").textContent=gameEnded?"Jogo encerrado":`Vez de ${jogadores[turno]?.nome || "aguardando"}`;
-  $("rollBtn").disabled=jogadores[turno]?.id!==myId||actionLocked||gameEnded;
-}
-function jogarTurno(){if(!isHost)return;turno=(turno+1)%jogadores.length;actionLocked=false;broadcast({type:"state",jogadores,turno,tempo:tempoRestante});renderHud()}
-function rollDice(){
-  if(actionLocked||jogadores[turno]?.id!==myId)return;
-  actionLocked=true;
-  const d=$("dice");
-  d.classList.add("diceRolling");
-  setTimeout(()=>{
-    d.classList.remove("diceRolling");
-    const val=Math.floor(Math.random()*6)+1;
-    d.textContent=val;
-    if(isHost)processRoll(myId,val);
-    else conn.send({type:"rollRequest",playerId:myId,valor:val});
-  },600);
-}
-function processRoll(playerId,valor){
-  const p=jogadores.find(x=>x.id===playerId);if(!p)return;
-  const d=valor||Math.floor(Math.random()*6)+1;
-  p.posicao=Math.min(TOTAL_CASAS,p.posicao+d);
-  renderBoard();renderHud();
-  setTimeout(()=>processarCasa(p),500);
-}
-function processarCasa(p){
-  const c=p.posicao;
-  if(c===TOTAL_CASAS){endGame(`${p.nome} chegou à casa 150!`);return;}
-  if(PROBLEMAS[c]){
-    let perde=-3;
-    if(p.itens.some(i=>["arvore","agua","filtro","kit"].includes(i.id))){
-      const prot=p.itens.find(i=>["arvore","agua","filtro","kit"].includes(i.id));
-      p.itens=p.itens.filter(i=>i!==prot);
-      toast(`${p.nome} usou ${prot.nome} e evitou o problema!`);
-      perde=0;
-    }else if(p.profissao.id==="medico"&&!p.poderesUsados.medico){p.poderesUsados.medico=true;perde=0;toast(`${p.nome} usou poder de Médico!`);}
-    else if(p.profissao.id==="agente"&&!p.poderesUsados.agente){p.poderesUsados.agente=true;perde=0;toast(`${p.nome} usou poder de Agente Ambiental!`);}
-    if(perde<0){p.posicao=Math.max(0,p.posicao+perde);toast(`${PROBLEMAS[c]} → ${perde} casas`)}
-    renderBoard();renderHud();
-  }else if(SOLUCOES[c]){
-    let ganha=2;
-    if(p.profissao.id==="engenheiro")ganha++;
-    if(p.itens.some(i=>i.id==="mapa"||i.id==="energia"||i.id==="documento")){
-      const b=p.itens.find(i=>["mapa","energia","documento"].includes(i.id));
-      p.itens=p.itens.filter(i=>i!==b);ganha++;
+
+    const board=$("board");
+
+    board.innerHTML="";
+
+    for(
+        let i=1;
+        i<=TOTAL_CASAS;
+        i++
+    ){
+
+        let classe="";
+
+        let icone="";
+
+        let tipo="";
+
+        if(PROBLEMAS[i]){
+
+            classe="problem";
+
+            icone="⚠️";
+
+            tipo="Problema";
+
+        }
+        else if(SOLUCOES[i]){
+
+            classe="solution";
+
+            icone="🌱";
+
+            tipo="Solução";
+
+        }
+        else if(PERGUNTAS[i]){
+
+            classe="question";
+
+            icone="❓";
+
+            tipo="Pergunta";
+
+        }
+        else if(
+            ITEM_CASAS.includes(i)
+        ){
+
+            classe="item";
+
+            icone="🎁";
+
+            tipo="Item";
+
+        }
+
+        if(i===TOTAL_CASAS){
+
+            classe="finish";
+
+            icone="🏆";
+
+            tipo="Chegada";
+
+        }
+
+        const jogadoresCasa=
+            jogadores.filter(
+                p=>p.posicao===i
+            );
+
+        let pessoas="";
+
+        jogadoresCasa.forEach(p=>{
+
+            pessoas+=`
+
+            <div
+                class="person"
+                style="color:${CORES[p.cor]}"
+                title="${escapeHtml(p.nome)}"
+            >
+
+                <div class="head"></div>
+
+                <div class="body"></div>
+
+                <div class="leg1"></div>
+
+                <div class="leg2"></div>
+
+            </div>
+
+            `;
+
+        });
+
+        board.innerHTML+=`
+
+        <div class="cell ${classe}">
+
+            <span class="cellNumber">
+                ${i}
+            </span>
+
+            <span class="cellIcon">
+                ${icone}
+            </span>
+
+            <span class="cellType">
+                ${tipo}
+            </span>
+
+            <div class="pawns">
+                ${pessoas}
+            </div>
+
+        </div>
+
+        `;
+
     }
-    p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);
-    toast(`${SOLUCOES[c]} → +${ganha} casas`);
-    renderBoard();renderHud();
-  }else if(PERGUNTAS[c]){
-    pendingQuestion={casa:c,q:PERGUNTAS[c],player:p};
-    if(isHost)broadcast({type:"question",q:{casa:c,q:PERGUNTAS[c]}});
-    showQuestionModal();
-    return;
-  }else if(ITEM_CASAS.includes(c)){
-    const item=ITENS[Math.floor(Math.random()*ITENS.length)];
-    p.itens.push(item);
+
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function renderHud(){
+
+    const me=
+        jogadores.find(
+            p=>p.id===myId
+        );
+
+    if(me){
+
+        const porcentagem=
+            Math.min(
+                100,
+                (me.posicao/TOTAL_CASAS)*100
+            );
+
+        $("progressPercent").textContent=
+            Math.round(porcentagem)+"%";
+
+        $("progressFill").style.width=
+            porcentagem+"%";
+
+        $("progressText").textContent=
+            `Seu progresso: ${me.posicao}/${TOTAL_CASAS}`;
+
+    }
+
+    $("hudPlayers").innerHTML=
+        jogadores.map(p=>`
+
+        <div class="playerCard ${
+            p.id===myId?"me":""
+        }">
+
+            <div>
+
+                <span
+                    class="playerColor"
+                    style="background:${CORES[p.cor]}"
+                ></span>
+
+                <span class="playerName">
+                    ${escapeHtml(p.nome)}
+                </span>
+
+            </div>
+
+            <div class="playerStats">
+
+                📍 Casa:
+                <span>${p.posicao}</span>
+
+                <br>
+
+                ✅ Acertos:
+                <span>${p.acertos}</span>
+
+                <br>
+
+                📢 Denúncias:
+                <span>${p.denuncias}</span>
+
+                <br>
+
+                🎒 Itens:
+                <span>${p.itens.length}</span>
+
+            </div>
+
+        </div>
+
+        `).join("");
+
+    if(gameEnded){
+
+        $("turnText").textContent=
+            "🏆 Jogo encerrado.";
+
+    }
+    else{
+
+        $("turnText").textContent=
+            `Vez de ${
+                jogadores[turno]?.nome||
+                "aguardando"
+            }`;
+
+    }
+
+    $("rollBtn").disabled=
+        !gameStarted||
+        gameEnded||
+        actionLocked||
+        jogadores[turno]?.id!==myId;
+
+}
+
+
+/* =====================================================
+   ROLAR DADO
+===================================================== */
+
+function rollDice(){
+
+    if(
+        !gameStarted||
+        gameEnded||
+        actionLocked||
+        jogadores[turno]?.id!==myId
+    ){
+        return;
+    }
+
+    actionLocked=true;
+
+    renderHud();
+
+    const dice=$("dice");
+
+    dice.classList.add(
+        "diceRolling"
+    );
+
+    let contador=0;
+
+    const animacao=
+        setInterval(()=>{
+
+            dice.textContent=
+                Math.floor(
+                    Math.random()*6
+                )+1;
+
+            contador++;
+
+            if(contador>=7){
+
+                clearInterval(animacao);
+
+            }
+
+        },80);
+
+    setTimeout(()=>{
+
+        dice.classList.remove(
+            "diceRolling"
+        );
+
+        const valor=
+            Math.floor(
+                Math.random()*6
+            )+1;
+
+        dice.textContent=valor;
+
+        $("diceResult").textContent=
+            "Você tirou "+valor;
+
+        if(isHost){
+
+            processRoll(
+                myId,
+                valor
+            );
+
+        }
+        else if(conn&&conn.open){
+
+            conn.send({
+
+                type:"rollRequest",
+
+                playerId:myId,
+
+                valor:valor
+
+            });
+
+        }
+
+    },650);
+
+}
+
+
+/* =====================================================
+   PROCESSAR ROLAGEM
+===================================================== */
+
+function processRoll(
+    playerId,
+    valor
+){
+
+    if(!isHost)return;
+
+    const jogador=
+        jogadores.find(
+            p=>p.id===playerId
+        );
+
+    if(!jogador)return;
+
+    if(!valor||valor<1||valor>6){
+
+        actionLocked=false;
+
+        return;
+
+    }
+
+    let passos=valor;
+
+    passos+=
+        jogador.movimentoExtra||0;
+
+    jogador.movimentoExtra=0;
+
+    moverJogador(
+        jogador,
+        passos,
+        ()=>{
+            processarCasa(
+                jogador
+            );
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MOVIMENTO CASA POR CASA
+===================================================== */
+
+function moverJogador(
+    jogador,
+    passos,
+    callback
+){
+
+    let atual=0;
+
+    const token=++animationToken;
+
+    function passo(){
+
+        if(token!==animationToken){
+
+            return;
+        }
+
+        if(atual>=passos){
+
+            callback();
+
+            return;
+        }
+
+        if(
+            jogador.posicao>=TOTAL_CASAS
+        ){
+
+            callback();
+
+            return;
+        }
+
+        jogador.posicao++;
+
+        atual++;
+
+        renderBoard();
+
+        renderHud();
+
+        broadcastState();
+
+        setTimeout(
+            passo,
+            TEMPO_PASSO
+        );
+
+    }
+
+    passo();
+
+}
+
+
+/* =====================================================
+   PROCESSAR CASA
+===================================================== */
+
+function processarCasa(p){
+
+    if(gameEnded)return;
+
+    const casa=p.posicao;
+
+    if(casa===TOTAL_CASAS){
+
+        endGame(
+            `🏆 ${escapeHtml(p.nome)}
+            chegou à casa 150!`
+        );
+
+        return;
+    }
+
+    if(PROBLEMAS[casa]){
+
+        processarProblema(p,casa);
+
+        return;
+    }
+
+    if(SOLUCOES[casa]){
+
+        processarSolucao(p,casa);
+
+        return;
+    }
+
+    if(PERGUNTAS[casa]){
+
+        iniciarPergunta(p,casa);
+
+        return;
+    }
+
+    if(ITEM_CASAS.includes(casa)){
+
+        ganharItem(p);
+
+        return;
+    }
+
+    finalizarTurno();
+
+}
+
+
+/* =====================================================
+   PROBLEMA
+===================================================== */
+
+function processarProblema(p,casa){
+
+    let protegido=false;
+
+    const protecoes=[
+        "arvore",
+        "agua",
+        "filtro",
+        "kit",
+        "luvas",
+        "lixeira",
+        "capacete",
+        "colete"
+    ];
+
+    const itemProtecao=
+        p.itens.find(
+            i=>protecoes.includes(i.id)
+        );
+
+    if(itemProtecao){
+
+        p.itens=
+            p.itens.filter(
+                i=>i!==itemProtecao
+            );
+
+        protegido=true;
+
+        toast(
+            `${p.nome} usou ${itemProtecao.emoji} ${itemProtecao.nome} e evitou o problema!`
+        );
+
+    }
+
+    if(!protegido){
+
+        const profissaoProtege=[
+            "medico",
+            "agente",
+            "assistente",
+            "quimico",
+            "defensor",
+            "voluntario"
+        ];
+
+        if(
+            p.profissao&&
+            profissaoProtege.includes(
+                p.profissao.id
+            )&&
+            !p.poderesUsados[p.profissao.id]
+        ){
+
+            p.poderesUsados[
+                p.profissao.id
+            ]=true;
+
+            protegido=true;
+
+            toast(
+                `${p.profissao.emoji} ${p.profissao.nome} protegeu você!`
+            );
+
+        }
+
+    }
+
+    if(protegido){
+
+        renderBoard();
+
+        renderHud();
+
+        broadcastState();
+
+        setTimeout(
+            finalizarTurno,
+            TEMPO_ACAO
+        );
+
+        return;
+    }
+
+    p.posicao=
+        Math.max(
+            0,
+            p.posicao-3
+        );
+
+    toast(
+        `⚠️ ${PROBLEMAS[casa]} → voltou 3 casas`
+    );
+
+    renderBoard();
+
+    renderHud();
+
+    broadcastState();
+
+    setTimeout(
+        finalizarTurno,
+        TEMPO_ACAO
+    );
+
+}
+
+
+/* =====================================================
+   SOLUÇÃO
+===================================================== */
+
+function processarSolucao(p,casa){
+
+    let ganho=2;
+
+    const profissaoBonus=[
+        "engenheiro",
+        "arquiteto",
+        "tecnico",
+        "sanitarista",
+        "gestor"
+    ];
+
+    if(
+        p.profissao&&
+        profissaoBonus.includes(
+            p.profissao.id
+        )
+    ){
+
+        ganho++;
+
+    }
+
+    const itensBonus=[
+        "mapa",
+        "energia",
+        "documento",
+        "painel"
+    ];
+
+    const itemBonus=
+        p.itens.find(
+            i=>itensBonus.includes(i.id)
+        );
+
+    if(itemBonus){
+
+        p.itens=
+            p.itens.filter(
+                i=>i!==itemBonus
+            );
+
+        ganho++;
+
+    }
+
+    p.posicao=
+        Math.min(
+            TOTAL_CASAS,
+            p.posicao+ganho
+        );
+
+    toast(
+        `🌱 ${SOLUCOES[casa]} → +${ganho} casas`
+    );
+
+    renderBoard();
+
+    renderHud();
+
+    broadcastState();
+
+    if(
+        p.posicao>=TOTAL_CASAS
+    ){
+
+        endGame(
+            `🏆 ${p.nome} chegou à casa 150!`
+        );
+
+        return;
+    }
+
+    setTimeout(
+        finalizarTurno,
+        TEMPO_ACAO
+    );
+
+}
+
+
+/* =====================================================
+   ITEM
+===================================================== */
+
+function ganharItem(p){
+
+    const item=
+        ITENS[
+            Math.floor(
+                Math.random()*
+                ITENS.length
+            )
+        ];
+
+    p.itens.push({
+        ...item
+    });
+
     let bonus=0;
-    if(item.id==="semente")bonus=1;
-    if(item.id==="sementes")bonus=2;
-    if(item.id==="bicicleta")bonus=2;
-    if((item.id==="semente"||item.id==="sementes")&&(p.profissao.id==="biologo"||p.profissao.id==="agricultor"))bonus++;
-    p.posicao=Math.min(TOTAL_CASAS,p.posicao+bonus);
-    toast(`${p.nome} encontrou: ${item.emoji} ${item.nome}${bonus>0?` → +${bonus} casas`:''}`);
-    renderBoard();renderHud();
-  }
-  setTimeout(()=>{if(isHost)jogarTurno()},800);
+
+    if(item.id==="semente"){
+        bonus=1;
+    }
+
+    if(item.id==="sementes"){
+        bonus=2;
+    }
+
+    if(item.id==="bicicleta"){
+        bonus=2;
+    }
+
+    if(item.id==="compostagem"){
+        bonus=1;
+    }
+
+    if(item.id==="horta"){
+        bonus=2;
+    }
+
+    if(
+        ["semente","sementes"].includes(item.id)&&
+        p.profissao&&
+        ["biologo","agricultor"].includes(
+            p.profissao.id
+        )
+    ){
+
+        bonus++;
+
+    }
+
+    p.posicao=
+        Math.min(
+            TOTAL_CASAS,
+            p.posicao+bonus
+        );
+
+    toast(
+        `🎁 ${p.nome} encontrou ${item.emoji} ${item.nome}${
+            bonus?
+            ` → +${bonus} casas`
+            :""
+        }`
+    );
+
+    renderBoard();
+
+    renderHud();
+
+    broadcastState();
+
+    if(
+        p.posicao>=TOTAL_CASAS
+    ){
+
+        endGame(
+            `🏆 ${p.nome} chegou à casa 150!`
+        );
+
+        return;
+    }
+
+    setTimeout(
+        finalizarTurno,
+        TEMPO_ACAO
+    );
+
 }
+
+
+/* =====================================================
+   PERGUNTA
+===================================================== */
+
+function iniciarPergunta(p,casa){
+
+    pendingQuestion={
+        playerId:p.id,
+        casa:casa,
+        q:{
+            ...PERGUNTAS[casa]
+        }
+    };
+
+    actionLocked=true;
+
+    if(isHost){
+
+        broadcast({
+
+            type:"question",
+
+            question:{
+                playerId:p.id,
+                casa:casa,
+                q:PERGUNTAS[casa]
+            }
+
+        });
+
+        showQuestionModal();
+
+    }
+
+}
+
+
+/* =====================================================
+   MODAL DA PERGUNTA
+===================================================== */
+
 function showQuestionModal(){
-  const q=pendingQuestion.q;
-  $("questionText").textContent=q.q;
-  $("questionOpts").innerHTML=q.op.map((o,i)=>`<button class="questionOption" onclick="responder(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join("");
-  show("questionModal");
+
+    if(!pendingQuestion)return;
+
+    const q=pendingQuestion.q;
+
+    $("questionText").textContent=
+        q.q;
+
+    $("questionOpts").innerHTML=
+        q.op.map((op,i)=>`
+
+        <button
+            class="questionOption"
+            onclick="responderPergunta(${i})"
+        >
+            ${String.fromCharCode(65+i)})
+            ${escapeHtml(op)}
+        </button>
+
+        `).join("");
+
+    show("questionModal");
+
 }
-function responder(i){
-  if(isHost)processQuestionAnswer(myId,i);
-  else conn.send({type:"questionAnswer",answer:i});
-  hide("questionModal");
+
+
+/* =====================================================
+   RESPONDER
+===================================================== */
+
+function responderPergunta(resposta){
+
+    if(!pendingQuestion)return;
+
+    const jogador=
+        pendingQuestion.playerId;
+
+    hide("questionModal");
+
+    if(isHost){
+
+        processQuestionAnswer(
+            jogador,
+            resposta
+        );
+
+    }
+    else if(conn&&conn.open){
+
+        conn.send({
+
+            type:"questionAnswer",
+
+            playerId:myId,
+
+            answer:resposta
+
+        });
+
+    }
+
 }
-function processQuestionAnswer(playerId,answer){
-  const p=jogadores.find(x=>x.id===playerId);if(!p||!pendingQuestion)return;
-  const correta=pendingQuestion.q.correta;
-  if(answer===correta){
-    p.acertos++;let ganha=2;
-    if(["professor","pesquisador"].includes(p.profissao.id))ganha++;
-    if(p.itens.some(i=>i.id==="livro")){p.itens=p.itens.filter(i=>i.id!=="livro");ganha++;}
-    p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);
-    toast(`✅ Acertou! +${ganha} casas`);
-  }else{
-    let nova=false;
-    if(p.itens.some(i=>["denuncia","megafone"].includes(i.id))){
-      const d=p.itens.find(i=>["denuncia","megafone"].includes(i.id));
-      p.itens=p.itens.filter(i=>i!==d);p.denuncias++;nova=true;
-      toast(`❌ Errou, mas ${d.nome} dá nova tentativa!`);
-    }else if(["advogado","jornalista","lider"].includes(p.profissao.id)&&!p.poderesUsados[p.profissao.id]){
-      p.poderesUsados[p.profissao.id]=true;nova=true;
-      toast(`❌ Errou, ${p.profissao.nome} dá nova tentativa!`);
-    }else toast("❌ Errou, fica na casa");
-  }
-  pendingQuestion=null;renderBoard();renderHud();
-  setTimeout(()=>{if(isHost)jogarTurno()},800);
+
+
+/* =====================================================
+   PROCESSAR RESPOSTA
+===================================================== */
+
+function processQuestionAnswer(
+    playerId,
+    resposta
+){
+
+    if(!isHost)return;
+
+    if(!pendingQuestion)return;
+
+    if(
+        pendingQuestion.playerId!==playerId
+    ){
+
+        return;
+    }
+
+    const p=
+        jogadores.find(
+            x=>x.id===playerId
+        );
+
+    if(!p)return;
+
+    const correta=
+        pendingQuestion.q.correta;
+
+    if(resposta===correta){
+
+        p.acertos++;
+
+        let ganho=2;
+
+        if(
+            p.profissao&&
+            ["professor","pesquisador"].includes(
+                p.profissao.id
+            )
+        ){
+
+            ganho++;
+
+        }
+
+        const livro=
+            p.itens.find(
+                i=>i.id==="livro"
+            );
+
+        if(livro){
+
+            p.itens=
+                p.itens.filter(
+                    i=>i!==livro
+                );
+
+            ganho++;
+
+        }
+
+        p.posicao=
+            Math.min(
+                TOTAL_CASAS,
+                p.posicao+ganho
+            );
+
+        toast(
+            `✅ Acertou! +${ganho} casas`
+        );
+
+        pendingQuestion=null;
+
+        renderBoard();
+
+        renderHud();
+
+        broadcastState();
+
+        if(
+            p.posicao>=TOTAL_CASAS
+        ){
+
+            endGame(
+                `🏆 ${p.nome} chegou à casa 150!`
+            );
+
+            return;
+        }
+
+        setTimeout(
+            finalizarTurno,
+            TEMPO_ACAO
+        );
+
+        return;
+    }
+
+    /* =========================
+       RESPOSTA ERRADA
+    ========================= */
+
+    const novaTentativaItens=[
+        "denuncia",
+        "megafone"
+    ];
+
+    const item=
+        p.itens.find(
+            i=>novaTentativaItens.includes(i.id)
+        );
+
+    if(item){
+
+        p.itens=
+            p.itens.filter(
+                i=>i!==item
+            );
+
+        p.denuncias++;
+
+        toast(
+            `❌ Errou, mas usou ${item.emoji} ${item.nome} para tentar novamente!`
+        );
+
+        pendingQuestion=null;
+
+        broadcastState();
+
+        setTimeout(()=>{
+
+            iniciarPergunta(
+                p,
+                p.posicao
+            );
+
+        },TEMPO_ACAO);
+
+        return;
+    }
+
+    const profissaoNova=[
+        "advogado",
+        "jornalista",
+        "lider",
+        "comunicador"
+    ];
+
+    if(
+        p.profissao&&
+        profissaoNova.includes(
+            p.profissao.id
+        )&&
+        !p.poderesUsados[p.profissao.id]
+    ){
+
+        p.poderesUsados[p.profissao.id]=true;
+
+        toast(
+            `❌ Errou, mas ${p.profissao.nome} permite uma nova tentativa!`
+        );
+
+        pendingQuestion=null;
+
+        broadcastState();
+
+        setTimeout(()=>{
+
+            iniciarPergunta(
+                p,
+                p.posicao
+            );
+
+        },TEMPO_ACAO);
+
+        return;
+    }
+
+    toast(
+        "❌ Resposta errada. Você permanece na casa."
+    );
+
+    pendingQuestion=null;
+
+    renderBoard();
+
+    renderHud();
+
+    broadcastState();
+
+    setTimeout(
+        finalizarTurno,
+        TEMPO_ACAO
+    );
+
 }
+
+
+/* =====================================================
+   FINALIZAR TURNO
+===================================================== */
+
+function finalizarTurno(){
+
+    if(gameEnded)return;
+
+    pendingQuestion=null;
+
+    actionLocked=false;
+
+    turno=
+        (turno+1)%
+        jogadores.length;
+
+    renderBoard();
+
+    renderHud();
+
+    broadcastState();
+
+}
+
+
+/* =====================================================
+   ITENS
+===================================================== */
+
 function openItems(){
-  const me=jogadores.find(p=>p.id===myId);if(!me)return;
-  $("itemGrid").innerHTML=me.itens.length===0?"<p style='grid-column:1/-1;text-align:center;padding:20px;'>Você não tem itens ainda.</p>":
-    me.itens.map(i=>`<div class="itemCard"><div style="font-size:28px;">${i.emoji}</div><div style="font-weight:bold;margin-top:5px;">${i.nome}</div><div style="font-size:11px;color:#666;margin-top:4px;">${i.desc}</div></div>`).join("");
-  show("itemsModal");
+
+    const me=
+        jogadores.find(
+            p=>p.id===myId
+        );
+
+    if(!me)return;
+
+    if(!me.itens.length){
+
+        $("itemGrid").innerHTML=`
+            <p style="grid-column:1/-1;text-align:center;padding:20px">
+                Você ainda não possui itens.
+            </p>
+        `;
+
+    }
+    else{
+
+        $("itemGrid").innerHTML=
+            me.itens.map(item=>`
+
+            <div class="itemCard">
+
+                <div class="itemEmoji">
+                    ${item.emoji}
+                </div>
+
+                <div class="itemName">
+                    ${escapeHtml(item.nome)}
+                </div>
+
+                <div class="itemDesc">
+                    ${escapeHtml(item.desc)}
+                </div>
+
+            </div>
+
+            `).join("");
+
+    }
+
+    show("itemsModal");
+
 }
+
+
+/* =====================================================
+   PROFISSÃO
+===================================================== */
+
 function openProfession(){
-  const me=jogadores.find(p=>p.id===myId);if(!me)return;
-  $("profInfo").innerHTML=`<div class="profDisplay"><div class="profEmoji">${me.profissao.emoji}</div><div class="profName">${me.profissao.nome}</div><div style="color:#4b5563;line-height:1.6;">${me.profissao.desc}</div></div>`;
-  show("professionModal");
+
+    const me=
+        jogadores.find(
+            p=>p.id===myId
+        );
+
+    if(!me||!me.profissao){
+
+        toast(
+            "Sua profissão ainda não foi definida."
+        );
+
+        return;
+    }
+
+    $("profInfo").innerHTML=`
+
+        <div class="profDisplay">
+
+            <div class="profEmoji">
+                ${me.profissao.emoji}
+            </div>
+
+            <div class="profName">
+                ${escapeHtml(me.profissao.nome)}
+            </div>
+
+            <div class="profDesc">
+                ${escapeHtml(me.profissao.desc)}
+            </div>
+
+        </div>
+
+    `;
+
+    show("professionModal");
+
 }
+
+
+/* =====================================================
+   SORTEIO DAS PROFISSÕES
+===================================================== */
+
+function mostrarSorteioProfissoes(){
+
+    const me=
+        jogadores.find(
+            p=>p.id===myId
+        );
+
+    if(!me||!me.profissao)return;
+
+    show("professionDrawModal");
+
+    const emoji=$("drawProfEmoji");
+
+    const nome=$("drawProfName");
+
+    let contador=0;
+
+    const intervalo=
+        setInterval(()=>{
+
+            const prof=
+                PROFISSOES[
+                    Math.floor(
+                        Math.random()*
+                        PROFISSOES.length
+                    )
+                ];
+
+            emoji.textContent=
+                prof.emoji;
+
+            nome.textContent=
+                prof.nome;
+
+            contador++;
+
+            if(contador>=18){
+
+                clearInterval(intervalo);
+
+                emoji.textContent=
+                    me.profissao.emoji;
+
+                nome.textContent=
+                    me.profissao.nome;
+
+                setTimeout(()=>{
+
+                    hide("professionDrawModal");
+
+                    toast(
+                        `💼 Sua profissão é ${me.profissao.nome}!`
+                    );
+
+                },1200);
+
+            }
+
+        },100);
+
+}
+
+
+/* =====================================================
+   FIM DE JOGO
+===================================================== */
+
 function endGame(motivo){
-  gameEnded=true;clearInterval(timerInterval);
-  let res="🏆 Resultado Final<br><br>";
-  const ordem=[...jogadores].sort((a,b)=>b.posicao-a.posicao||b.itens.length-a.itens.length||b.acertos-a.acertos);
-  ordem.forEach((p,i)=>res+=`<b>${i+1}º</b> - ${escapeHtml(p.nome)}<br>📍 Casa: ${p.posicao} | ✅ Acertos: ${p.acertos} | 📢 Denúncias: ${p.denuncias} | 🎒 Itens: ${p.itens.length}<br><br>`);
-  res+=`<b>${motivo}</b>`;
-  if(isHost)broadcast({type:"endGame",result:res});
-  showResultModal(res);
+
+    if(gameEnded)return;
+
+    gameEnded=true;
+
+    clearInterval(timerInterval);
+
+    actionLocked=true;
+
+    const ordem=[
+        ...jogadores
+    ].sort((a,b)=>{
+
+        if(
+            b.posicao!==a.posicao
+        ){
+
+            return b.posicao-a.posicao;
+        }
+
+        if(
+            b.itens.length!==a.itens.length
+        ){
+
+            return b.itens.length-a.itens.length;
+        }
+
+        return b.acertos-a.acertos;
+
+    });
+
+    let resultado=
+        "🏆 <b>Resultado Final</b><br><br>";
+
+    ordem.forEach((p,i)=>{
+
+        resultado+=`
+
+        <div style="margin-bottom:14px">
+
+            <b>${i+1}º - ${escapeHtml(p.nome)}</b>
+
+            <br>
+
+            📍 Casa: ${p.posicao}
+
+            &nbsp;|&nbsp;
+
+            🎒 Itens: ${p.itens.length}
+
+            &nbsp;|&nbsp;
+
+            ✅ Acertos: ${p.acertos}
+
+        </div>
+
+        `;
+
+    });
+
+    resultado+=`
+        <hr style="border:0;border-top:1px solid #ddd;margin:15px 0">
+        <b>${motivo}</b>
+    `;
+
+    if(isHost){
+
+        broadcast({
+
+            type:"endGame",
+
+            result:resultado
+
+        });
+
+    }
+
+    showResultModal(
+        resultado
+    );
+
+    renderHud();
+
 }
-function showResultModal(r){$("resultText").innerHTML=r;show("resultModal")}
+
+
+/* =====================================================
+   RESULTADO
+===================================================== */
+
+function showResultModal(resultado){
+
+    $("resultText").innerHTML=
+        resultado;
+
+    show("resultModal");
+
+}
+
 </script>
+
 </body>
-</html>
+  </html>
