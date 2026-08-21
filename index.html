@@ -10,15 +10,19 @@
 html,body{min-height:100vh;font-family:Arial,sans-serif;}
 body{color:#1a2e1a;background:radial-gradient(circle at 10% 15%,#86efac 0%,transparent 35%),radial-gradient(circle at 90% 20%,#93c5fd 0%,transparent 35%),radial-gradient(circle at 50% 90%,#fef08a 0%,transparent 35%),linear-gradient(180deg,#dcfce7,#e0f2fe,#fef9c3);background-attachment:fixed;}
 button,input{font:inherit;border:0;border-radius:12px;}
-button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:white;font-weight:bold;}
-.hidden{display:none!important}
+button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:white;font-weight:bold;transition:transform 0.15s,opacity 0.15s;}
+button:hover{transform:scale(1.03);opacity:0.95;}
+button:active{transform:scale(0.98);}
+.hidden{display:none !important;}
 
 #lobby{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;}
 .lobbyBox{max-width:560px;width:100%;background:#ffffffdd;border:2px solid #22c55e40;border-radius:28px;padding:30px;text-align:center;box-shadow:0 25px 80px #00000022;backdrop-filter:blur(15px);}
 .lobbyBox h1{color:#166534;margin-bottom:15px;}
-.lobbyBox input{width:100%;padding:14px;margin:8px 0;border:2px solid #94a3b8;outline:none;}
+.lobbyBox input{width:100%;padding:14px;margin:8px 0;border:2px solid #94a3b8;outline:none;transition:border-color 0.2s;}
 .lobbyBox input:focus{border-color:#22c55e;}
 .roomCode{font-size:26px;font-weight:bold;letter-spacing:5px;color:#ca8a04;margin:15px 0;}
+#playersLobby{margin-top:15px;text-align:left;}
+#startBtn{margin-top:15px;padding:12px 30px;font-size:16px;}
 
 #boardArea{max-width:1450px;margin:0 auto;padding:20px;position:relative;z-index:1;}
 #progressBox{background:#ffffffdd;border:2px solid #22c55e40;border-radius:17px;padding:14px;margin-bottom:14px;}
@@ -59,10 +63,10 @@ button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:w
 
 .hudActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 .hudActions button{padding:12px 20px;border-radius:12px;font-size:15px;min-width:140px;}
-#rollBtn{background:linear-gradient(135deg,#15803d,#22c55e)!important;}
-#itemsBtn{background:linear-gradient(135deg,#0891b2,#22d3ee)!important;}
-#profBtn{background:linear-gradient(135deg,#7c3aed,#a855f7)!important;}
-.hudActions button:disabled{opacity:0.5;cursor:not-allowed;}
+#rollBtn{background:linear-gradient(135deg,#15803d,#22c55e) !important;}
+#itemsBtn{background:linear-gradient(135deg,#0891b2,#22d3ee) !important;}
+#profBtn{background:linear-gradient(135deg,#7c3aed,#a855f7) !important;}
+.hudActions button:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
 #turnText{text-align:center;margin-top:15px;padding:10px;background:linear-gradient(90deg,#15803d,#0d9488);border-radius:10px;color:#fff;font-weight:bold;}
 #dice{width:80px;height:80px;border-radius:15px;background:#fff;border:3px solid #22c55e;display:flex;justify-content:center;align-items:center;font-size:40px;margin:0 auto 10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
@@ -71,7 +75,7 @@ button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:w
 
 .modal{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.4);display:flex;justify-content:center;align-items:center;padding:15px;backdrop-filter:blur(6px);}
 .modalBox{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;background:#fff;border:2px solid #22c55e40;border-radius:20px;padding:24px;box-shadow:0 20px 70px rgba(0,0,0,0.2);color:#1e293b;position:relative;}
-.close{position:absolute;right:12px;top:10px;width:36px;height:36px;border-radius:50%;background:#ef4444;color:#fff;font-weight:bold;font-size:20px;}
+.close{position:absolute;right:12px;top:10px;width:36px;height:36px;border-radius:50%;background:#ef4444;color:#fff;font-weight:bold;font-size:20px;border:none;}
 .modalBox h2{margin-top:5px;color:#166534;text-align:center;}
 .itemGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px;}
 .itemCard{background:#f0fdf4;padding:12px;border-radius:10px;border:1px solid #22c55e30;text-align:center;}
@@ -95,11 +99,11 @@ button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:w
 <h1>Caminhos da Justiça Ambiental</h1>
 <p>Jogo sobre justiça ambiental e participação comunitária.</p>
 <input id="nameInput" maxlength="18" placeholder="Seu nome">
-<button onclick="createRoom()">🏠 Criar sala</button>
-<button style="background:linear-gradient(135deg,#7c3aed,#a855f7);margin-top:8px;" onclick="openHowTo()">❓ Como jogar</button>
+<button id="createBtn" onclick="createRoom()">🏠 Criar sala</button>
+<button id="howBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);margin-top:8px;" onclick="openHowTo()">❓ Como jogar</button>
 <hr style="border-color:#cbd5e1;margin:15px 0">
 <input id="roomInput" placeholder="Código da sala">
-<button onclick="joinRoom()">🚪 Entrar na sala</button>
+<button id="joinBtn" onclick="joinRoom()">🚪 Entrar na sala</button>
 <div id="roomCodeBox" class="hidden"><p>Código da sala:</p><div id="roomCode" class="roomCode"></div></div>
 <div id="playersLobby"><b>👥 Jogadores:</b><div id="playersList">Nenhum jogador conectado.</div></div>
 <button id="startBtn" class="hidden" onclick="startGame()">▶️ Começar partida</button>
@@ -178,7 +182,7 @@ button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:w
 <div class="modalBox" style="text-align:center">
 <h2 id="resultTitle">🏆 Fim de Jogo!</h2>
 <div id="resultText" style="margin:20px 0;font-size:16px;line-height:1.8;"></div>
-<button onclick="location.reload()" style="padding:12px 30px;background:#2563eb;color:#fff;border-radius:10px;font-weight:bold;">🔄 Jogar Novamente</button>
+<button onclick="location.reload()" style="padding:12px 30px;background:#2563eb;color:#fff;border-radius:10px;font-weight:bold;border:none;">🔄 Jogar Novamente</button>
 </div>
 </div>
 
@@ -233,30 +237,279 @@ function hide(id){$(id).classList.add("hidden")}
 function closeModal(id){hide(id)}
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 function toast(text){const e=$("toast");e.textContent=text;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2500)}
-function renderLobbyPlayers(){$("playersList").innerHTML=jogadores.map(p=>`<div style="padding:5px 0;">● ${escapeHtml(p.nome)}</div>`).join("")}
+function renderLobbyPlayers(){
+  const list = $("playersList");
+  list.innerHTML = jogadores.map(p=>`<div style="padding:5px 0;">● ${escapeHtml(p.nome)}</div>`).join("");
+}
 
-function createRoom(){const n=$("nameInput").value.trim();if(!n)return toast("Digite seu nome");isHost=true;roomCode="JUSTICA-"+Math.random().toString(36).substring(2,7).toUpperCase();peer=new Peer(roomCode,{config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}});peer.on("open",id=>{myId=id;jogadores=[{id,nome:n,cor:0,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}}];$("roomCode").textContent=roomCode;show("roomCodeBox");show("startBtn");renderLobbyPlayers()});peer.on("connection",c=>{if(jogadores.length>=MAX_JOGADORES)return c.close();connections.push(c);c.on("open",()=>c.send({type:"roomInfo",jogadores}));c.on("data",d=>handleHostData(c,d))})}
-function joinRoom(){const n=$("nameInput").value.trim(),c=$("roomInput").value.trim().toUpperCase();if(!n||!c)return toast("Preencha nome e código");isHost=false;peer=new Peer({config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}});peer.on("open",id=>{myId=id;conn=peer.connect(c,{reliable:true});conn.on("open",()=>conn.send({type:"join",player:{id,nome:n}}));conn.on("data",handleClientData)})}
+// FUNÇÕES DO LOBBY - GARANTIDAS ANTES DE SEREM CHAMADAS
+function createRoom(){
+  console.log("Criando sala...");
+  const n=$("nameInput").value.trim();
+  if(!n)return toast("Digite seu nome");
+  
+  isHost=true;
+  roomCode="JUSTICA-"+Math.random().toString(36).substring(2,7).toUpperCase();
+  
+  peer = new Peer(roomCode, {
+    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
+  });
+  
+  peer.on("open", id => {
+    console.log("Sala criada com ID:", id);
+    myId = id;
+    jogadores = [{id, nome:n, cor:0, posicao:0, profissao:null, itens:[], acertos:0, denuncias:0, poderesUsados:{}}];
+    $("roomCode").textContent = roomCode;
+    show("roomCodeBox");
+    show("startBtn");
+    renderLobbyPlayers();
+    toast("Sala criada! Código: " + roomCode);
+  });
+  
+  peer.on("connection", c => {
+    console.log("Novo jogador conectado");
+    if(jogadores.length >= MAX_JOGADORES) {
+      c.close();
+      return;
+    }
+    connections.push(c);
+    c.on("open", () => c.send({type:"roomInfo", jogadores}));
+    c.on("data", d => handleHostData(c, d));
+  });
+  
+  peer.on("error", err => {
+    console.error("Erro no Peer:", err);
+    toast("Erro de conexão: " + err.type);
+  });
+}
+
+function joinRoom(){
+  console.log("Entrando na sala...");
+  const n=$("nameInput").value.trim(), c=$("roomInput").value.trim().toUpperCase();
+  if(!n)return toast("Digite seu nome");
+  if(!c)return toast("Digite o código da sala");
+  
+  isHost=false;
+  peer = new Peer({
+    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
+  });
+  
+  peer.on("open", id => {
+    console.log("Conectado, entrando na sala:", c);
+    myId = id;
+    conn = peer.connect(c, { reliable:true });
+    
+    conn.on("open", () => {
+      console.log("Enviando dados do jogador...");
+      conn.send({type:"join", player:{id, nome:n}});
+    });
+    
+    conn.on("data", handleClientData);
+    
+    conn.on("error", err => {
+      console.error("Erro na conexão:", err);
+      toast("Não foi possível entrar na sala! Verifique o código.");
+    });
+  });
+  
+  peer.on("error", err => {
+    console.error("Erro no Peer:", err);
+    toast("Erro de conexão: " + err.type);
+  });
+}
+
 function broadcast(d){if(isHost)connections.forEach(c=>c.send(d))}
-function handleHostData(c,data){if(data.type==="join"){if(jogadores.length>=MAX_JOGADORES)return c.send({type:"error",message:"Sala cheia"});const p={id:data.player.id,nome:data.player.nome,cor:jogadores.length,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}};jogadores.push(p);broadcast({type:"players",jogadores});renderLobbyPlayers()}if(data.type==="rollRequest"&&!actionLocked&&jogadores[turno]?.id===data.playerId)processRoll(data.playerId);if(data.type==="questionAnswer")processQuestionAnswer(data.playerId,data.answer)}
-function handleClientData(d){if(d.type==="players"){jogadores=d.jogadores;renderLobbyPlayers()}if(d.type==="start"){jogadores=d.jogadores;startLocalGame(d.tempo)}if(d.type==="state"){jogadores=d.jogadores;turno=d.turno;tempoRestante=d.tempo;renderBoard();renderHud()}if(d.type==="question"){pendingQuestion=d.q;showQuestionModal()}if(d.type==="endGame"){showResultModal(d.result)}}
-function startGame(){if(jogadores.length<1)return toast("Precisa de pelo menos 1 jogador");jogadores.forEach(p=>{p.profissao=PROFISSOES[Math.floor(Math.random()*PROFISSOES.length)]});broadcast({type:"start",jogadores,tempo:TEMPO_TOTAL});startLocalGame(TEMPO_TOTAL)}
-function startLocalGame(tempo){gameStarted=true;hide("lobby");show("game");tempoRestante=tempo;renderBoard();renderHud();timerInterval=setInterval(()=>{tempoRestante--;if(tempoRestante<=0)endGame("Tempo esgotado!")},1000);if(isHost)jogarTurno()}
+function handleHostData(c,data){
+  console.log("Dados recebidos no host:", data);
+  if(data.type==="join"){
+    if(jogadores.length>=MAX_JOGADORES)return c.send({type:"error",message:"Sala cheia"});
+    const p={id:data.player.id,nome:data.player.nome,cor:jogadores.length,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}};
+    jogadores.push(p);
+    broadcast({type:"players",jogadores});
+    renderLobbyPlayers();
+    toast(p.nome + " entrou na sala!");
+  }
+  if(data.type==="rollRequest"&&!actionLocked&&jogadores[turno]?.id===data.playerId)processRoll(data.playerId);
+  if(data.type==="questionAnswer")processQuestionAnswer(data.playerId,data.answer);
+}
+function handleClientData(d){
+  console.log("Dados recebidos no cliente:", d);
+  if(d.type==="players"){jogadores=d.jogadores;renderLobbyPlayers()}
+  if(d.type==="start"){jogadores=d.jogadores;startLocalGame(d.tempo)}
+  if(d.type==="state"){jogadores=d.jogadores;turno=d.turno;tempoRestante=d.tempo;renderBoard();renderHud()}
+  if(d.type==="question"){pendingQuestion=d.q;showQuestionModal()}
+  if(d.type==="endGame"){showResultModal(d.result)}
+}
+function startGame(){
+  console.log("Iniciando jogo...");
+  if(jogadores.length<1)return toast("Precisa de pelo menos 1 jogador");
+  jogadores.forEach(p=>{p.profissao=PROFISSOES[Math.floor(Math.random()*PROFISSOES.length)]});
+  broadcast({type:"start",jogadores,tempo:TEMPO_TOTAL});
+  startLocalGame(TEMPO_TOTAL);
+}
+function startLocalGame(tempo){
+  gameStarted=true;
+  hide("lobby");
+  show("game");
+  tempoRestante=tempo;
+  renderBoard();
+  renderHud();
+  timerInterval=setInterval(()=>{tempoRestante--;if(tempoRestante<=0)endGame("Tempo esgotado!")},1000);
+  if(isHost)jogarTurno();
+}
 
-function renderBoard(){const b=$("board");b.innerHTML="";for(let i=1;i<=TOTAL_CASAS;i++){let cls="",icon="",tipo="";if(PROBLEMAS[i]){cls="problem";icon="⚠️";tipo="Problema"}else if(SOLUCOES[i]){cls="solution";icon="🌱";tipo="Solução"}else if(PERGUNTAS[i]){cls="question";icon="❓";tipo="Pergunta"}else if(ITEM_CASAS.includes(i)){cls="item";icon="🎁";tipo="Item"}else if(i===TOTAL_CASAS){cls="finish";icon="🏆";tipo="Chegada"}const ps=jogadores.filter(p=>p.posicao===i).map(p=>`<div class="person" style="color:${CORES[p.cor]}"><div class="head"></div><div class="body"></div><div class="leg1"></div><div class="leg2"></div></div>`).join("");b.innerHTML+=`<div class="cell ${cls}"><span class="cellNumber">${i}</span><span class="cellIcon">${icon}</span><span class="cellType">${tipo}</span><div class="pawns">${ps}</div></div>`}}
-function renderHud(){const me=jogadores.find(p=>p.id===myId);if(me){const pct=(me.posicao/TOTAL_CASAS*100).toFixed(1);$("progressPercent").textContent=`${pct}%`;$("progressFill").style.width=`${pct}%`;$("progressText").textContent=`Seu progresso: ${me.posicao}/${TOTAL_CASAS}`}$("hudPlayers").innerHTML=jogadores.map(p=>`<div class="playerCard ${p.id===myId?'me':''}"><div style="display:flex;align-items:center;"><span class="playerColor" style="background:${CORES[p.cor]}"></span><span class="playerName">${escapeHtml(p.nome)}</span></div><div class="playerStats">📍 Casa: <span>${p.posicao}</span><br>✅ Acertos: <span>${p.acertos}</span><br>📢 Denúncias: <span>${p.denuncias}</span><br>🎒 Itens: <span>${p.itens.length}</span></div></div>`).join("");$("turnText").textContent=gameEnded?"Jogo encerrado":`Vez de ${jogadores[turno]?.nome || "aguardando"}`;$("rollBtn").disabled=jogadores[turno]?.id!==myId||actionLocked||gameEnded}
+function renderBoard(){
+  const b=$("board");b.innerHTML="";
+  for(let i=1;i<=TOTAL_CASAS;i++){
+    let cls="",icon="",tipo="";
+    if(PROBLEMAS[i]){cls="problem";icon="⚠️";tipo="Problema"}
+    else if(SOLUCOES[i]){cls="solution";icon="🌱";tipo="Solução"}
+    else if(PERGUNTAS[i]){cls="question";icon="❓";tipo="Pergunta"}
+    else if(ITEM_CASAS.includes(i)){cls="item";icon="🎁";tipo="Item"}
+    else if(i===TOTAL_CASAS){cls="finish";icon="🏆";tipo="Chegada"}
+    const ps=jogadores.filter(p=>p.posicao===i).map(p=>`<div class="person" style="color:${CORES[p.cor]}"><div class="head"></div><div class="body"></div><div class="leg1"></div><div class="leg2"></div></div>`).join("");
+    b.innerHTML+=`<div class="cell ${cls}"><span class="cellNumber">${i}</span><span class="cellIcon">${icon}</span><span class="cellType">${tipo}</span><div class="pawns">${ps}</div></div>`;
+  }
+}
+function renderHud(){
+  const me=jogadores.find(p=>p.id===myId);
+  if(me){
+    const pct=(me.posicao/TOTAL_CASAS*100).toFixed(1);
+    $("progressPercent").textContent=`${pct}%`;
+    $("progressFill").style.width=`${pct}%`;
+    $("progressText").textContent=`Seu progresso: ${me.posicao}/${TOTAL_CASAS}`;
+  }
+  $("hudPlayers").innerHTML=jogadores.map(p=>`<div class="playerCard ${p.id===myId?'me':''}"><div style="display:flex;align-items:center;"><span class="playerColor" style="background:${CORES[p.cor]}"></span><span class="playerName">${escapeHtml(p.nome)}</span></div><div class="playerStats">📍 Casa: <span>${p.posicao}</span><br>✅ Acertos: <span>${p.acertos}</span><br>📢 Denúncias: <span>${p.denuncias}</span><br>🎒 Itens: <span>${p.itens.length}</span></div></div>`).join("");
+  $("turnText").textContent=gameEnded?"Jogo encerrado":`Vez de ${jogadores[turno]?.nome || "aguardando"}`;
+  $("rollBtn").disabled=jogadores[turno]?.id!==myId||actionLocked||gameEnded;
+}
 function jogarTurno(){if(!isHost)return;turno=(turno+1)%jogadores.length;actionLocked=false;broadcast({type:"state",jogadores,turno,tempo:tempoRestante});renderHud()}
-function rollDice(){if(actionLocked||jogadores[turno]?.id!==myId)return;actionLocked=true;const d=$("dice");d.classList.add("diceRolling");setTimeout(()=>{d.classList.remove("diceRolling");const val=Math.floor(Math.random()*6)+1;d.textContent=val;if(isHost)processRoll(myId,val);else conn.send({type:"rollRequest",playerId:myId,valor:val})},600)}
-function processRoll(playerId,valor){const p=jogadores.find(x=>x.id===playerId);if(!p)return;const d=valor||Math.floor(Math.random()*6)+1;p.posicao=Math.min(TOTAL_CASAS,p.posicao+d);renderBoard();renderHud();setTimeout(()=>processarCasa(p),500)}
-function processarCasa(p){const c=p.posicao;if(c===TOTAL_CASAS){endGame(`${p.nome} chegou à casa 150!`);return}if(PROBLEMAS[c]){let perde=-3;if(p.itens.some(i=>["arvore","agua","filtro","kit"].includes(i.id))){const prot=p.itens.find(i=>["arvore","agua","filtro","kit"].includes(i.id));p.itens=p.itens.filter(i=>i!==prot);toast(`${p.nome} usou ${prot.nome} e evitou o problema!`);perde=0}else if(p.profissao.id==="medico"&&!p.poderesUsados.medico){p.poderesUsados.medico=true;perde=0;toast(`${p.nome} usou poder de Médico!`)}else if(p.profissao.id==="agente"&&!p.poderesUsados.agente){p.poderesUsados.agente=true;perde=0;toast(`${p.nome} usou poder de Agente Ambiental!`)}if(perde<0){p.posicao=Math.max(0,p.posicao+perde);toast(`${PROBLEMAS[c]} → ${perde} casas`)}renderBoard();renderHud()}else if(SOLUCOES[c]){let ganha=2;if(p.profissao.id==="engenheiro")ganha++;if(p.itens.some(i=>i.id==="mapa"||i.id==="energia"||i.id==="documento")){const b=p.itens.find(i=>["mapa","energia","documento"].includes(i.id));p.itens=p.itens.filter(i=>i!==b);ganha++}p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);toast(`${SOLUCOES[c]} → +${ganha} casas`);renderBoard();renderHud()}else if(PERGUNTAS[c]){pendingQuestion={casa:c,q:PERGUNTAS[c],player:p};if(isHost)broadcast({type:"question",q:{casa:c,q:PERGUNTAS[c]}});showQuestionModal();return}else if(ITEM_CASAS.includes(c)){const item=ITENS[Math.floor(Math.random()*ITENS.length)];p.itens.push(item);let bonus=0;if(item.id==="semente")bonus=1;if(item.id==="sementes")bonus=2;if(item.id==="bicicleta")bonus=2;if((item.id==="semente"||item.id==="sementes")&&(p.profissao.id==="biologo"||p.profissao.id==="agricultor"))bonus++;p.posicao=Math.min(TOTAL_CASAS,p.posicao+bonus);toast(`${p.nome} encontrou: ${item.emoji} ${item.nome}${bonus>0?` → +${bonus} casas`:''}`);renderBoard();renderHud()}setTimeout(()=>{if(isHost)jogarTurno()},800)}
-function showQuestionModal(){const q=pendingQuestion.q;$("questionText").textContent=q.q;$("questionOpts").innerHTML=q.op.map((o,i)=>`<button class="questionOption" onclick="responder(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join("");show("questionModal")}
-function responder(i){if(isHost)processQuestionAnswer(myId,i);else conn.send({type:"questionAnswer",answer:i});hide("questionModal")}
-function processQuestionAnswer(playerId,answer){const p=jogadores.find(x=>x.id===playerId);if(!p||!pendingQuestion)return;const correta=pendingQuestion.q.correta;if(answer===correta){p.acertos++;let ganha=2;if(["professor","pesquisador"].includes(p.profissao.id))ganha++;if(p.itens.some(i=>i.id==="livro")){p.itens=p.itens.filter(i=>i.id!=="livro");ganha++}p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);toast(`✅ Acertou! +${ganha} casas`)}else{let nova=false;if(p.itens.some(i=>["denuncia","megafone"].includes(i.id))){const d=p.itens.find(i=>["denuncia","megafone"].includes(i.id));p.itens=p.itens.filter(i=>i!==d);p.denuncias++;nova=true;toast(`❌ Errou, mas ${d.nome} dá nova tentativa!`)}else if(["advogado","jornalista","lider"].includes(p.profissao.id)&&!p.poderesUsados[p.profissao.id]){p.poderesUsados[p.profissao.id]=true;nova=true;toast(`❌ Errou, ${p.profissao.nome} dá nova tentativa!`)}else toast("❌ Errou, fica na casa")}pendingQuestion=null;renderBoard();renderHud();setTimeout(()=>{if(isHost)jogarTurno()},800)}
+function rollDice(){
+  if(actionLocked||jogadores[turno]?.id!==myId)return;
+  actionLocked=true;
+  const d=$("dice");
+  d.classList.add("diceRolling");
+  setTimeout(()=>{
+    d.classList.remove("diceRolling");
+    const val=Math.floor(Math.random()*6)+1;
+    d.textContent=val;
+    if(isHost)processRoll(myId,val);
+    else conn.send({type:"rollRequest",playerId:myId,valor:val});
+  },600);
+}
+function processRoll(playerId,valor){
+  const p=jogadores.find(x=>x.id===playerId);if(!p)return;
+  const d=valor||Math.floor(Math.random()*6)+1;
+  p.posicao=Math.min(TOTAL_CASAS,p.posicao+d);
+  renderBoard();renderHud();
+  setTimeout(()=>processarCasa(p),500);
+}
+function processarCasa(p){
+  const c=p.posicao;
+  if(c===TOTAL_CASAS){endGame(`${p.nome} chegou à casa 150!`);return;}
+  if(PROBLEMAS[c]){
+    let perde=-3;
+    if(p.itens.some(i=>["arvore","agua","filtro","kit"].includes(i.id))){
+      const prot=p.itens.find(i=>["arvore","agua","filtro","kit"].includes(i.id));
+      p.itens=p.itens.filter(i=>i!==prot);
+      toast(`${p.nome} usou ${prot.nome} e evitou o problema!`);
+      perde=0;
+    }else if(p.profissao.id==="medico"&&!p.poderesUsados.medico){p.poderesUsados.medico=true;perde=0;toast(`${p.nome} usou poder de Médico!`);}
+    else if(p.profissao.id==="agente"&&!p.poderesUsados.agente){p.poderesUsados.agente=true;perde=0;toast(`${p.nome} usou poder de Agente Ambiental!`);}
+    if(perde<0){p.posicao=Math.max(0,p.posicao+perde);toast(`${PROBLEMAS[c]} → ${perde} casas`)}
+    renderBoard();renderHud();
+  }else if(SOLUCOES[c]){
+    let ganha=2;
+    if(p.profissao.id==="engenheiro")ganha++;
+    if(p.itens.some(i=>i.id==="mapa"||i.id==="energia"||i.id==="documento")){
+      const b=p.itens.find(i=>["mapa","energia","documento"].includes(i.id));
+      p.itens=p.itens.filter(i=>i!==b);ganha++;
+    }
+    p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);
+    toast(`${SOLUCOES[c]} → +${ganha} casas`);
+    renderBoard();renderHud();
+  }else if(PERGUNTAS[c]){
+    pendingQuestion={casa:c,q:PERGUNTAS[c],player:p};
+    if(isHost)broadcast({type:"question",q:{casa:c,q:PERGUNTAS[c]}});
+    showQuestionModal();
+    return;
+  }else if(ITEM_CASAS.includes(c)){
+    const item=ITENS[Math.floor(Math.random()*ITENS.length)];
+    p.itens.push(item);
+    let bonus=0;
+    if(item.id==="semente")bonus=1;
+    if(item.id==="sementes")bonus=2;
+    if(item.id==="bicicleta")bonus=2;
+    if((item.id==="semente"||item.id==="sementes")&&(p.profissao.id==="biologo"||p.profissao.id==="agricultor"))bonus++;
+    p.posicao=Math.min(TOTAL_CASAS,p.posicao+bonus);
+    toast(`${p.nome} encontrou: ${item.emoji} ${item.nome}${bonus>0?` → +${bonus} casas`:''}`);
+    renderBoard();renderHud();
+  }
+  setTimeout(()=>{if(isHost)jogarTurno()},800);
+}
+function showQuestionModal(){
+  const q=pendingQuestion.q;
+  $("questionText").textContent=q.q;
+  $("questionOpts").innerHTML=q.op.map((o,i)=>`<button class="questionOption" onclick="responder(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join("");
+  show("questionModal");
+}
+function responder(i){
+  if(isHost)processQuestionAnswer(myId,i);
+  else conn.send({type:"questionAnswer",answer:i});
+  hide("questionModal");
+}
+function processQuestionAnswer(playerId,answer){
+  const p=jogadores.find(x=>x.id===playerId);if(!p||!pendingQuestion)return;
+  const correta=pendingQuestion.q.correta;
+  if(answer===correta){
+    p.acertos++;let ganha=2;
+    if(["professor","pesquisador"].includes(p.profissao.id))ganha++;
+    if(p.itens.some(i=>i.id==="livro")){p.itens=p.itens.filter(i=>i.id!=="livro");ganha++;}
+    p.posicao=Math.min(TOTAL_CASAS,p.posicao+ganha);
+    toast(`✅ Acertou! +${ganha} casas`);
+  }else{
+    let nova=false;
+    if(p.itens.some(i=>["denuncia","megafone"].includes(i.id))){
+      const d=p.itens.find(i=>["denuncia","megafone"].includes(i.id));
+      p.itens=p.itens.filter(i=>i!==d);p.denuncias++;nova=true;
+      toast(`❌ Errou, mas ${d.nome} dá nova tentativa!`);
+    }else if(["advogado","jornalista","lider"].includes(p.profissao.id)&&!p.poderesUsados[p.profissao.id]){
+      p.poderesUsados[p.profissao.id]=true;nova=true;
+      toast(`❌ Errou, ${p.profissao.nome} dá nova tentativa!`);
+    }else toast("❌ Errou, fica na casa");
+  }
+  pendingQuestion=null;renderBoard();renderHud();
+  setTimeout(()=>{if(isHost)jogarTurno()},800);
+}
 function openHowTo(){show("howModal")}
-function openItems(){const me=jogadores.find(p=>p.id===myId);if(!me)return;$("itemGrid").innerHTML=me.itens.length===0?"<p style='grid-column:1/-1;text-align:center;padding:20px;'>Você não tem itens ainda.</p>":me.itens.map(i=>`<div class="itemCard"><div style="font-size:28px;">${i.emoji}</div><div style="font-weight:bold;margin-top:5px;">${i.nome}</div><div style="font-size:11px;color:#666;margin-top:4px;">${i.desc}</div></div>`).join("");show("itemsModal")}
-function openProfession(){const me=jogadores.find(p=>p.id===myId);if(!me)return;$("profInfo").innerHTML=`<div class="profDisplay"><div class="profEmoji">${me.profissao.emoji}</div><div class="profName">${me.profissao.nome}</div><div style="color:#4b5563;line-height:1.6;">${me.profissao.desc}</div></div>`;show("professionModal")}
-function endGame(motivo){gameEnded=true;clearInterval(timerInterval);let res="🏆 Resultado Final<br><br>";const ordem=[...jogadores].sort((a,b)=>b.posicao-a.posicao||b.itens.length-a.itens.length||b.acertos-a.acertos);ordem.forEach((p,i)=>res+=`<b>${i+1}º</b> - ${escapeHtml(p.nome)}<br>📍 Casa: ${p.posicao} | ✅ Acertos: ${p.acertos} | 📢 Denúncias: ${p.denuncias} | 🎒 Itens: ${p.itens.length}<br><br>`);res+=`<b>${motivo}</b>`;if(isHost)broadcast({type:"endGame",result:res});showResultModal(res)}
+function openItems(){
+  const me=jogadores.find(p=>p.id===myId);if(!me)return;
+  $("itemGrid").innerHTML=me.itens.length===0?"<p style='grid-column:1/-1;text-align:center;padding:20px;'>Você não tem itens ainda.</p>":
+    me.itens.map(i=>`<div class="itemCard"><div style="font-size:28px;">${i.emoji}</div><div style="font-weight:bold;margin-top:5px;">${i.nome}</div><div style="font-size:11px;color:#666;margin-top:4px;">${i.desc}</div></div>`).join("");
+  show("itemsModal");
+}
+function openProfession(){
+  const me=jogadores.find(p=>p.id===myId);if(!me)return;
+  $("profInfo").innerHTML=`<div class="profDisplay"><div class="profEmoji">${me.profissao.emoji}</div><div class="profName">${me.profissao.nome}</div><div style="color:#4b5563;line-height:1.6;">${me.profissao.desc}</div></div>`;
+  show("professionModal");
+}
+function endGame(motivo){
+  gameEnded=true;clearInterval(timerInterval);
+  let res="🏆 Resultado Final<br><br>";
+  const ordem=[...jogadores].sort((a,b)=>b.posicao-a.posicao||b.itens.length-a.itens.length||b.acertos-a.acertos);
+  ordem.forEach((p,i)=>res+=`<b>${i+1}º</b> - ${escapeHtml(p.nome)}<br>📍 Casa: ${p.posicao} | ✅ Acertos: ${p.acertos} | 📢 Denúncias: ${p.denuncias} | 🎒 Itens: ${p.itens.length}<br><br>`);
+  res+=`<b>${motivo}</b>`;
+  if(isHost)broadcast({type:"endGame",result:res});
+  showResultModal(res);
+}
 function showResultModal(r){$("resultText").innerHTML=r;show("resultModal")}
+
+// DEBUG: Verificar se as funções existem no carregamento
+console.log("✅ Funções do lobby carregadas!");
+console.log("createRoom:", typeof createRoom);
+console.log("joinRoom:", typeof joinRoom);
+console.log("startGame:", typeof startGame);
+console.log("openHowTo:", typeof openHowTo);
 </script>
 </body>
 </html>
