@@ -10,9 +10,10 @@
 html,body{min-height:100vh;font-family:Arial,sans-serif;}
 body{color:#1a2e1a;background:radial-gradient(circle at 10% 15%,#86efac 0%,transparent 35%),radial-gradient(circle at 90% 20%,#93c5fd 0%,transparent 35%),radial-gradient(circle at 50% 90%,#fef08a 0%,transparent 35%),linear-gradient(180deg,#dcfce7,#e0f2fe,#fef9c3);background-attachment:fixed;}
 button,input{font:inherit;border:0;border-radius:12px;}
-button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:white;font-weight:bold;transition:transform 0.15s,opacity 0.15s;}
+button{cursor:pointer;background:linear-gradient(135deg,#15803d,#22c55e);color:white;font-weight:bold;transition:transform 0.15s,opacity 0.15s;padding:12px 20px;}
 button:hover{transform:scale(1.03);opacity:0.95;}
 button:active{transform:scale(0.98);}
+button:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 .hidden{display:none !important;}
 
 #lobby{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;}
@@ -21,8 +22,10 @@ button:active{transform:scale(0.98);}
 .lobbyBox input{width:100%;padding:14px;margin:8px 0;border:2px solid #94a3b8;outline:none;transition:border-color 0.2s;}
 .lobbyBox input:focus{border-color:#22c55e;}
 .roomCode{font-size:26px;font-weight:bold;letter-spacing:5px;color:#ca8a04;margin:15px 0;}
-#playersLobby{margin-top:15px;text-align:left;}
-#startBtn{margin-top:15px;padding:12px 30px;font-size:16px;}
+#statusBox{background:#f3f4f6;border-radius:10px;padding:10px;margin:15px 0;font-size:13px;text-align:left;}
+#statusText{color:#374151;}
+.error{color:#dc2626;font-weight:bold;}
+.success{color:#16a34a;font-weight:bold;}
 
 #boardArea{max-width:1450px;margin:0 auto;padding:20px;position:relative;z-index:1;}
 #progressBox{background:#ffffffdd;border:2px solid #22c55e40;border-radius:17px;padding:14px;margin-bottom:14px;}
@@ -30,12 +33,10 @@ button:active{transform:scale(0.98);}
 #progressFill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#84cc16,#facc15);transition:.3s;}
 
 #board{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;padding:12px;border-radius:20px;background:linear-gradient(135deg,#a67c52,#8b5a2b,#a67c52);box-shadow:inset 0 0 20px #5c3a21,0 10px 30px rgba(0,0,0,0.25);}
-
 .cell{min-height:75px;border-radius:8px;position:relative;padding:4px;border:2px solid #5c3a21;box-shadow:inset 0 2px 4px rgba(255,255,255,0.3),inset 0 -2px 4px rgba(0,0,0,0.2);background:linear-gradient(145deg,#d9b38c,#c49a6c);display:flex;flex-direction:column;justify-content:space-between;}
 .cellNumber{font-weight:bold;font-size:13px;color:#3d2314;padding:2px 4px;align-self:flex-start;}
 .cellIcon{align-self:center;font-size:18px;}
 .cellType{font-size:9px;color:#5c3a21;padding:0 4px 2px;text-align:center;}
-
 .cell.problem{background:linear-gradient(145deg,#f87171,#ef4444);border-color:#b91c1c;}
 .cell.solution{background:linear-gradient(145deg,#86efac,#22c55e);border-color:#15803d;}
 .cell.question{background:linear-gradient(145deg,#c4b5fd,#8b5cf6);border-color:#6d28d9;}
@@ -62,11 +63,9 @@ button:active{transform:scale(0.98);}
 .playerStats span{font-weight:bold;color:#1e293b;}
 
 .hudActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.hudActions button{padding:12px 20px;border-radius:12px;font-size:15px;min-width:140px;}
 #rollBtn{background:linear-gradient(135deg,#15803d,#22c55e) !important;}
 #itemsBtn{background:linear-gradient(135deg,#0891b2,#22d3ee) !important;}
 #profBtn{background:linear-gradient(135deg,#7c3aed,#a855f7) !important;}
-.hudActions button:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
 #turnText{text-align:center;margin-top:15px;padding:10px;background:linear-gradient(90deg,#15803d,#0d9488);border-radius:10px;color:#fff;font-weight:bold;}
 #dice{width:80px;height:80px;border-radius:15px;background:#fff;border:3px solid #22c55e;display:flex;justify-content:center;align-items:center;font-size:40px;margin:0 auto 10px;box-shadow:0 5px 15px rgba(0,0,0,0.2);}
@@ -88,7 +87,7 @@ button:active{transform:scale(0.98);}
 #toast.show{opacity:1;}
 
 @media(max-width:768px){#board{grid-template-columns:repeat(5,1fr);gap:4px;}.cell{min-height:60px;}#hudPlayers{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){#hudPlayers{grid-template-columns:1fr;}.hudActions button{min-width:100px;padding:10px;}}
+@media(max-width:480px){#hudPlayers{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -98,6 +97,12 @@ button:active{transform:scale(0.98);}
 <div style="font-size:50px;">🌎</div>
 <h1>Caminhos da Justiça Ambiental</h1>
 <p>Jogo sobre justiça ambiental e participação comunitária.</p>
+
+<div id="statusBox">
+  <div><strong>📊 Status:</strong></div>
+  <div id="statusText">🔄 Carregando...</div>
+</div>
+
 <input id="nameInput" maxlength="18" placeholder="Seu nome">
 <button id="createBtn" onclick="createRoom()">🏠 Criar sala</button>
 <button id="howBtn" style="background:linear-gradient(135deg,#7c3aed,#a855f7);margin-top:8px;" onclick="openHowTo()">❓ Como jogar</button>
@@ -145,8 +150,8 @@ button:active{transform:scale(0.98);}
 <h2>❓ Como Jogar</h2>
 <div style="margin-top:15px;line-height:1.8;">
 <p><b>🎲 Objetivo:</b> Chegar à casa 150 primeiro!</p>
-<p><b>⚠️ Problema:</b> Volta casas</p>
-<p><b>🌱 Solução:</b> Avança casas</p>
+<p><b>⚠️ Problema:</b> Volta 3 casas</p>
+<p><b>🌱 Solução:</b> Avança 2 casas</p>
 <p><b>❓ Pergunta:</b> Acertou = +2 | Errou = fica</p>
 <p><b>🎁 Item:</b> Ganha poder especial</p>
 <p><b>💼 Profissão:</b> Poder único por partida</p>
@@ -231,109 +236,137 @@ const ITEM_CASAS=[9,18,27,36,45,54,63,72,81,90,99,108,117,126,135,144];
 let peer=null,conn=null,connections=[],isHost=false,roomCode="",myId="",gameStarted=false,gameEnded=false;
 let jogadores=[],turno=0,tempoRestante=TEMPO_TOTAL,timerInterval=null,pendingQuestion=null,actionLocked=false;
 
+// ===== FUNÇÕES AUXILIARES =====
 function $(id){return document.getElementById(id)}
 function show(id){$(id).classList.remove("hidden")}
 function hide(id){$(id).classList.add("hidden")}
 function closeModal(id){hide(id)}
 function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 function toast(text){const e=$("toast");e.textContent=text;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2500)}
+function setStatus(text, isError=false){
+  const st=$("statusText");
+  st.innerHTML=text;
+  st.className=isError?"error":"success";
+}
 function renderLobbyPlayers(){
-  const list = $("playersList");
-  list.innerHTML = jogadores.map(p=>`<div style="padding:5px 0;">● ${escapeHtml(p.nome)}</div>`).join("");
+  const list=$("playersList");
+  list.innerHTML=jogadores.map(p=>`<div style="padding:5px 0;">● ${escapeHtml(p.nome)}</div>`).join("");
 }
 
-// FUNÇÕES DO LOBBY - GARANTIDAS ANTES DE SEREM CHAMADAS
+// ===== INICIALIZAÇÃO =====
+window.onload=function(){
+  console.log("✅ Página carregada!");
+  if(typeof Peer==="undefined"){
+    setStatus("❌ Erro: Biblioteca PeerJS não carregou! Verifique sua internet.", true);
+    $("createBtn").disabled=true;
+    $("joinBtn").disabled=true;
+    return;
+  }
+  setStatus("✅ Pronto! Digite seu nome e comece.");
+};
+
+// ===== FUNÇÕES DO LOBBY =====
+function openHowTo(){
+  console.log("📖 Abrindo Como Jogar...");
+  show("howModal");
+}
+
 function createRoom(){
-  console.log("Criando sala...");
+  console.log("🏠 Criando sala...");
   const n=$("nameInput").value.trim();
   if(!n)return toast("Digite seu nome");
+  
+  setStatus("🔄 Conectando ao servidor...");
   
   isHost=true;
   roomCode="JUSTICA-"+Math.random().toString(36).substring(2,7).toUpperCase();
   
-  peer = new Peer(roomCode, {
-    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
-  });
-  
-  peer.on("open", id => {
-    console.log("Sala criada com ID:", id);
-    myId = id;
-    jogadores = [{id, nome:n, cor:0, posicao:0, profissao:null, itens:[], acertos:0, denuncias:0, poderesUsados:{}}];
-    $("roomCode").textContent = roomCode;
-    show("roomCodeBox");
-    show("startBtn");
-    renderLobbyPlayers();
-    toast("Sala criada! Código: " + roomCode);
-  });
-  
-  peer.on("connection", c => {
-    console.log("Novo jogador conectado");
-    if(jogadores.length >= MAX_JOGADORES) {
-      c.close();
-      return;
-    }
-    connections.push(c);
-    c.on("open", () => c.send({type:"roomInfo", jogadores}));
-    c.on("data", d => handleHostData(c, d));
-  });
-  
-  peer.on("error", err => {
-    console.error("Erro no Peer:", err);
-    toast("Erro de conexão: " + err.type);
-  });
+  try{
+    peer=new Peer(roomCode,{
+      config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}
+    });
+    
+    peer.on("open",id=>{
+      console.log("✅ Sala criada! ID:",id);
+      myId=id;
+      jogadores=[{id,nome:n,cor:0,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}}];
+      $("roomCode").textContent=roomCode;
+      show("roomCodeBox");
+      show("startBtn");
+      renderLobbyPlayers();
+      setStatus(`✅ Sala criada! Código: <strong>${roomCode}</strong>`);
+    });
+    
+    peer.on("connection",c=>{
+      console.log("👤 Jogador entrou");
+      if(jogadores.length>=MAX_JOGADORES){c.close();return;}
+      connections.push(c);
+      c.on("open",()=>c.send({type:"roomInfo",jogadores}));
+      c.on("data",d=>handleHostData(c,d));
+    });
+    
+    peer.on("error",err=>{
+      console.error("❌ Erro Peer:",err);
+      setStatus(`❌ Erro: ${err.type}`, true);
+      toast("Erro: "+err.type);
+    });
+  }catch(e){
+    console.error("❌ Exceção:",e);
+    setStatus("❌ Erro ao criar sala: "+e.message, true);
+  }
 }
 
 function joinRoom(){
-  console.log("Entrando na sala...");
-  const n=$("nameInput").value.trim(), c=$("roomInput").value.trim().toUpperCase();
+  console.log("🚪 Entrando na sala...");
+  const n=$("nameInput").value.trim(),c=$("roomInput").value.trim().toUpperCase();
   if(!n)return toast("Digite seu nome");
   if(!c)return toast("Digite o código da sala");
   
+  setStatus("🔄 Conectando...");
+  
   isHost=false;
-  peer = new Peer({
-    config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }
-  });
+  peer=new Peer({config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}});
   
-  peer.on("open", id => {
-    console.log("Conectado, entrando na sala:", c);
-    myId = id;
-    conn = peer.connect(c, { reliable:true });
+  peer.on("open",id=>{
+    console.log("✅ Conectado, entrando na sala:",c);
+    myId=id;
+    conn=peer.connect(c,{reliable:true});
     
-    conn.on("open", () => {
-      console.log("Enviando dados do jogador...");
-      conn.send({type:"join", player:{id, nome:n}});
+    conn.on("open",()=>{
+      console.log("✅ Conexão aberta, enviando dados...");
+      conn.send({type:"join",player:{id,nome:n}});
     });
     
-    conn.on("data", handleClientData);
+    conn.on("data",handleClientData);
     
-    conn.on("error", err => {
-      console.error("Erro na conexão:", err);
-      toast("Não foi possível entrar na sala! Verifique o código.");
+    conn.on("error",err=>{
+      console.error("❌ Erro conexão:",err);
+      setStatus("❌ Não foi possível conectar!", true);
     });
   });
   
-  peer.on("error", err => {
-    console.error("Erro no Peer:", err);
-    toast("Erro de conexão: " + err.type);
+  peer.on("error",err=>{
+    console.error("❌ Erro Peer:",err);
+    setStatus("❌ Erro de conexão: "+err.type, true);
   });
 }
 
 function broadcast(d){if(isHost)connections.forEach(c=>c.send(d))}
 function handleHostData(c,data){
-  console.log("Dados recebidos no host:", data);
+  console.log("📥 Host recebeu:",data);
   if(data.type==="join"){
     if(jogadores.length>=MAX_JOGADORES)return c.send({type:"error",message:"Sala cheia"});
     const p={id:data.player.id,nome:data.player.nome,cor:jogadores.length,posicao:0,profissao:null,itens:[],acertos:0,denuncias:0,poderesUsados:{}};
     jogadores.push(p);
     broadcast({type:"players",jogadores});
     renderLobbyPlayers();
-    toast(p.nome + " entrou na sala!");
+    toast(p.nome+" entrou!");
   }
   if(data.type==="rollRequest"&&!actionLocked&&jogadores[turno]?.id===data.playerId)processRoll(data.playerId);
   if(data.type==="questionAnswer")processQuestionAnswer(data.playerId,data.answer);
 }
 function handleClientData(d){
-  console.log("Dados recebidos no cliente:", d);
+  console.log("📥 Cliente recebeu:",d);
   if(d.type==="players"){jogadores=d.jogadores;renderLobbyPlayers()}
   if(d.type==="start"){jogadores=d.jogadores;startLocalGame(d.tempo)}
   if(d.type==="state"){jogadores=d.jogadores;turno=d.turno;tempoRestante=d.tempo;renderBoard();renderHud()}
@@ -341,7 +374,7 @@ function handleClientData(d){
   if(d.type==="endGame"){showResultModal(d.result)}
 }
 function startGame(){
-  console.log("Iniciando jogo...");
+  console.log("▶️ Iniciando jogo...");
   if(jogadores.length<1)return toast("Precisa de pelo menos 1 jogador");
   jogadores.forEach(p=>{p.profissao=PROFISSOES[Math.floor(Math.random()*PROFISSOES.length)]});
   broadcast({type:"start",jogadores,tempo:TEMPO_TOTAL});
@@ -358,6 +391,7 @@ function startLocalGame(tempo){
   if(isHost)jogarTurno();
 }
 
+// ===== RESTO DO JOGO =====
 function renderBoard(){
   const b=$("board");b.innerHTML="";
   for(let i=1;i<=TOTAL_CASAS;i++){
@@ -387,12 +421,10 @@ function jogarTurno(){if(!isHost)return;turno=(turno+1)%jogadores.length;actionL
 function rollDice(){
   if(actionLocked||jogadores[turno]?.id!==myId)return;
   actionLocked=true;
-  const d=$("dice");
-  d.classList.add("diceRolling");
+  const d=$("dice");d.classList.add("diceRolling");
   setTimeout(()=>{
     d.classList.remove("diceRolling");
-    const val=Math.floor(Math.random()*6)+1;
-    d.textContent=val;
+    const val=Math.floor(Math.random()*6)+1;d.textContent=val;
     if(isHost)processRoll(myId,val);
     else conn.send({type:"rollRequest",playerId:myId,valor:val});
   },600);
@@ -411,17 +443,15 @@ function processarCasa(p){
     let perde=-3;
     if(p.itens.some(i=>["arvore","agua","filtro","kit"].includes(i.id))){
       const prot=p.itens.find(i=>["arvore","agua","filtro","kit"].includes(i.id));
-      p.itens=p.itens.filter(i=>i!==prot);
-      toast(`${p.nome} usou ${prot.nome} e evitou o problema!`);
-      perde=0;
-    }else if(p.profissao.id==="medico"&&!p.poderesUsados.medico){p.poderesUsados.medico=true;perde=0;toast(`${p.nome} usou poder de Médico!`);}
-    else if(p.profissao.id==="agente"&&!p.poderesUsados.agente){p.poderesUsados.agente=true;perde=0;toast(`${p.nome} usou poder de Agente Ambiental!`);}
+      p.itens=p.itens.filter(i=>i!==prot);toast(`${p.nome} usou ${prot.nome} e evitou!`);perde=0;
+    }else if(p.profissao.id==="medico"&&!p.poderesUsados.medico){p.poderesUsados.medico=true;perde=0;toast(`${p.nome} usou Médico!`);}
+    else if(p.profissao.id==="agente"&&!p.poderesUsados.agente){p.poderesUsados.agente=true;perde=0;toast(`${p.nome} usou Agente!`);}
     if(perde<0){p.posicao=Math.max(0,p.posicao+perde);toast(`${PROBLEMAS[c]} → ${perde} casas`)}
     renderBoard();renderHud();
   }else if(SOLUCOES[c]){
     let ganha=2;
     if(p.profissao.id==="engenheiro")ganha++;
-    if(p.itens.some(i=>i.id==="mapa"||i.id==="energia"||i.id==="documento")){
+    if(p.itens.some(i=>["mapa","energia","documento"].includes(i.id))){
       const b=p.itens.find(i=>["mapa","energia","documento"].includes(i.id));
       p.itens=p.itens.filter(i=>i!==b);ganha++;
     }
@@ -431,15 +461,11 @@ function processarCasa(p){
   }else if(PERGUNTAS[c]){
     pendingQuestion={casa:c,q:PERGUNTAS[c],player:p};
     if(isHost)broadcast({type:"question",q:{casa:c,q:PERGUNTAS[c]}});
-    showQuestionModal();
-    return;
+    showQuestionModal();return;
   }else if(ITEM_CASAS.includes(c)){
-    const item=ITENS[Math.floor(Math.random()*ITENS.length)];
-    p.itens.push(item);
+    const item=ITENS[Math.floor(Math.random()*ITENS.length)];p.itens.push(item);
     let bonus=0;
-    if(item.id==="semente")bonus=1;
-    if(item.id==="sementes")bonus=2;
-    if(item.id==="bicicleta")bonus=2;
+    if(item.id==="semente")bonus=1;if(item.id==="sementes")bonus=2;if(item.id==="bicicleta")bonus=2;
     if((item.id==="semente"||item.id==="sementes")&&(p.profissao.id==="biologo"||p.profissao.id==="agricultor"))bonus++;
     p.posicao=Math.min(TOTAL_CASAS,p.posicao+bonus);
     toast(`${p.nome} encontrou: ${item.emoji} ${item.nome}${bonus>0?` → +${bonus} casas`:''}`);
@@ -472,7 +498,7 @@ function processQuestionAnswer(playerId,answer){
     if(p.itens.some(i=>["denuncia","megafone"].includes(i.id))){
       const d=p.itens.find(i=>["denuncia","megafone"].includes(i.id));
       p.itens=p.itens.filter(i=>i!==d);p.denuncias++;nova=true;
-      toast(`❌ Errou, mas ${d.nome} dá nova tentativa!`);
+      toast(`❌ Errou, ${d.nome} dá nova tentativa!`);
     }else if(["advogado","jornalista","lider"].includes(p.profissao.id)&&!p.poderesUsados[p.profissao.id]){
       p.poderesUsados[p.profissao.id]=true;nova=true;
       toast(`❌ Errou, ${p.profissao.nome} dá nova tentativa!`);
@@ -481,10 +507,9 @@ function processQuestionAnswer(playerId,answer){
   pendingQuestion=null;renderBoard();renderHud();
   setTimeout(()=>{if(isHost)jogarTurno()},800);
 }
-function openHowTo(){show("howModal")}
 function openItems(){
   const me=jogadores.find(p=>p.id===myId);if(!me)return;
-  $("itemGrid").innerHTML=me.itens.length===0?"<p style='grid-column:1/-1;text-align:center;padding:20px;'>Você não tem itens ainda.</p>":
+  $("itemGrid").innerHTML=me.itens.length===0?"<p style='grid-column:1/-1;text-align:center;padding:20px;'>Sem itens ainda.</p>":
     me.itens.map(i=>`<div class="itemCard"><div style="font-size:28px;">${i.emoji}</div><div style="font-weight:bold;margin-top:5px;">${i.nome}</div><div style="font-size:11px;color:#666;margin-top:4px;">${i.desc}</div></div>`).join("");
   show("itemsModal");
 }
@@ -503,13 +528,6 @@ function endGame(motivo){
   showResultModal(res);
 }
 function showResultModal(r){$("resultText").innerHTML=r;show("resultModal")}
-
-// DEBUG: Verificar se as funções existem no carregamento
-console.log("✅ Funções do lobby carregadas!");
-console.log("createRoom:", typeof createRoom);
-console.log("joinRoom:", typeof joinRoom);
-console.log("startGame:", typeof startGame);
-console.log("openHowTo:", typeof openHowTo);
 </script>
 </body>
 </html>
