@@ -102,6 +102,10 @@ body{
     background:linear-gradient(135deg,#21a9c8,#1477d4);
 }
 
+.btn-purple{
+    background:linear-gradient(135deg,#3924c9,#21127d);
+}
+
 .room-code{
     margin:18px 0;
     padding:15px;
@@ -277,7 +281,7 @@ body{
 }
 
 /* =========================
-   JOGADORES NO TABULEIRO
+   JOGADORES
 ========================= */
 
 .tokens{
@@ -298,6 +302,39 @@ body{
     border-radius:50%;
     border:2px solid white;
     box-shadow:0 1px 3px rgba(0,0,0,.5);
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.token.moving{
+    animation:
+        tokenJump .18s ease,
+        tokenGlow .18s ease;
+}
+
+@keyframes tokenJump{
+    0%{
+        transform:translateY(5px) scale(.75);
+    }
+    60%{
+        transform:translateY(-5px) scale(1.18);
+    }
+    100%{
+        transform:translateY(0) scale(1);
+    }
+}
+
+@keyframes tokenGlow{
+    0%{
+        box-shadow:0 1px 3px rgba(0,0,0,.5);
+    }
+    50%{
+        box-shadow:0 0 12px rgba(255,255,255,.9);
+    }
+    100%{
+        box-shadow:0 1px 3px rgba(0,0,0,.5);
+    }
 }
 
 /* =========================
@@ -323,7 +360,7 @@ body{
 }
 
 /* =========================
-   HUD INFERIOR
+   HUD
 ========================= */
 
 .bottom-hud{
@@ -370,6 +407,44 @@ body{
     transition:.15s;
 }
 
+/* ANIMAÇÃO DO DADO */
+
+.dice.rolling{
+    animation:diceRolling .75s ease-in-out;
+}
+
+@keyframes diceRolling{
+
+    0%{
+        transform:rotate(0deg) scale(1);
+    }
+
+    15%{
+        transform:rotate(18deg) scale(1.08);
+    }
+
+    30%{
+        transform:rotate(-18deg) scale(.94);
+    }
+
+    45%{
+        transform:rotate(15deg) scale(1.08);
+    }
+
+    60%{
+        transform:rotate(-15deg) scale(.96);
+    }
+
+    75%{
+        transform:rotate(8deg) scale(1.05);
+    }
+
+    100%{
+        transform:rotate(0deg) scale(1);
+    }
+
+}
+
 .dice-box:active .dice{
     transform:scale(.95);
 }
@@ -382,7 +457,7 @@ body{
 }
 
 /* =========================
-   CARD DO JOGADOR
+   CARD
 ========================= */
 
 .current-player{
@@ -392,8 +467,7 @@ body{
     border:3px solid #b47a00;
     border-radius:22px;
     padding:16px 18px;
-    box-shadow:
-        0 5px 15px rgba(0,0,0,.3);
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
 }
 
 .current-player-name{
@@ -450,7 +524,7 @@ body{
 }
 
 /* =========================
-   VEZ DO JOGADOR
+   VEZ
 ========================= */
 
 .turn-indicator{
@@ -786,6 +860,14 @@ body{
             🚪 Entrar na sala
         </button>
 
+        <!-- NOVO: COMO JOGAR NO LOBBY -->
+
+        <button
+            id="lobbyHowBtn"
+            class="btn btn-purple">
+            ❓ Como Jogar
+        </button>
+
         <div id="roomArea" class="hidden">
 
             <div class="room-code">
@@ -829,30 +911,15 @@ body{
 
         <div class="legend">
 
-            <div class="legend-item">
-                ⚠️ Problema
-            </div>
-
-            <div class="legend-item">
-                🌱 Solução
-            </div>
-
-            <div class="legend-item">
-                ❓ Pergunta
-            </div>
-
-            <div class="legend-item">
-                🎁 Item
-            </div>
-
-            <div class="legend-item">
-                🏆 Chegada
-            </div>
+            <div class="legend-item">⚠️ Problema</div>
+            <div class="legend-item">🌱 Solução</div>
+            <div class="legend-item">❓ Pergunta</div>
+            <div class="legend-item">🎁 Item</div>
+            <div class="legend-item">🏆 Chegada</div>
 
         </div>
 
     </div>
-
 
     <div class="bottom-hud">
 
@@ -876,7 +943,6 @@ body{
 
         </div>
 
-
         <div class="current-player">
 
             <div
@@ -889,7 +955,7 @@ body{
                 id="currentPlayerStats"
                 class="player-stats">
 
-                📍 Casa: 0<br>
+                📍 Casa: 1<br>
                 ✅ Acertos: 0<br>
                 📢 Denúncias: 0<br>
                 🎁 Itens: 0
@@ -897,7 +963,6 @@ body{
             </div>
 
         </div>
-
 
         <div class="action-buttons">
 
@@ -921,7 +986,6 @@ body{
 
         </div>
 
-
         <div
             id="turnIndicator"
             class="turn-indicator">
@@ -931,54 +995,6 @@ body{
     </div>
 
 </section>
-
-
-<!-- =========================
-     MODAL ITENS
-========================= -->
-
-<div
-    id="itemsModal"
-    class="modal hidden">
-
-    <div class="modal-box">
-
-        <h2>🎁 Seus itens</h2>
-
-        <div id="itemsContent">
-            Você ainda não possui itens.
-        </div>
-
-        <button
-            class="close-btn"
-            onclick="closeModal('itemsModal')">
-            Fechar
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     MODAL PERGUNTA
-========================= -->
-
-<div
-    id="questionModal"
-    class="modal hidden">
-
-    <div class="modal-box">
-
-        <h2>❓ Pergunta</h2>
-
-        <p id="questionText"></p>
-
-        <div id="answers"></div>
-
-    </div>
-
-</div>
 
 
 <!-- =========================
@@ -1049,6 +1065,54 @@ body{
 
 
 <!-- =========================
+     MODAL ITENS
+========================= -->
+
+<div
+    id="itemsModal"
+    class="modal hidden">
+
+    <div class="modal-box">
+
+        <h2>🎁 Seus itens</h2>
+
+        <div id="itemsContent">
+            Você ainda não possui itens.
+        </div>
+
+        <button
+            class="close-btn"
+            onclick="closeModal('itemsModal')">
+            Fechar
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL PERGUNTA
+========================= -->
+
+<div
+    id="questionModal"
+    class="modal hidden">
+
+    <div class="modal-box">
+
+        <h2>❓ Pergunta</h2>
+
+        <p id="questionText"></p>
+
+        <div id="answers"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
      MENSAGEM
 ========================= -->
 
@@ -1082,8 +1146,13 @@ const TOTAL_CASAS = 150;
 const TEMPO_TOTAL = 30 * 60;
 const MAX_JOGADORES = 11;
 
-/* Mensagens ficam abertas por 10 segundos */
 const TEMPO_MENSAGEM = 10000;
+
+/* Tempo entre cada casa durante o movimento */
+const TEMPO_PASSO = 220;
+
+/* Tempo da animação do dado */
+const TEMPO_DADO = 800;
 
 const CORES = [
     "#e53935",
@@ -1212,7 +1281,6 @@ let moving = false;
 
 let perguntaAtual = null;
 
-/* Controle da mensagem */
 let messageTimeout = null;
 
 
@@ -1226,22 +1294,41 @@ const game = document.getElementById("game");
 const playerName = document.getElementById("playerName");
 const roomInput = document.getElementById("roomInput");
 
-const createRoomBtn = document.getElementById("createRoomBtn");
-const joinRoomBtn = document.getElementById("joinRoomBtn");
+const createRoomBtn =
+    document.getElementById("createRoomBtn");
 
-const roomArea = document.getElementById("roomArea");
-const roomCodeElement = document.getElementById("roomCode");
+const joinRoomBtn =
+    document.getElementById("joinRoomBtn");
 
-const playersLobby = document.getElementById("playersLobby");
-const startBtn = document.getElementById("startBtn");
+const lobbyHowBtn =
+    document.getElementById("lobbyHowBtn");
 
-const lobbyStatus = document.getElementById("lobbyStatus");
+const roomArea =
+    document.getElementById("roomArea");
 
-const board = document.getElementById("board");
+const roomCodeElement =
+    document.getElementById("roomCode");
 
-const diceBox = document.getElementById("diceBox");
-const dice = document.getElementById("dice");
-const rollBtn = document.getElementById("rollBtn");
+const playersLobby =
+    document.getElementById("playersLobby");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const lobbyStatus =
+    document.getElementById("lobbyStatus");
+
+const board =
+    document.getElementById("board");
+
+const diceBox =
+    document.getElementById("diceBox");
+
+const dice =
+    document.getElementById("dice");
+
+const rollBtn =
+    document.getElementById("rollBtn");
 
 const currentPlayerName =
     document.getElementById("currentPlayerName");
@@ -1332,7 +1419,7 @@ function esperar(ms){
 
 
 /* =========================================================
-   CRIAÇÃO DO TABULEIRO
+   TABULEIRO
 ========================================================= */
 
 function criarTabuleiro(){
@@ -1459,7 +1546,9 @@ function criarTabuleiro(){
                 document.createElement("div");
 
             tokens.className = "tokens";
-            tokens.id = "tokens-" + numero;
+
+            tokens.id =
+                "tokens-" + numero;
 
             cell.appendChild(tokens);
 
@@ -1587,10 +1676,10 @@ function getPlayer(){
 
 
 /* =========================================================
-   TABULEIRO
+   TABULEIRO / TOKENS
 ========================================================= */
 
-function atualizarTabuleiro(){
+function atualizarTabuleiro(animarMeuToken = false){
 
     document
         .querySelectorAll(".tokens")
@@ -1624,6 +1713,15 @@ function atualizarTabuleiro(){
 
         token.className = "token";
 
+        if(
+            animarMeuToken &&
+            player.id === myId
+        ){
+
+            token.classList.add("moving");
+
+        }
+
         token.style.background =
             player.color;
 
@@ -1641,7 +1739,7 @@ function atualizarTabuleiro(){
    HUD
 ========================================================= */
 
-function atualizarHUD(){
+function atualizarHUD(animarToken = false){
 
     const me =
         getPlayer();
@@ -1667,7 +1765,7 @@ function atualizarHUD(){
 
     }
 
-    atualizarTabuleiro();
+    atualizarTabuleiro(animarToken);
 
 }
 
@@ -1677,9 +1775,6 @@ function atualizarHUD(){
 ========================================================= */
 
 function atualizarTimer(){
-
-    /* O tempo continua existindo no jogo,
-       mas não fica mais ocupando espaço no HUD. */
 
 }
 
@@ -1728,7 +1823,7 @@ rollBtn.addEventListener(
 );
 
 
-function jogarDado(){
+async function jogarDado(){
 
     if(!gameStarted)
         return;
@@ -1749,22 +1844,70 @@ function jogarDado(){
 
     }
 
+    moving = true;
+
+    rollBtn.disabled = true;
+
+    diceBox.style.pointerEvents = "none";
+
+    const faces = [
+        "⚀",
+        "⚁",
+        "⚂",
+        "⚃",
+        "⚄",
+        "⚅"
+    ];
+
+    /* =========================
+       ANIMAÇÃO DO DADO
+    ========================= */
+
+    dice.classList.remove("rolling");
+
+    void dice.offsetWidth;
+
+    dice.classList.add("rolling");
+
+    const inicio =
+        Date.now();
+
+    while(
+        Date.now() - inicio <
+        TEMPO_DADO
+    ){
+
+        const aleatorio =
+            Math.floor(
+                Math.random() * 6
+            );
+
+        dice.textContent =
+            faces[aleatorio];
+
+        await esperar(90);
+
+    }
+
     const resultado =
         Math.floor(
             Math.random() * 6
         ) + 1;
 
     dice.textContent =
-        ["⚀","⚁","⚂","⚃","⚄","⚅"]
-        [resultado - 1];
+        faces[resultado - 1];
 
-    moverJogador(resultado);
+    dice.classList.remove("rolling");
+
+    await esperar(120);
+
+    await moverJogador(resultado);
 
 }
 
 
 /* =========================================================
-   MOVIMENTO
+   MOVIMENTO CASA POR CASA
 ========================================================= */
 
 async function moverJogador(passos){
@@ -1772,10 +1915,17 @@ async function moverJogador(passos){
     const me =
         getPlayer();
 
-    if(!me)
+    if(!me){
+
+        moving = false;
+
+        rollBtn.disabled = false;
+
+        diceBox.style.pointerEvents = "auto";
+
         return;
 
-    moving = true;
+    }
 
     for(let i=0;i<passos;i++){
 
@@ -1784,9 +1934,12 @@ async function moverJogador(passos){
 
         me.position++;
 
-        atualizarHUD();
+        /* Atualiza o boneco nesta casa */
+        atualizarHUD(true);
 
-        await esperar(180);
+        /* Pequena pausa para mostrar
+           cada casa individualmente */
+        await esperar(TEMPO_PASSO);
 
     }
 
@@ -1803,11 +1956,17 @@ function processarCasa(player){
 
     if(player.position === 150){
 
+        atualizarHUD(true);
+
         mostrarMensagem(
             `🏆 ${player.name} chegou à casa 150!`
         );
 
         moving = false;
+
+        rollBtn.disabled = false;
+
+        diceBox.style.pointerEvents = "auto";
 
         return;
 
@@ -1959,7 +2118,7 @@ function responderPergunta(index){
 
     closeModal("questionModal");
 
-    atualizarHUD();
+    atualizarHUD(true);
 
     passarTurno();
 
@@ -1973,6 +2132,10 @@ function responderPergunta(index){
 function passarTurno(){
 
     moving = false;
+
+    rollBtn.disabled = false;
+
+    diceBox.style.pointerEvents = "auto";
 
     if(players.length === 0)
         return;
@@ -2003,9 +2166,37 @@ function closeModal(id){
 }
 
 
-/* =========================
+/* =========================================================
+   COMO JOGAR
+========================================================= */
+
+lobbyHowBtn.addEventListener(
+    "click",
+    () => {
+
+        document
+            .getElementById("howModal")
+            .classList.remove("hidden");
+
+    }
+);
+
+
+howBtn.addEventListener(
+    "click",
+    () => {
+
+        document
+            .getElementById("howModal")
+            .classList.remove("hidden");
+
+    }
+);
+
+
+/* =========================================================
    ITENS
-========================= */
+========================================================= */
 
 itemsBtn.addEventListener(
     "click",
@@ -2045,24 +2236,6 @@ itemsBtn.addEventListener(
         document
             .getElementById(
                 "itemsModal"
-            )
-            .classList.remove("hidden");
-
-    }
-);
-
-
-/* =========================
-   COMO JOGAR
-========================= */
-
-howBtn.addEventListener(
-    "click",
-    () => {
-
-        document
-            .getElementById(
-                "howModal"
             )
             .classList.remove("hidden");
 
@@ -2392,10 +2565,6 @@ function receberDados(
         return;
 
 
-    /* =========================
-       JOIN
-    ========================= */
-
     if(
         data.type === "JOIN" &&
         isHost
@@ -2426,10 +2595,6 @@ function receberDados(
 
     }
 
-
-    /* =========================
-       ESTADO
-    ========================= */
 
     if(
         data.type === "STATE"
@@ -2463,10 +2628,6 @@ function receberDados(
 
     }
 
-
-    /* =========================
-       WELCOME
-    ========================= */
 
     if(
         data.type === "WELCOME"
@@ -2511,10 +2672,6 @@ function receberDados(
     }
 
 
-    /* =========================
-       FULL
-    ========================= */
-
     if(
         data.type === "FULL"
     ){
@@ -2527,10 +2684,6 @@ function receberDados(
 
     }
 
-
-    /* =========================
-       START
-    ========================= */
 
     if(
         data.type === "START"
@@ -2551,7 +2704,7 @@ function receberDados(
 
 
 /* =========================================================
-   ATUALIZAR LOBBY
+   LOBBY
 ========================================================= */
 
 function atualizarLobby(){
