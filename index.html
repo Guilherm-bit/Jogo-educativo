@@ -541,72 +541,6 @@ body{
 }
 
 /* =========================
-   MENSAGENS DO JOGO
-========================= */
-
-#gameMessage{
-    position:fixed;
-    top:20px;
-    left:50%;
-    transform:translateX(-50%);
-    width:min(520px,calc(100% - 30px));
-    background:rgba(255,255,255,.98);
-    border:4px solid #35a866;
-    border-radius:20px;
-    padding:18px 55px 18px 18px;
-    box-shadow:0 12px 35px rgba(0,0,0,.35);
-    z-index:1000;
-    color:#173d2b;
-    font-size:18px;
-    font-weight:bold;
-    line-height:1.4;
-    animation:messageIn .25s ease;
-}
-
-#gameMessage.hidden{
-    display:none;
-}
-
-#gameMessageClose{
-    position:absolute;
-    top:7px;
-    right:9px;
-    width:34px;
-    height:34px;
-    border:0;
-    border-radius:50%;
-    background:#e84b51;
-    color:white;
-    font-size:22px;
-    font-weight:bold;
-    cursor:pointer;
-    line-height:34px;
-    padding:0;
-}
-
-#gameMessageClose:hover{
-    background:#c9343d;
-}
-
-@keyframes messageIn{
-
-    from{
-        opacity:0;
-        transform:
-            translateX(-50%)
-            translateY(-15px);
-    }
-
-    to{
-        opacity:1;
-        transform:
-            translateX(-50%)
-            translateY(0);
-    }
-
-}
-
-/* =========================
    RESPONSIVO
 ========================= */
 
@@ -698,14 +632,6 @@ body{
         font-size:19px;
         padding:14px;
     }
-
-    #gameMessage{
-        top:12px;
-        width:calc(100% - 20px);
-        font-size:16px;
-        padding:16px 50px 16px 15px;
-    }
-
 }
 
 @media(max-width:390px){
@@ -745,25 +671,6 @@ body{
 </head>
 
 <body>
-
-<!-- =========================
-     MENSAGEM DO JOGO
-========================= -->
-
-<div
-    id="gameMessage"
-    class="hidden">
-
-    <button
-        id="gameMessageClose"
-        aria-label="Fechar">
-        ×
-    </button>
-
-    <div id="gameMessageText"></div>
-
-</div>
-
 
 <!-- =========================
      LOBBY
@@ -1211,13 +1118,6 @@ let perguntaAtual = null;
 
 
 /* =========================================================
-   CONTROLE DAS MENSAGENS
-========================================================= */
-
-let mensagemTimeout = null;
-
-
-/* =========================================================
    ELEMENTOS
 ========================================================= */
 
@@ -1259,15 +1159,6 @@ const itemsBtn =
 const howBtn =
     document.getElementById("howBtn");
 
-const gameMessage =
-    document.getElementById("gameMessage");
-
-const gameMessageText =
-    document.getElementById("gameMessageText");
-
-const gameMessageClose =
-    document.getElementById("gameMessageClose");
-
 
 /* =========================================================
    UTILIDADES
@@ -1301,51 +1192,6 @@ function esperar(ms){
     );
 
 }
-
-
-/* =========================================================
-   SISTEMA DE MENSAGENS
-========================================================= */
-
-function mostrarMensagem(texto){
-
-    clearTimeout(mensagemTimeout);
-
-    gameMessageText.innerHTML =
-        escapeHtml(texto)
-            .replaceAll("\n","<br>");
-
-    gameMessage.classList.remove(
-        "hidden"
-    );
-
-    mensagemTimeout =
-        setTimeout(() => {
-
-            fecharMensagem();
-
-        },10000);
-
-}
-
-
-function fecharMensagem(){
-
-    clearTimeout(
-        mensagemTimeout
-    );
-
-    gameMessage.classList.add(
-        "hidden"
-    );
-
-}
-
-
-gameMessageClose.addEventListener(
-    "click",
-    fecharMensagem
-);
 
 
 /* =========================================================
@@ -1394,10 +1240,7 @@ function criarTabuleiro(){
 
             if(numero === 150){
 
-                cell.classList.add(
-                    "special",
-                    "finish"
-                );
+                cell.classList.add("special","finish");
 
                 cell.innerHTML = `
                     <div>
@@ -1737,7 +1580,7 @@ function iniciarTimer(){
 
                 clearInterval(timerInterval);
 
-                mostrarMensagem(
+                alert(
                     "⏰ O tempo acabou!"
                 );
 
@@ -1780,7 +1623,7 @@ function jogarDado(){
 
     if(players[currentTurn]?.id !== myId){
 
-        mostrarMensagem(
+        alert(
             "⏳ Aguarde sua vez!"
         );
 
@@ -1842,7 +1685,7 @@ function processarCasa(player){
 
     if(player.position === 150){
 
-        mostrarMensagem(
+        alert(
             `🏆 ${player.name} chegou à casa 150!`
         );
 
@@ -1860,7 +1703,7 @@ function processarCasa(player){
                 player.position - 3
             );
 
-        mostrarMensagem(
+        alert(
             "⚠️ Problema ambiental!\n\nVocê voltou 3 casas."
         );
 
@@ -1874,7 +1717,7 @@ function processarCasa(player){
                 player.position + 1
             );
 
-        mostrarMensagem(
+        alert(
             "🌱 Solução ambiental!\n\nVocê avançou 1 casa."
         );
 
@@ -1889,7 +1732,7 @@ function processarCasa(player){
             "🎁 Item"
         );
 
-        mostrarMensagem(
+        alert(
             "🎁 Você encontrou um item!"
         );
 
@@ -1984,13 +1827,13 @@ function responderPergunta(index){
                 me.position + 2
             );
 
-        mostrarMensagem(
+        alert(
             "✅ Resposta correta!\nVocê avançou 2 casas."
         );
 
     }else{
 
-        mostrarMensagem(
+        alert(
             "❌ Resposta incorreta.\nVocê permanece no lugar."
         );
 
@@ -2166,7 +2009,7 @@ async function(){
 
     if(!name){
 
-        mostrarMensagem(
+        alert(
             "Digite seu nome primeiro."
         );
 
@@ -2302,7 +2145,7 @@ async function(){
 
     if(!name){
 
-        mostrarMensagem(
+        alert(
             "Digite seu nome primeiro."
         );
 
@@ -2312,7 +2155,7 @@ async function(){
 
     if(!code){
 
-        mostrarMensagem(
+        alert(
             "Digite o código da sala."
         );
 
@@ -2558,7 +2401,7 @@ function receberDados(
         data.type === "FULL"
     ){
 
-        mostrarMensagem(
+        alert(
             "A sala está cheia. O máximo é 11 jogadores."
         );
 
@@ -2747,4 +2590,4 @@ criarTabuleiro();
 </script>
 
 </body>
-</html>
+    </html>
