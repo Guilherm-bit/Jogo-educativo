@@ -174,6 +174,30 @@ body{
     padding:3px;
 }
 
+/*
+   CORREÇÃO PRINCIPAL:
+   Cada segunda linha é invertida.
+   Assim o caminho fica em zigue-zague.
+*/
+
+.cell{
+    position:relative;
+    z-index:2;
+    border-radius:10px;
+    min-width:0;
+    min-height:0;
+    background:linear-gradient(145deg,#f1d7ad,#d8b47c);
+    border:2px solid rgba(104,73,37,.35);
+    box-shadow:
+        0 3px 5px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+}
+
 /* =========================
    CAMINHOS
 ========================= */
@@ -184,7 +208,7 @@ body{
     width:100%;
     height:100%;
     pointer-events:none;
-    z-index:0;
+    z-index:1;
 }
 
 .path-line{
@@ -208,24 +232,6 @@ body{
 /* =========================
    CASAS
 ========================= */
-
-.cell{
-    position:relative;
-    z-index:2;
-    border-radius:10px;
-    min-width:0;
-    min-height:0;
-    background:linear-gradient(145deg,#f1d7ad,#d8b47c);
-    border:2px solid rgba(104,73,37,.35);
-    box-shadow:
-        0 3px 5px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.5);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    overflow:hidden;
-}
 
 .cell.normal .number{
     position:absolute;
@@ -317,9 +323,11 @@ body{
     0%{
         transform:translateY(5px) scale(.75);
     }
+
     60%{
         transform:translateY(-5px) scale(1.18);
     }
+
     100%{
         transform:translateY(0) scale(1);
     }
@@ -329,9 +337,11 @@ body{
     0%{
         box-shadow:0 1px 3px rgba(0,0,0,.5);
     }
+
     50%{
         box-shadow:0 0 12px rgba(255,255,255,.9);
     }
+
     100%{
         box-shadow:0 1px 3px rgba(0,0,0,.5);
     }
@@ -406,8 +416,6 @@ body{
         inset 0 0 12px rgba(0,0,0,.12);
     transition:.15s;
 }
-
-/* ANIMAÇÃO DO DADO */
 
 .dice.rolling{
     animation:diceRolling .75s ease-in-out;
@@ -509,6 +517,12 @@ body{
 
 .action-btn:active{
     transform:scale(.96);
+}
+
+.action-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    transform:none;
 }
 
 .action-btn.roll{
@@ -645,6 +659,7 @@ body{
         transform:scale(.9);
         opacity:0;
     }
+
     to{
         transform:scale(1);
         opacity:1;
@@ -825,73 +840,71 @@ body{
 
 <section id="lobby">
 
-    <div class="lobby-box">
+<div class="lobby-box">
 
-        <h1>🌿 Caminhos da Justiça Ambiental</h1>
+<h1>🌿 Caminhos da Justiça Ambiental</h1>
 
-        <p>
-            Jogo educativo multiplayer sobre justiça ambiental.
-        </p>
+<p>
+Jogo educativo multiplayer sobre justiça ambiental.
+</p>
 
-        <input
-            id="playerName"
-            class="input"
-            maxlength="20"
-            placeholder="Digite seu nome"
-        >
+<input
+    id="playerName"
+    class="input"
+    maxlength="20"
+    placeholder="Digite seu nome"
+>
 
-        <button
-            id="createRoomBtn"
-            class="btn btn-green">
-            🌱 Criar sala
-        </button>
+<button
+    id="createRoomBtn"
+    class="btn btn-green">
+    🌱 Criar sala
+</button>
 
-        <input
-            id="roomInput"
-            class="input"
-            maxlength="12"
-            placeholder="Código da sala"
-            style="margin-top:15px"
-        >
+<input
+    id="roomInput"
+    class="input"
+    maxlength="12"
+    placeholder="Código da sala"
+    style="margin-top:15px"
+>
 
-        <button
-            id="joinRoomBtn"
-            class="btn btn-blue">
-            🚪 Entrar na sala
-        </button>
+<button
+    id="joinRoomBtn"
+    class="btn btn-blue">
+    🚪 Entrar na sala
+</button>
 
-        <!-- NOVO: COMO JOGAR NO LOBBY -->
+<button
+    id="lobbyHowBtn"
+    class="btn btn-purple">
+    ❓ Como Jogar
+</button>
 
-        <button
-            id="lobbyHowBtn"
-            class="btn btn-purple">
-            ❓ Como Jogar
-        </button>
+<div id="roomArea" class="hidden">
 
-        <div id="roomArea" class="hidden">
+<div class="room-code">
+<span id="roomCode"></span>
+</div>
 
-            <div class="room-code">
-                <span id="roomCode"></span>
-            </div>
+<strong>Jogadores na sala</strong>
 
-            <strong>Jogadores na sala</strong>
+<div id="playersLobby"></div>
 
-            <div id="playersLobby"></div>
+<button
+    id="startBtn"
+    class="btn btn-green hidden">
+    🎮 Começar jogo
+</button>
 
-            <button
-                id="startBtn"
-                class="btn btn-green hidden">
-                🎮 Começar jogo
-            </button>
+</div>
 
-        </div>
+<div
+    id="lobbyStatus"
+    style="margin-top:15px;color:#547265">
+</div>
 
-        <div
-            id="lobbyStatus"
-            style="margin-top:15px;color:#547265">
-        </div>
-
-    </div>
+</div>
 
 </section>
 
@@ -902,213 +915,203 @@ body{
 
 <section id="game">
 
-    <div class="board-wrapper">
+<div class="board-wrapper">
 
-        <div
-            id="board"
-            class="board">
-        </div>
+<div id="board" class="board"></div>
 
-        <div class="legend">
+<div class="legend">
 
-            <div class="legend-item">⚠️ Problema</div>
-            <div class="legend-item">🌱 Solução</div>
-            <div class="legend-item">❓ Pergunta</div>
-            <div class="legend-item">🎁 Item</div>
-            <div class="legend-item">🏆 Chegada</div>
+<div class="legend-item">⚠️ Problema</div>
+<div class="legend-item">🌱 Solução</div>
+<div class="legend-item">❓ Pergunta</div>
+<div class="legend-item">🎁 Item</div>
+<div class="legend-item">🏆 Chegada</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
-    <div class="bottom-hud">
+<div class="bottom-hud">
 
-        <div class="dice-area">
+<div class="dice-area">
 
-            <div
-                id="diceBox"
-                class="dice-box">
+<div id="diceBox" class="dice-box">
 
-                <div
-                    id="dice"
-                    class="dice">
-                    🎲
-                </div>
+<div id="dice" class="dice">
+🎲
+</div>
 
-                <div class="dice-text">
-                    Clique para jogar
-                </div>
+<div class="dice-text">
+Clique para jogar
+</div>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="current-player">
+<div class="current-player">
 
-            <div
-                id="currentPlayerName"
-                class="current-player-name">
-                🔴 Guilherme
-            </div>
+<div
+    id="currentPlayerName"
+    class="current-player-name">
+    🔴 Jogador
+</div>
 
-            <div
-                id="currentPlayerStats"
-                class="player-stats">
+<div
+    id="currentPlayerStats"
+    class="player-stats">
 
-                📍 Casa: 1<br>
-                ✅ Acertos: 0<br>
-                📢 Denúncias: 0<br>
-                🎁 Itens: 0
+📍 Casa: 1<br>
+✅ Acertos: 0<br>
+📢 Denúncias: 0<br>
+🎁 Itens: 0
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="action-buttons">
+<div class="action-buttons">
 
-            <button
-                id="rollBtn"
-                class="action-btn roll">
-                🎲 Girar Dado
-            </button>
+<button
+    id="rollBtn"
+    class="action-btn roll">
+    🎲 Girar Dado
+</button>
 
-            <button
-                id="itemsBtn"
-                class="action-btn items">
-                🎁 Ver Itens
-            </button>
+<button
+    id="itemsBtn"
+    class="action-btn items">
+    🎁 Ver Itens
+</button>
 
-            <button
-                id="howBtn"
-                class="action-btn how">
-                ❓ Como Jogar
-            </button>
+<button
+    id="howBtn"
+    class="action-btn how">
+    ❓ Como Jogar
+</button>
 
-        </div>
+</div>
 
-        <div
-            id="turnIndicator"
-            class="turn-indicator">
-            Vez de Guilherme
-        </div>
+<div
+    id="turnIndicator"
+    class="turn-indicator">
+    Aguardando...
+</div>
 
-    </div>
+</div>
 
 </section>
 
 
 <!-- =========================
-     MODAL COMO JOGAR
+     COMO JOGAR
 ========================= -->
 
 <div
     id="howModal"
     class="modal hidden">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <h2>❓ Como Jogar</h2>
+<h2>❓ Como Jogar</h2>
 
-        <div class="how-list">
+<div class="how-list">
 
-            <p>
-                🎯 <strong>Objetivo:</strong>
-                chegar primeiro à casa 150.
-            </p>
+<p>
+🎯 <strong>Objetivo:</strong>
+chegar primeiro à casa 150.
+</p>
 
-            <p>
-                🎲 <strong>Dado:</strong>
-                clique em “Girar Dado” para avançar.
-            </p>
+<p>
+🎲 <strong>Dado:</strong>
+clique em “Girar Dado” para avançar.
+</p>
 
-            <p>
-                ⚠️ <strong>Problema:</strong>
-                você volta 3 casas.
-            </p>
+<p>
+⚠️ <strong>Problema:</strong>
+você volta 3 casas.
+</p>
 
-            <p>
-                🌱 <strong>Solução:</strong>
-                você avança 1 casa.
-            </p>
+<p>
+🌱 <strong>Solução:</strong>
+você avança 1 casa.
+</p>
 
-            <p>
-                ❓ <strong>Pergunta:</strong>
-                responda corretamente para avançar 2 casas.
-            </p>
+<p>
+❓ <strong>Pergunta:</strong>
+responda corretamente para avançar 2 casas.
+</p>
 
-            <p>
-                🎁 <strong>Item:</strong>
-                você encontra um item que fica guardado.
-            </p>
+<p>
+🎁 <strong>Item:</strong>
+você encontra um item que fica guardado.
+</p>
 
-            <p>
-                🏆 <strong>Chegada:</strong>
-                quem chegar à casa 150 vence.
-            </p>
+<p>
+🏆 <strong>Chegada:</strong>
+quem chegar à casa 150 vence.
+</p>
 
-            <p>
-                ⏱️ A partida possui limite de
-                <strong>30 minutos</strong>.
-            </p>
+<p>
+⏱️ A partida possui limite de
+<strong>30 minutos</strong>.
+</p>
 
-        </div>
+</div>
 
-        <button
-            class="close-btn"
-            onclick="closeModal('howModal')">
-            Fechar
-        </button>
+<button
+    class="close-btn"
+    onclick="closeModal('howModal')">
+    Fechar
+</button>
 
-    </div>
-
+</div>
 </div>
 
 
 <!-- =========================
-     MODAL ITENS
+     ITENS
 ========================= -->
 
 <div
     id="itemsModal"
     class="modal hidden">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <h2>🎁 Seus itens</h2>
+<h2>🎁 Seus itens</h2>
 
-        <div id="itemsContent">
-            Você ainda não possui itens.
-        </div>
+<div id="itemsContent">
+Você ainda não possui itens.
+</div>
 
-        <button
-            class="close-btn"
-            onclick="closeModal('itemsModal')">
-            Fechar
-        </button>
+<button
+    class="close-btn"
+    onclick="closeModal('itemsModal')">
+    Fechar
+</button>
 
-    </div>
-
+</div>
 </div>
 
 
 <!-- =========================
-     MODAL PERGUNTA
+     PERGUNTA
 ========================= -->
 
 <div
     id="questionModal"
     class="modal hidden">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <h2>❓ Pergunta</h2>
+<h2>❓ Pergunta</h2>
 
-        <p id="questionText"></p>
+<p id="questionText"></p>
 
-        <div id="answers"></div>
+<div id="answers"></div>
 
-    </div>
-
+</div>
 </div>
 
 
@@ -1120,19 +1123,18 @@ body{
     id="messageModal"
     class="hidden">
 
-    <div class="message-box">
+<div class="message-box">
 
-        <button
-            class="message-close"
-            onclick="fecharMensagem()"
-            aria-label="Fechar">
-            ×
-        </button>
+<button
+    class="message-close"
+    onclick="fecharMensagem()"
+    aria-label="Fechar">
+    ×
+</button>
 
-        <div id="messageText"></div>
+<div id="messageText"></div>
 
-    </div>
-
+</div>
 </div>
 
 
@@ -1147,11 +1149,7 @@ const TEMPO_TOTAL = 30 * 60;
 const MAX_JOGADORES = 11;
 
 const TEMPO_MENSAGEM = 10000;
-
-/* Tempo entre cada casa durante o movimento */
 const TEMPO_PASSO = 220;
-
-/* Tempo da animação do dado */
 const TEMPO_DADO = 800;
 
 const CORES = [
@@ -1200,60 +1198,60 @@ const ITENS = new Set([
 
 const perguntas = [
 
-    {
-        texto:"O que é racismo ambiental?",
-        respostas:[
-            "Tratamento desigual de grupos em questões ambientais",
-            "Um tipo de reciclagem",
-            "Uma campanha de limpeza",
-            "Uma área de preservação"
-        ],
-        correta:0
-    },
+{
+texto:"O que é racismo ambiental?",
+respostas:[
+"Tratamento desigual de grupos em questões ambientais",
+"Um tipo de reciclagem",
+"Uma campanha de limpeza",
+"Uma área de preservação"
+],
+correta:0
+},
 
-    {
-        texto:"Qual situação pode representar injustiça ambiental?",
-        respostas:[
-            "Distribuição igual de áreas verdes",
-            "Falta de saneamento em comunidades vulneráveis",
-            "Criação de parques",
-            "Coleta seletiva"
-        ],
-        correta:1
-    },
+{
+texto:"Qual situação pode representar injustiça ambiental?",
+respostas:[
+"Distribuição igual de áreas verdes",
+"Falta de saneamento em comunidades vulneráveis",
+"Criação de parques",
+"Coleta seletiva"
+],
+correta:1
+},
 
-    {
-        texto:"Por que o saneamento básico é importante?",
-        respostas:[
-            "Somente para deixar as cidades bonitas",
-            "Para aumentar o trânsito",
-            "Para proteger a saúde e o meio ambiente",
-            "Para produzir mais lixo"
-        ],
-        correta:2
-    },
+{
+texto:"Por que o saneamento básico é importante?",
+respostas:[
+"Somente para deixar as cidades bonitas",
+"Para aumentar o trânsito",
+"Para proteger a saúde e o meio ambiente",
+"Para produzir mais lixo"
+],
+correta:2
+},
 
-    {
-        texto:"Qual atitude ajuda a preservar o meio ambiente?",
-        respostas:[
-            "Jogar lixo nos rios",
-            "Desperdiçar água",
-            "Separar corretamente os resíduos",
-            "Queimar lixo"
-        ],
-        correta:2
-    },
+{
+texto:"Qual atitude ajuda a preservar o meio ambiente?",
+respostas:[
+"Jogar lixo nos rios",
+"Desperdiçar água",
+"Separar corretamente os resíduos",
+"Queimar lixo"
+],
+correta:2
+},
 
-    {
-        texto:"Quem deve participar das decisões ambientais?",
-        respostas:[
-            "Somente empresas",
-            "Somente políticos",
-            "A comunidade e o poder público",
-            "Ninguém"
-        ],
-        correta:2
-    }
+{
+texto:"Quem deve participar das decisões ambientais?",
+respostas:[
+"Somente empresas",
+"Somente políticos",
+"A comunidade e o poder público",
+"Ninguém"
+],
+correta:2
+}
 
 ];
 
@@ -1267,10 +1265,9 @@ let connection = null;
 
 let isHost = false;
 let roomCode = "";
-
-let players = [];
 let myId = null;
 
+let players = [];
 let currentTurn = 0;
 
 let gameStarted = false;
@@ -1280,8 +1277,13 @@ let timerInterval = null;
 let moving = false;
 
 let perguntaAtual = null;
+let perguntaJogadorId = null;
+
+let perguntaHost = null;
+let perguntaHostPlayerId = null;
 
 let messageTimeout = null;
+let jogoProcessandoNoHost = false;
 
 
 /* =========================================================
@@ -1291,65 +1293,68 @@ let messageTimeout = null;
 const lobby = document.getElementById("lobby");
 const game = document.getElementById("game");
 
-const playerName = document.getElementById("playerName");
-const roomInput = document.getElementById("roomInput");
+const playerName =
+document.getElementById("playerName");
+
+const roomInput =
+document.getElementById("roomInput");
 
 const createRoomBtn =
-    document.getElementById("createRoomBtn");
+document.getElementById("createRoomBtn");
 
 const joinRoomBtn =
-    document.getElementById("joinRoomBtn");
+document.getElementById("joinRoomBtn");
 
 const lobbyHowBtn =
-    document.getElementById("lobbyHowBtn");
+document.getElementById("lobbyHowBtn");
 
 const roomArea =
-    document.getElementById("roomArea");
+document.getElementById("roomArea");
 
 const roomCodeElement =
-    document.getElementById("roomCode");
+document.getElementById("roomCode");
 
 const playersLobby =
-    document.getElementById("playersLobby");
+document.getElementById("playersLobby");
 
 const startBtn =
-    document.getElementById("startBtn");
+document.getElementById("startBtn");
 
 const lobbyStatus =
-    document.getElementById("lobbyStatus");
+document.getElementById("lobbyStatus");
 
 const board =
-    document.getElementById("board");
+document.getElementById("board");
 
 const diceBox =
-    document.getElementById("diceBox");
+document.getElementById("diceBox");
 
 const dice =
-    document.getElementById("dice");
+document.getElementById("dice");
 
 const rollBtn =
-    document.getElementById("rollBtn");
+document.getElementById("rollBtn");
 
 const currentPlayerName =
-    document.getElementById("currentPlayerName");
+document.getElementById("currentPlayerName");
 
 const currentPlayerStats =
-    document.getElementById("currentPlayerStats");
+document.getElementById("currentPlayerStats");
 
 const turnIndicator =
-    document.getElementById("turnIndicator");
+document.getElementById("turnIndicator");
 
 const itemsBtn =
-    document.getElementById("itemsBtn");
+document.getElementById("itemsBtn");
 
 const howBtn =
-    document.getElementById("howBtn");
+document.getElementById("howBtn");
 
 const messageModal =
-    document.getElementById("messageModal");
+document.getElementById("messageModal");
 
 const messageText =
-    document.getElementById("messageText");
+document.getElementById("messageText");
 
 
 /* =========================================================
@@ -1358,28 +1363,29 @@ const messageText =
 
 function mostrarMensagem(texto){
 
-    clearTimeout(messageTimeout);
+clearTimeout(messageTimeout);
 
-    messageText.textContent = texto;
+messageText.textContent = texto;
 
-    messageModal.classList.remove("hidden");
+messageModal.classList.remove("hidden");
 
-    messageTimeout = setTimeout(() => {
+messageTimeout =
+setTimeout(() => {
 
-        fecharMensagem();
+fecharMensagem();
 
-    }, TEMPO_MENSAGEM);
+},TEMPO_MENSAGEM);
 
 }
 
 
 function fecharMensagem(){
 
-    clearTimeout(messageTimeout);
+clearTimeout(messageTimeout);
 
-    messageTimeout = null;
+messageTimeout = null;
 
-    messageModal.classList.add("hidden");
+messageModal.classList.add("hidden");
 
 }
 
@@ -1390,30 +1396,102 @@ function fecharMensagem(){
 
 function randomId(){
 
-    return Math.random()
-        .toString(36)
-        .substring(2,10);
+return Math.random()
+.toString(36)
+.substring(2,10);
 
 }
 
 
 function escapeHtml(text){
 
-    return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
 function esperar(ms){
 
-    return new Promise(
-        resolve => setTimeout(resolve,ms)
-    );
+return new Promise(
+resolve => setTimeout(resolve,ms)
+);
+
+}
+
+
+function getPlayer(){
+
+return players.find(
+p => p.id === myId
+);
+
+}
+
+
+function getPlayerById(id){
+
+return players.find(
+p => p.id === id
+);
+
+}
+
+
+/* =========================================================
+   ENVIO DO HOST
+========================================================= */
+
+function enviarParaTodos(data){
+
+if(!isHost || !peer)
+return;
+
+Object.values(peer.connections)
+.flat()
+.forEach(conn => {
+
+if(conn && conn.open){
+
+try{
+
+conn.send(data);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+});
+
+}
+
+
+function transmitirEstado(){
+
+if(!isHost)
+return;
+
+enviarParaTodos({
+
+type:"STATE",
+
+players:players,
+
+currentTurn:currentTurn,
+
+started:gameStarted,
+
+gameTime:gameTime
+
+});
 
 }
 
@@ -1424,313 +1502,350 @@ function esperar(ms){
 
 function criarTabuleiro(){
 
-    board.innerHTML = "";
+board.innerHTML = "";
 
-    for(let linha=0;linha<15;linha++){
+for(let numero=1;
+numero<=TOTAL_CASAS;
+numero++){
 
-        const inicio =
-            linha * 10 + 1;
+const cell =
+document.createElement("div");
 
-        for(let i=0;i<10;i++){
+cell.className = "cell";
 
-            const numero =
-                inicio + i;
+cell.dataset.number = numero;
 
-            const cell =
-                document.createElement("div");
 
-            cell.className = "cell";
+/*
+   CORREÇÃO PRINCIPAL DO TABULEIRO.
 
-            cell.dataset.number = numero;
+   Linha 0:
+   1 2 3 4 5 6 7 8 9 10
 
-            if(numero === 150){
+   Linha 1:
+   20 19 18 17 16 15 14 13 12 11
 
-                cell.classList.add("special","finish");
+   Linha 2:
+   21 22 23 24 25 26 27 28 29 30
+*/
 
-                cell.innerHTML = `
-                    <div>
-                        <div class="special-icon">🏆</div>
-                        <div class="special-label">
-                            Chegada
-                        </div>
-                    </div>
-                `;
+const linha =
+Math.floor((numero - 1) / 10);
 
-            }
+const colunaOriginal =
+(numero - 1) % 10;
 
-            else if(PROBLEMAS.has(numero)){
+let coluna;
 
-                cell.classList.add(
-                    "special",
-                    "problem"
-                );
+if(linha % 2 === 0){
 
-                cell.innerHTML = `
-                    <div>
-                        <div class="special-icon">⚠️</div>
-                        <div class="special-label">
-                            Problema
-                        </div>
-                    </div>
-                `;
+coluna =
+colunaOriginal + 1;
 
-            }
+}else{
 
-            else if(SOLUCOES.has(numero)){
+coluna =
+10 - colunaOriginal;
 
-                cell.classList.add(
-                    "special",
-                    "solution"
-                );
+}
 
-                cell.innerHTML = `
-                    <div>
-                        <div class="special-icon">🌱</div>
-                        <div class="special-label">
-                            Solução
-                        </div>
-                    </div>
-                `;
+cell.style.gridColumn =
+coluna;
 
-            }
+cell.style.gridRow =
+linha + 1;
 
-            else if(PERGUNTAS.has(numero)){
 
-                cell.classList.add(
-                    "special",
-                    "question"
-                );
+if(numero === TOTAL_CASAS){
 
-                cell.innerHTML = `
-                    <div>
-                        <div class="special-icon">❓</div>
-                        <div class="special-label">
-                            Pergunta
-                        </div>
-                    </div>
-                `;
+cell.classList.add(
+"special",
+"finish"
+);
 
-            }
+cell.innerHTML = `
+<div>
+<div class="special-icon">🏆</div>
+<div class="special-label">
+Chegada
+</div>
+</div>
+`;
 
-            else if(ITENS.has(numero)){
+}
 
-                cell.classList.add(
-                    "special",
-                    "item"
-                );
+else if(PROBLEMAS.has(numero)){
 
-                cell.innerHTML = `
-                    <div>
-                        <div class="special-icon">🎁</div>
-                        <div class="special-label">
-                            Item
-                        </div>
-                    </div>
-                `;
+cell.classList.add(
+"special",
+"problem"
+);
 
-            }
+cell.innerHTML = `
+<div>
+<div class="special-icon">⚠️</div>
+<div class="special-label">
+Problema
+</div>
+</div>
+`;
 
-            else{
+}
 
-                cell.classList.add("normal");
+else if(SOLUCOES.has(numero)){
 
-                cell.innerHTML = `
-                    <span class="number">
-                        ${numero}
-                    </span>
-                `;
+cell.classList.add(
+"special",
+"solution"
+);
 
-            }
+cell.innerHTML = `
+<div>
+<div class="special-icon">🌱</div>
+<div class="special-label">
+Solução
+</div>
+</div>
+`;
 
-            const tokens =
-                document.createElement("div");
+}
 
-            tokens.className = "tokens";
+else if(PERGUNTAS.has(numero)){
 
-            tokens.id =
-                "tokens-" + numero;
+cell.classList.add(
+"special",
+"question"
+);
 
-            cell.appendChild(tokens);
+cell.innerHTML = `
+<div>
+<div class="special-icon">❓</div>
+<div class="special-label">
+Pergunta
+</div>
+</div>
+`;
 
-            board.appendChild(cell);
+}
 
-        }
+else if(ITENS.has(numero)){
 
-    }
+cell.classList.add(
+"special",
+"item"
+);
 
-    desenharCaminhos();
+cell.innerHTML = `
+<div>
+<div class="special-icon">🎁</div>
+<div class="special-label">
+Item
+</div>
+</div>
+`;
+
+}
+
+else{
+
+cell.classList.add("normal");
+
+cell.innerHTML = `
+<span class="number">
+${numero}
+</span>
+`;
+
+}
+
+
+const tokens =
+document.createElement("div");
+
+tokens.className = "tokens";
+
+tokens.id =
+"tokens-" + numero;
+
+cell.appendChild(tokens);
+
+board.appendChild(cell);
+
+}
+
+desenharCaminhos();
 
 }
 
 
 /* =========================================================
-   CAMINHOS
+   CAMINHO EM ZIGUE-ZAGUE
 ========================================================= */
 
 function desenharCaminhos(){
 
-    const antigo =
-        board.querySelector(".path-svg");
+const antigo =
+board.querySelector(".path-svg");
 
-    if(antigo)
-        antigo.remove();
+if(antigo)
+antigo.remove();
 
-    const svg =
-        document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "svg"
-        );
+const svg =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"svg"
+);
 
-    svg.classList.add("path-svg");
+svg.classList.add("path-svg");
 
-    const pontos = [];
+const pontos = [];
 
-    const cells =
-        [...board.querySelectorAll(".cell")];
+const cells =
+[...board.querySelectorAll(".cell")];
 
-    cells.forEach(cell => {
+const boardRect =
+board.getBoundingClientRect();
 
-        const numero =
-            Number(cell.dataset.number);
+cells.forEach(cell => {
 
-        const rect =
-            cell.getBoundingClientRect();
+const numero =
+Number(cell.dataset.number);
 
-        const boardRect =
-            board.getBoundingClientRect();
+const rect =
+cell.getBoundingClientRect();
 
-        pontos[numero] = {
+pontos[numero] = {
 
-            x:
-                rect.left -
-                boardRect.left +
-                rect.width / 2,
+x:
+rect.left -
+boardRect.left +
+rect.width / 2,
 
-            y:
-                rect.top -
-                boardRect.top +
-                rect.height / 2
+y:
+rect.top -
+boardRect.top +
+rect.height / 2
 
-        };
+};
 
-    });
+});
 
-    let d = "";
 
-    for(let i=1;i<=TOTAL_CASAS;i++){
+let d = "";
 
-        if(!pontos[i])
-            continue;
+for(let i=1;
+i<=TOTAL_CASAS;
+i++){
 
-        if(i === 1){
+if(!pontos[i])
+continue;
 
-            d +=
-                `M ${pontos[i].x} ${pontos[i].y}`;
+if(i === 1){
 
-        }else{
+d =
+`M ${pontos[i].x} ${pontos[i].y}`;
 
-            d +=
-                ` L ${pontos[i].x} ${pontos[i].y}`;
+}else{
 
-        }
+d +=
+` L ${pontos[i].x} ${pontos[i].y}`;
 
-    }
+}
 
-    const path =
-        document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path"
-        );
+}
 
-    path.setAttribute("d",d);
-    path.classList.add("path-line");
 
-    const path2 =
-        document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "path"
-        );
+const path =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"path"
+);
 
-    path2.setAttribute("d",d);
-    path2.classList.add("path-highlight");
+path.setAttribute("d",d);
 
-    svg.appendChild(path);
-    svg.appendChild(path2);
+path.classList.add(
+"path-line"
+);
 
-    board.prepend(svg);
+
+const path2 =
+document.createElementNS(
+"http://www.w3.org/2000/svg",
+"path"
+);
+
+path2.setAttribute("d",d);
+
+path2.classList.add(
+"path-highlight"
+);
+
+
+svg.appendChild(path);
+svg.appendChild(path2);
+
+board.prepend(svg);
 
 }
 
 
 /* =========================================================
-   JOGADOR
+   TOKENS
 ========================================================= */
 
-function getPlayer(){
+function atualizarTabuleiro(animarMeuToken=false){
 
-    return players.find(
-        p => p.id === myId
-    );
+document
+.querySelectorAll(".tokens")
+.forEach(el => {
+
+el.innerHTML = "";
+
+});
+
+
+players.forEach(player => {
+
+const pos =
+Math.max(
+1,
+Math.min(
+TOTAL_CASAS,
+Number(player.position) || 1
+)
+);
+
+const container =
+document.getElementById(
+"tokens-" + pos
+);
+
+if(!container)
+return;
+
+const token =
+document.createElement("div");
+
+token.className = "token";
+
+if(
+animarMeuToken &&
+player.id === myId
+){
+
+token.classList.add("moving");
 
 }
 
+token.style.background =
+player.color;
 
-/* =========================================================
-   TABULEIRO / TOKENS
-========================================================= */
+token.title =
+player.name;
 
-function atualizarTabuleiro(animarMeuToken = false){
+container.appendChild(token);
 
-    document
-        .querySelectorAll(".tokens")
-        .forEach(el => {
-
-            el.innerHTML = "";
-
-        });
-
-    players.forEach(player => {
-
-        const pos =
-            Math.max(
-                1,
-                Math.min(
-                    TOTAL_CASAS,
-                    player.position
-                )
-            );
-
-        const container =
-            document.getElementById(
-                "tokens-" + pos
-            );
-
-        if(!container)
-            return;
-
-        const token =
-            document.createElement("div");
-
-        token.className = "token";
-
-        if(
-            animarMeuToken &&
-            player.id === myId
-        ){
-
-            token.classList.add("moving");
-
-        }
-
-        token.style.background =
-            player.color;
-
-        token.title =
-            player.name;
-
-        container.appendChild(token);
-
-    });
+});
 
 }
 
@@ -1739,33 +1854,55 @@ function atualizarTabuleiro(animarMeuToken = false){
    HUD
 ========================================================= */
 
-function atualizarHUD(animarToken = false){
+function atualizarHUD(animarToken=false){
 
-    const me =
-        getPlayer();
+const me =
+getPlayer();
 
-    if(!me)
-        return;
+if(me){
 
-    currentPlayerName.textContent =
-        "🔴 " + me.name;
+currentPlayerName.textContent =
+"🔴 " + me.name;
 
-    currentPlayerStats.innerHTML = `
-        📍 Casa: ${me.position}<br>
-        ✅ Acertos: ${me.correct || 0}<br>
-        📢 Denúncias: ${me.denuncias || 0}<br>
-        🎁 Itens: ${(me.items || []).length}
-    `;
+currentPlayerStats.innerHTML = `
+📍 Casa: ${me.position}<br>
+✅ Acertos: ${me.correct || 0}<br>
+📢 Denúncias: ${me.denuncias || 0}<br>
+🎁 Itens: ${(me.items || []).length}
+`;
 
-    if(players[currentTurn]){
+}
 
-        turnIndicator.textContent =
-            "Vez de " +
-            players[currentTurn].name;
+if(players[currentTurn]){
 
-    }
+turnIndicator.textContent =
+"Vez de " +
+players[currentTurn].name;
 
-    atualizarTabuleiro(animarToken);
+}
+
+atualizarTabuleiro(animarToken);
+
+atualizarBotoes();
+
+}
+
+
+function atualizarBotoes(){
+
+const minhaVez =
+gameStarted &&
+players[currentTurn] &&
+players[currentTurn].id === myId &&
+!moving;
+
+rollBtn.disabled =
+!minhaVez;
+
+diceBox.style.pointerEvents =
+minhaVez
+? "auto"
+: "none";
 
 }
 
@@ -1774,36 +1911,48 @@ function atualizarHUD(animarToken = false){
    TIMER
 ========================================================= */
 
-function atualizarTimer(){
+function iniciarTimer(){
+
+clearInterval(timerInterval);
+
+timerInterval =
+setInterval(() => {
+
+if(!gameStarted)
+return;
+
+if(!isHost)
+return;
+
+if(gameTime <= 0){
+
+clearInterval(timerInterval);
+
+gameStarted = false;
+
+enviarParaTodos({
+type:"TIME_UP"
+});
+
+mostrarMensagem(
+"⏰ O tempo acabou!"
+);
+
+atualizarBotoes();
+
+return;
 
 }
 
+gameTime--;
 
-function iniciarTimer(){
+if(gameTime % 5 === 0){
 
-    clearInterval(timerInterval);
+transmitirEstado();
 
-    timerInterval =
-        setInterval(() => {
+}
 
-            if(!gameStarted)
-                return;
-
-            if(gameTime <= 0){
-
-                clearInterval(timerInterval);
-
-                mostrarMensagem(
-                    "⏰ O tempo acabou!"
-                );
-
-                return;
-
-            }
-
-            gameTime--;
-
-        },1000);
+},1000);
 
 }
 
@@ -1813,342 +1962,655 @@ function iniciarTimer(){
 ========================================================= */
 
 diceBox.addEventListener(
-    "click",
-    jogarDado
+"click",
+jogarDado
 );
 
 rollBtn.addEventListener(
-    "click",
-    jogarDado
+"click",
+jogarDado
 );
 
 
 async function jogarDado(){
 
-    if(!gameStarted)
-        return;
+if(!gameStarted)
+return;
 
-    if(moving)
-        return;
+if(moving)
+return;
 
-    if(players.length === 0)
-        return;
+if(!players.length)
+return;
 
-    if(players[currentTurn]?.id !== myId){
+if(
+!players[currentTurn] ||
+players[currentTurn].id !== myId
+){
 
-        mostrarMensagem(
-            "⏳ Aguarde sua vez!"
-        );
+mostrarMensagem(
+"⏳ Aguarde sua vez!"
+);
 
-        return;
+return;
 
-    }
+}
 
-    moving = true;
+moving = true;
 
-    rollBtn.disabled = true;
+atualizarBotoes();
 
-    diceBox.style.pointerEvents = "none";
 
-    const faces = [
-        "⚀",
-        "⚁",
-        "⚂",
-        "⚃",
-        "⚄",
-        "⚅"
-    ];
+if(isHost){
 
-    /* =========================
-       ANIMAÇÃO DO DADO
-    ========================= */
+await hostExecutarJogada(myId);
 
-    dice.classList.remove("rolling");
+}else{
 
-    void dice.offsetWidth;
+if(connection && connection.open){
 
-    dice.classList.add("rolling");
+connection.send({
 
-    const inicio =
-        Date.now();
+type:"ROLL_REQUEST",
 
-    while(
-        Date.now() - inicio <
-        TEMPO_DADO
-    ){
+playerId:myId
 
-        const aleatorio =
-            Math.floor(
-                Math.random() * 6
-            );
+});
 
-        dice.textContent =
-            faces[aleatorio];
+}else{
 
-        await esperar(90);
+moving = false;
 
-    }
+atualizarBotoes();
 
-    const resultado =
-        Math.floor(
-            Math.random() * 6
-        ) + 1;
+mostrarMensagem(
+"❌ Conexão com a sala perdida."
+);
 
-    dice.textContent =
-        faces[resultado - 1];
+}
 
-    dice.classList.remove("rolling");
-
-    await esperar(120);
-
-    await moverJogador(resultado);
+}
 
 }
 
 
 /* =========================================================
-   MOVIMENTO CASA POR CASA
+   JOGADA DO HOST
 ========================================================= */
 
-async function moverJogador(passos){
+async function hostExecutarJogada(playerId){
 
-    const me =
-        getPlayer();
+if(!isHost)
+return;
 
-    if(!me){
+if(jogoProcessandoNoHost)
+return;
 
-        moving = false;
+if(
+!gameStarted ||
+!players[currentTurn] ||
+players[currentTurn].id !== playerId
+){
 
-        rollBtn.disabled = false;
+return;
 
-        diceBox.style.pointerEvents = "auto";
+}
 
-        return;
+jogoProcessandoNoHost = true;
 
-    }
+const player =
+getPlayerById(playerId);
 
-    for(let i=0;i<passos;i++){
+if(!player){
 
-        if(me.position >= TOTAL_CASAS)
-            break;
+jogoProcessandoNoHost = false;
 
-        me.position++;
+return;
 
-        /* Atualiza o boneco nesta casa */
-        atualizarHUD(true);
+}
 
-        /* Pequena pausa para mostrar
-           cada casa individualmente */
-        await esperar(TEMPO_PASSO);
 
-    }
+const resultado =
+Math.floor(
+Math.random() * 6
+) + 1;
 
-    processarCasa(me);
+
+enviarParaTodos({
+
+type:"DICE_RESULT",
+
+result:resultado,
+
+playerId:playerId
+
+});
+
+
+await animarDadoLocal(resultado);
+
+
+for(let i=0;
+i<resultado;
+i++){
+
+if(
+player.position >=
+TOTAL_CASAS
+)
+break;
+
+player.position++;
+
+transmitirEstado();
+
+await esperar(TEMPO_PASSO);
+
+}
+
+
+await hostProcessarCasa(player);
 
 }
 
 
 /* =========================================================
-   CASA
+   ANIMAÇÃO DO DADO
 ========================================================= */
 
-function processarCasa(player){
+async function animarDadoLocal(resultado){
 
-    if(player.position === 150){
+const faces = [
+"⚀",
+"⚁",
+"⚂",
+"⚃",
+"⚄",
+"⚅"
+];
 
-        atualizarHUD(true);
+dice.classList.remove("rolling");
 
-        mostrarMensagem(
-            `🏆 ${player.name} chegou à casa 150!`
-        );
+void dice.offsetWidth;
 
-        moving = false;
+dice.classList.add("rolling");
 
-        rollBtn.disabled = false;
+const inicio =
+Date.now();
 
-        diceBox.style.pointerEvents = "auto";
+while(
+Date.now() - inicio <
+TEMPO_DADO
+){
 
-        return;
+dice.textContent =
+faces[
+Math.floor(
+Math.random() * 6
+)
+];
 
-    }
+await esperar(90);
 
-    if(PROBLEMAS.has(player.position)){
+}
 
-        player.position =
-            Math.max(
-                1,
-                player.position - 3
-            );
+dice.textContent =
+faces[resultado - 1];
 
-        mostrarMensagem(
-            "⚠️ Problema ambiental!\n\nVocê voltou 3 casas."
-        );
-
-    }
-
-    else if(SOLUCOES.has(player.position)){
-
-        player.position =
-            Math.min(
-                TOTAL_CASAS,
-                player.position + 1
-            );
-
-        mostrarMensagem(
-            "🌱 Solução ambiental!\n\nVocê avançou 1 casa."
-        );
-
-    }
-
-    else if(ITENS.has(player.position)){
-
-        player.items =
-            player.items || [];
-
-        player.items.push(
-            "🎁 Item"
-        );
-
-        mostrarMensagem(
-            "🎁 Você encontrou um item!"
-        );
-
-    }
-
-    else if(PERGUNTAS.has(player.position)){
-
-        abrirPergunta();
-
-        return;
-
-    }
-
-    atualizarHUD();
-
-    passarTurno();
+dice.classList.remove("rolling");
 
 }
 
 
 /* =========================================================
-   PERGUNTAS
+   PROCESSAR CASA
 ========================================================= */
 
-function abrirPergunta(){
+async function hostProcessarCasa(player){
 
-    perguntaAtual =
-        perguntas[
-            Math.floor(
-                Math.random() *
-                perguntas.length
-            )
-        ];
+if(!isHost)
+return;
 
-    document.getElementById(
-        "questionText"
-    ).textContent =
-        perguntaAtual.texto;
 
-    const answers =
-        document.getElementById(
-            "answers"
-        );
+if(
+player.position ===
+TOTAL_CASAS
+){
 
-    answers.innerHTML = "";
+transmitirEstado();
 
-    perguntaAtual.respostas
-        .forEach((resposta,index) => {
+gameStarted = false;
 
-            const button =
-                document.createElement("button");
+enviarParaTodos({
 
-            button.className =
-                "answer";
+type:"WIN",
 
-            button.textContent =
-                resposta;
+playerId:player.id,
 
-            button.onclick =
-                () =>
-                responderPergunta(index);
+playerName:player.name
 
-            answers.appendChild(button);
+});
 
-        });
+mostrarMensagem(
+`🏆 ${player.name} chegou à casa 150!`
+);
 
-    document
-        .getElementById(
-            "questionModal"
-        )
-        .classList.remove("hidden");
+transmitirEstado();
+
+jogoProcessandoNoHost = false;
+
+return;
 
 }
 
+
+/* PROBLEMA */
+
+if(
+PROBLEMAS.has(
+player.position
+)
+){
+
+player.position =
+Math.max(
+1,
+player.position - 3
+);
+
+transmitirEstado();
+
+enviarParaTodos({
+
+type:"MESSAGE",
+
+text:
+`⚠️ Problema ambiental!\n\n${player.name} voltou 3 casas.`
+
+});
+
+await esperar(350);
+
+passarTurnoHost();
+
+return;
+
+}
+
+
+/* SOLUÇÃO */
+
+if(
+SOLUCOES.has(
+player.position
+)
+){
+
+player.position =
+Math.min(
+TOTAL_CASAS,
+player.position + 1
+);
+
+transmitirEstado();
+
+enviarParaTodos({
+
+type:"MESSAGE",
+
+text:
+`🌱 Solução ambiental!\n\n${player.name} avançou 1 casa.`
+
+});
+
+await esperar(350);
+
+passarTurnoHost();
+
+return;
+
+}
+
+
+/* ITEM */
+
+if(
+ITENS.has(
+player.position
+)
+){
+
+player.items =
+player.items || [];
+
+player.items.push(
+"🎁 Item"
+);
+
+transmitirEstado();
+
+enviarParaTodos({
+
+type:"MESSAGE",
+
+text:
+`🎁 ${player.name} encontrou um item!`
+
+});
+
+await esperar(350);
+
+passarTurnoHost();
+
+return;
+
+}
+
+
+/* PERGUNTA */
+
+if(
+PERGUNTAS.has(
+player.position
+)
+){
+
+abrirPerguntaParaJogador(
+player
+);
+
+return;
+
+}
+
+
+/* CASA NORMAL */
+
+passarTurnoHost();
+
+}
+
+
+/* =========================================================
+   PASSAR TURNO
+========================================================= */
+
+function passarTurnoHost(){
+
+if(!isHost)
+return;
+
+if(players.length === 0){
+
+jogoProcessandoNoHost = false;
+
+return;
+
+}
+
+currentTurn++;
+
+if(
+currentTurn >=
+players.length
+){
+
+currentTurn = 0;
+
+}
+
+transmitirEstado();
+
+jogoProcessandoNoHost = false;
+
+}
+
+
+/* =========================================================
+   PERGUNTA
+========================================================= */
+
+function abrirPerguntaParaJogador(player){
+
+const pergunta =
+perguntas[
+Math.floor(
+Math.random() *
+perguntas.length
+)
+];
+
+
+perguntaHost =
+pergunta;
+
+perguntaHostPlayerId =
+player.id;
+
+
+enviarParaTodos({
+
+type:"QUESTION",
+
+playerId:player.id,
+
+pergunta:pergunta
+
+});
+
+}
+
+
+/* =========================================================
+   MOSTRAR PERGUNTA
+========================================================= */
+
+function mostrarPerguntaLocal(
+playerId,
+pergunta
+){
+
+perguntaAtual =
+pergunta;
+
+perguntaJogadorId =
+playerId;
+
+
+document.getElementById(
+"questionText"
+).textContent =
+pergunta.texto;
+
+
+const answers =
+document.getElementById(
+"answers"
+);
+
+answers.innerHTML = "";
+
+
+pergunta.respostas.forEach(
+(resposta,index) => {
+
+const button =
+document.createElement(
+"button"
+);
+
+button.className =
+"answer";
+
+button.textContent =
+resposta;
+
+button.onclick =
+() =>
+responderPergunta(index);
+
+answers.appendChild(button);
+
+}
+);
+
+
+document.getElementById(
+"questionModal"
+).classList.remove(
+"hidden"
+);
+
+}
+
+
+/* =========================================================
+   RESPONDER PERGUNTA
+========================================================= */
 
 function responderPergunta(index){
 
-    const me =
-        getPlayer();
+if(
+perguntaJogadorId !== myId
+){
 
-    if(!me)
-        return;
+return;
 
-    if(index === perguntaAtual.correta){
+}
 
-        me.correct =
-            (me.correct || 0) + 1;
 
-        me.position =
-            Math.min(
-                TOTAL_CASAS,
-                me.position + 2
-            );
+if(isHost){
 
-        mostrarMensagem(
-            "✅ Resposta correta!\nVocê avançou 2 casas."
-        );
+processarRespostaHost(
+myId,
+index
+);
 
-    }else{
+}else{
 
-        mostrarMensagem(
-            "❌ Resposta incorreta.\nVocê permanece no lugar."
-        );
+if(
+connection &&
+connection.open
+){
 
-    }
+connection.send({
 
-    closeModal("questionModal");
+type:"ANSWER",
 
-    atualizarHUD(true);
+playerId:myId,
 
-    passarTurno();
+answer:index
+
+});
+
+}
+
+}
+
+
+closeModal(
+"questionModal"
+);
+
+perguntaAtual = null;
+perguntaJogadorId = null;
 
 }
 
 
 /* =========================================================
-   TURNOS
+   PROCESSAR RESPOSTA NO HOST
 ========================================================= */
 
-function passarTurno(){
+function processarRespostaHost(
+playerId,
+index
+){
 
-    moving = false;
+if(!isHost)
+return;
 
-    rollBtn.disabled = false;
+if(
+perguntaHostPlayerId !==
+playerId
+){
 
-    diceBox.style.pointerEvents = "auto";
+return;
 
-    if(players.length === 0)
-        return;
+}
 
-    currentTurn++;
 
-    if(currentTurn >= players.length){
+const player =
+getPlayerById(playerId);
 
-        currentTurn = 0;
+if(!player)
+return;
 
-    }
 
-    atualizarHUD();
+const pergunta =
+perguntaHost;
+
+if(!pergunta){
+
+return;
+
+}
+
+
+const correta =
+Number(index) ===
+Number(pergunta.correta);
+
+
+if(correta){
+
+player.correct =
+(player.correct || 0) + 1;
+
+player.position =
+Math.min(
+TOTAL_CASAS,
+player.position + 2
+);
+
+enviarParaTodos({
+
+type:"MESSAGE",
+
+text:
+`✅ ${player.name} acertou!\n\nAvançou 2 casas.`
+
+});
+
+}else{
+
+enviarParaTodos({
+
+type:"MESSAGE",
+
+text:
+`❌ ${player.name} errou a pergunta.\n\nPermanece no lugar.`
+
+});
+
+}
+
+
+perguntaHost = null;
+perguntaHostPlayerId = null;
+
+
+transmitirEstado();
+
+
+setTimeout(
+() => {
+
+passarTurnoHost();
+
+},
+350
+);
 
 }
 
@@ -2159,9 +2621,16 @@ function passarTurno(){
 
 function closeModal(id){
 
-    document
-        .getElementById(id)
-        .classList.add("hidden");
+const modal =
+document.getElementById(id);
+
+if(modal){
+
+modal.classList.add(
+"hidden"
+);
+
+}
 
 }
 
@@ -2171,26 +2640,30 @@ function closeModal(id){
 ========================================================= */
 
 lobbyHowBtn.addEventListener(
-    "click",
-    () => {
+"click",
+() => {
 
-        document
-            .getElementById("howModal")
-            .classList.remove("hidden");
+document.getElementById(
+"howModal"
+).classList.remove(
+"hidden"
+);
 
-    }
+}
 );
 
 
 howBtn.addEventListener(
-    "click",
-    () => {
+"click",
+() => {
 
-        document
-            .getElementById("howModal")
-            .classList.remove("hidden");
+document.getElementById(
+"howModal"
+).classList.remove(
+"hidden"
+);
 
-    }
+}
 );
 
 
@@ -2199,47 +2672,49 @@ howBtn.addEventListener(
 ========================================================= */
 
 itemsBtn.addEventListener(
-    "click",
-    () => {
+"click",
+() => {
 
-        const me =
-            getPlayer();
+const me =
+getPlayer();
 
-        if(!me)
-            return;
+if(!me)
+return;
 
-        const content =
-            document.getElementById(
-                "itemsContent"
-            );
+const content =
+document.getElementById(
+"itemsContent"
+);
 
-        if(
-            !me.items ||
-            me.items.length === 0
-        ){
 
-            content.innerHTML =
-                "Você ainda não possui itens.";
+if(
+!me.items ||
+me.items.length === 0
+){
 
-        }else{
+content.innerHTML =
+"Você ainda não possui itens.";
 
-            content.innerHTML =
-                me.items
-                    .map(
-                        (item,i) =>
-                        `<p>🎁 Item ${i + 1}</p>`
-                    )
-                    .join("");
+}else{
 
-        }
+content.innerHTML =
+me.items
+.map(
+(item,i) =>
+`<p>🎁 Item ${i + 1}</p>`
+)
+.join("");
 
-        document
-            .getElementById(
-                "itemsModal"
-            )
-            .classList.remove("hidden");
+}
 
-    }
+
+document.getElementById(
+"itemsModal"
+).classList.remove(
+"hidden"
+);
+
+}
 );
 
 
@@ -2249,41 +2724,79 @@ itemsBtn.addEventListener(
 
 function criarPeer(){
 
-    return new Promise(
-        (resolve,reject) => {
+return new Promise(
+(resolve,reject) => {
 
-            const id =
-                "caminhos-" +
-                randomId();
+const id =
+"caminhos-" +
+randomId();
 
-            peer =
-                new Peer(id);
+peer =
+new Peer(id);
 
-            peer.on(
-                "open",
-                peerId => {
+peer.on(
+"open",
+peerId => {
 
-                    myId =
-                        peerId;
+myId =
+peerId;
 
-                    resolve(peerId);
+resolve(peerId);
 
-                }
-            );
+}
+);
 
-            peer.on(
-                "error",
-                err => {
+peer.on(
+"error",
+err => {
 
-                    console.error(err);
+console.error(
+"PeerJS:",
+err
+);
 
-                    reject(err);
+reject(err);
 
-                }
-            );
+}
+);
 
-        }
-    );
+}
+);
+
+}
+
+
+/* =========================================================
+   CRIAR JOGADOR
+========================================================= */
+
+function criarJogador(
+id,
+name,
+index
+){
+
+return {
+
+id:id,
+
+name:name,
+
+position:1,
+
+color:
+CORES[
+index %
+CORES.length
+],
+
+items:[],
+
+correct:0,
+
+denuncias:0
+
+};
 
 }
 
@@ -2295,126 +2808,138 @@ function criarPeer(){
 createRoomBtn.onclick =
 async function(){
 
-    const name =
-        playerName.value.trim();
+const name =
+playerName.value.trim();
 
-    if(!name){
+if(!name){
 
-        mostrarMensagem(
-            "Digite seu nome primeiro."
-        );
+mostrarMensagem(
+"Digite seu nome primeiro."
+);
 
-        return;
+return;
 
-    }
+}
 
-    try{
 
-        await criarPeer();
+try{
 
-        isHost = true;
+await criarPeer();
 
-        roomCode =
-            peer.id
-                .replace(
-                    "caminhos-",
-                    ""
-                )
-                .toUpperCase();
+isHost = true;
 
-        roomCodeElement.textContent =
-            roomCode;
 
-        roomArea.classList.remove(
-            "hidden"
-        );
+roomCode =
+peer.id.replace(
+"caminhos-",
+""
+).toUpperCase();
 
-        startBtn.classList.remove(
-            "hidden"
-        );
 
-        players = [
-            criarJogador(
-                myId,
-                name,
-                0
-            )
-        ];
+roomCodeElement.textContent =
+roomCode;
 
-        atualizarLobby();
 
-        peer.on(
-            "connection",
-            conn => {
+roomArea.classList.remove(
+"hidden"
+);
 
-                if(
-                    players.length >=
-                    MAX_JOGADORES
-                ){
+startBtn.classList.remove(
+"hidden"
+);
 
-                    conn.on(
-                        "open",
-                        () => {
 
-                            conn.send({
-                                type:"FULL"
-                            });
+players = [
 
-                        }
-                    );
+criarJogador(
+myId,
+name,
+0
+)
 
-                    return;
+];
 
-                }
 
-                conn.on(
-                    "open",
-                    () => {
+atualizarLobby();
 
-                        conn.send({
 
-                            type:"WELCOME",
+peer.on(
+"connection",
+conn => {
 
-                            players:
-                                players,
+if(
+players.length >=
+MAX_JOGADORES
+){
 
-                            currentTurn:
-                                currentTurn,
+conn.on(
+"open",
+() => {
 
-                            started:
-                                gameStarted
+conn.send({
 
-                        });
+type:"FULL"
 
-                    }
-                );
+});
 
-                conn.on(
-                    "data",
-                    data => {
+}
+);
 
-                        receberDados(
-                            conn,
-                            data
-                        );
+return;
 
-                    }
-                );
+}
 
-            }
-        );
 
-        lobbyStatus.textContent =
-            "Sala criada! Compartilhe o código com os outros jogadores.";
+conn.on(
+"open",
+() => {
 
-    }catch(error){
+conn.send({
 
-        console.error(error);
+type:"WELCOME",
 
-        lobbyStatus.textContent =
-            "Não foi possível criar a sala.";
+players:players,
 
-    }
+currentTurn:currentTurn,
+
+started:gameStarted,
+
+gameTime:gameTime
+
+});
+
+}
+);
+
+
+conn.on(
+"data",
+data => {
+
+receberDados(
+conn,
+data
+);
+
+}
+);
+
+}
+);
+
+
+lobbyStatus.textContent =
+"Sala criada! Compartilhe o código com os outros jogadores.";
+
+
+}catch(error){
+
+console.error(error);
+
+lobbyStatus.textContent =
+"Não foi possível criar a sala.";
+
+}
 
 };
 
@@ -2426,279 +2951,489 @@ async function(){
 joinRoomBtn.onclick =
 async function(){
 
-    const name =
-        playerName.value.trim();
+const name =
+playerName.value.trim();
 
-    const code =
-        roomInput.value
-            .trim()
-            .toLowerCase();
+const code =
+roomInput.value
+.trim()
+.toLowerCase();
 
-    if(!name){
 
-        mostrarMensagem(
-            "Digite seu nome primeiro."
-        );
+if(!name){
 
-        return;
+mostrarMensagem(
+"Digite seu nome primeiro."
+);
 
-    }
+return;
 
-    if(!code){
+}
 
-        mostrarMensagem(
-            "Digite o código da sala."
-        );
 
-        return;
+if(!code){
 
-    }
+mostrarMensagem(
+"Digite o código da sala."
+);
 
-    try{
+return;
 
-        await criarPeer();
+}
 
-        roomCode =
-            code.toUpperCase();
 
-        const hostId =
-            "caminhos-" +
-            code.toLowerCase();
+try{
 
-        connection =
-            peer.connect(
-                hostId
-            );
+await criarPeer();
 
-        connection.on(
-            "open",
-            () => {
 
-                connection.send({
+roomCode =
+code.toUpperCase();
 
-                    type:"JOIN",
 
-                    player:
-                        criarJogador(
-                            myId,
-                            name,
-                            0
-                        )
+const hostId =
+"caminhos-" +
+code;
 
-                });
 
-                lobbyStatus.textContent =
-                    "Entrando na sala...";
+connection =
+peer.connect(
+hostId,
+{
+reliable:true
+}
+);
 
-            }
-        );
 
-        connection.on(
-            "data",
-            data => {
+connection.on(
+"open",
+() => {
 
-                receberDados(
-                    connection,
-                    data
-                );
+connection.send({
 
-            }
-        );
+type:"JOIN",
 
-    }catch(error){
+player:
+criarJogador(
+myId,
+name,
+0
+)
 
-        console.error(error);
+});
 
-        lobbyStatus.textContent =
-            "Não foi possível entrar na sala.";
+lobbyStatus.textContent =
+"Entrando na sala...";
 
-    }
+}
+);
+
+
+connection.on(
+"data",
+data => {
+
+receberDados(
+connection,
+data
+);
+
+}
+);
+
+
+connection.on(
+"close",
+() => {
+
+mostrarMensagem(
+"❌ A conexão com o anfitrião foi encerrada."
+);
+
+}
+);
+
+
+}catch(error){
+
+console.error(error);
+
+lobbyStatus.textContent =
+"Não foi possível entrar na sala.";
+
+}
 
 };
 
 
 /* =========================================================
-   CRIAR JOGADOR
+   RECEBER DADOS
 ========================================================= */
 
-function criarJogador(
-    id,
-    name,
-    index
+function receberDados(
+conn,
+data
 ){
 
-    return {
+if(!data || !data.type)
+return;
 
-        id:id,
 
-        name:name,
+/* NOVO JOGADOR */
 
-        position:1,
+if(
+data.type === "JOIN" &&
+isHost
+){
 
-        color:
-            CORES[
-                index %
-                CORES.length
-            ],
+if(
+players.length >=
+MAX_JOGADORES
+){
 
-        items:[],
+conn.send({
+type:"FULL"
+});
 
-        correct:0,
-
-        denuncias:0
-
-    };
+return;
 
 }
 
 
-/* =========================================================
-   DADOS RECEBIDOS
-========================================================= */
+const novo =
+data.player;
 
-function receberDados(
-    conn,
-    data
+
+novo.color =
+CORES[
+players.length %
+CORES.length
+];
+
+
+players.push(novo);
+
+atualizarLobby();
+
+transmitirEstado();
+
+return;
+
+}
+
+
+/* PEDIDO DO DADO */
+
+if(
+data.type === "ROLL_REQUEST" &&
+isHost
 ){
 
-    if(!data || !data.type)
-        return;
+if(
+data.playerId !==
+players[currentTurn]?.id
+){
+
+return;
+
+}
+
+hostExecutarJogada(
+data.playerId
+);
+
+return;
+
+}
 
 
-    if(
-        data.type === "JOIN" &&
-        isHost
-    ){
+/* RESPOSTA */
 
-        if(
-            players.length >=
-            MAX_JOGADORES
-        )
-            return;
+if(
+data.type === "ANSWER" &&
+isHost
+){
 
-        const novo =
-            data.player;
+processarRespostaHost(
+data.playerId,
+data.answer
+);
 
-        novo.color =
-            CORES[
-                players.length %
-                CORES.length
-            ];
+return;
 
-        players.push(novo);
-
-        atualizarLobby();
-
-        transmitirEstado();
-
-        return;
-
-    }
+}
 
 
-    if(
-        data.type === "STATE"
-    ){
+/* ESTADO */
 
-        players =
-            data.players || [];
+if(
+data.type === "STATE"
+){
 
-        currentTurn =
-            data.currentTurn || 0;
+players =
+data.players || [];
 
-        gameStarted =
-            !!data.started;
+currentTurn =
+Number(
+data.currentTurn
+) || 0;
 
-        if(gameStarted){
-
-            lobby.classList.add(
-                "hidden"
-            );
-
-            game.style.display =
-                "block";
-
-        }
-
-        atualizarLobby();
-
-        atualizarHUD();
-
-        return;
-
-    }
+gameStarted =
+!!data.started;
 
 
-    if(
-        data.type === "WELCOME"
-    ){
+if(
+typeof data.gameTime ===
+"number"
+){
 
-        players =
-            data.players || [];
+gameTime =
+data.gameTime;
 
-        currentTurn =
-            data.currentTurn || 0;
-
-        gameStarted =
-            !!data.started;
-
-        const novo =
-            players.find(
-                p => p.id === myId
-            );
-
-        if(!novo){
-
-            players.push(
-                criarJogador(
-                    myId,
-                    playerName.value.trim(),
-                    players.length
-                )
-            );
-
-        }
-
-        atualizarLobby();
-
-        if(gameStarted){
-
-            iniciarJogoTela();
-
-        }
-
-        return;
-
-    }
+}
 
 
-    if(
-        data.type === "FULL"
-    ){
+if(gameStarted){
 
-        mostrarMensagem(
-            "A sala está cheia. O máximo é 11 jogadores."
-        );
+lobby.classList.add(
+"hidden"
+);
 
-        return;
+game.style.display =
+"block";
 
-    }
+if(
+!board.children.length
+){
+
+criarTabuleiro();
+
+}
+
+}
 
 
-    if(
-        data.type === "START"
-    ){
+atualizarLobby();
 
-        players =
-            data.players ||
-            players;
+atualizarHUD();
 
-        currentTurn =
-            data.currentTurn || 0;
+return;
 
-        iniciarJogoTela();
+}
 
-    }
+
+/* WELCOME */
+
+if(
+data.type === "WELCOME"
+){
+
+players =
+data.players || [];
+
+currentTurn =
+Number(
+data.currentTurn
+) || 0;
+
+gameStarted =
+!!data.started;
+
+
+if(
+typeof data.gameTime ===
+"number"
+){
+
+gameTime =
+data.gameTime;
+
+}
+
+
+const existe =
+players.find(
+p => p.id === myId
+);
+
+
+if(!existe){
+
+players.push(
+criarJogador(
+myId,
+playerName.value.trim(),
+players.length
+)
+);
+
+}
+
+
+atualizarLobby();
+
+
+if(gameStarted){
+
+iniciarJogoTela();
+
+}
+
+
+return;
+
+}
+
+
+/* START */
+
+if(
+data.type === "START"
+){
+
+players =
+data.players ||
+players;
+
+currentTurn =
+Number(
+data.currentTurn
+) || 0;
+
+gameStarted = true;
+
+gameTime =
+data.gameTime ||
+TEMPO_TOTAL;
+
+iniciarJogoTela();
+
+return;
+
+}
+
+
+/* RESULTADO DO DADO */
+
+if(
+data.type === "DICE_RESULT"
+){
+
+if(
+data.playerId === myId
+){
+
+moving = true;
+
+}
+
+animarDadoLocal(
+data.result
+);
+
+return;
+
+}
+
+
+/* PERGUNTA */
+
+if(
+data.type === "QUESTION"
+){
+
+if(
+data.playerId === myId
+){
+
+moving = true;
+
+mostrarPerguntaLocal(
+data.playerId,
+data.pergunta
+);
+
+}
+
+return;
+
+}
+
+
+/* MENSAGEM */
+
+if(
+data.type === "MESSAGE"
+){
+
+mostrarMensagem(
+data.text
+);
+
+return;
+
+}
+
+
+/* VITÓRIA */
+
+if(
+data.type === "WIN"
+){
+
+gameStarted = false;
+
+moving = false;
+
+atualizarBotoes();
+
+mostrarMensagem(
+`🏆 ${data.playerName} chegou à casa 150 e venceu o jogo!`
+);
+
+return;
+
+}
+
+
+/* TEMPO */
+
+if(
+data.type === "TIME_UP"
+){
+
+gameStarted = false;
+
+moving = false;
+
+clearInterval(
+timerInterval
+);
+
+atualizarBotoes();
+
+mostrarMensagem(
+"⏰ O tempo acabou!"
+);
+
+return;
+
+}
+
+
+/* SALA CHEIA */
+
+if(
+data.type === "FULL"
+){
+
+mostrarMensagem(
+"A sala está cheia. O máximo é 11 jogadores."
+);
+
+return;
+
+}
 
 }
 
@@ -2709,79 +3444,34 @@ function receberDados(
 
 function atualizarLobby(){
 
-    playersLobby.innerHTML = "";
+playersLobby.innerHTML = "";
 
-    players.forEach(p => {
+players.forEach(p => {
 
-        const div =
-            document.createElement("div");
+const div =
+document.createElement(
+"div"
+);
 
-        div.className =
-            "lobby-player";
+div.className =
+"lobby-player";
 
-        div.innerHTML =
-            `🔴 ${escapeHtml(p.name)}`;
+div.innerHTML =
+`🔴 ${escapeHtml(p.name)}`;
 
-        playersLobby.appendChild(div);
+playersLobby.appendChild(div);
 
-    });
+});
 
-    if(isHost){
 
-        startBtn.classList.toggle(
-            "hidden",
-            players.length < 1
-        );
+if(isHost){
 
-    }
+startBtn.classList.toggle(
+"hidden",
+players.length < 1
+);
 
 }
-
-
-/* =========================================================
-   TRANSMITIR ESTADO
-========================================================= */
-
-function transmitirEstado(){
-
-    if(!isHost)
-        return;
-
-    const data = {
-
-        type:"STATE",
-
-        players:
-            players,
-
-        currentTurn:
-            currentTurn,
-
-        started:
-            gameStarted
-
-    };
-
-    if(
-        peer &&
-        peer.connections
-    ){
-
-        Object.values(
-            peer.connections
-        )
-        .flat()
-        .forEach(conn => {
-
-            if(conn.open){
-
-                conn.send(data);
-
-            }
-
-        });
-
-    }
 
 }
 
@@ -2793,19 +3483,37 @@ function transmitirEstado(){
 startBtn.onclick =
 function(){
 
-    if(!isHost)
-        return;
+if(!isHost)
+return;
 
-    gameStarted = true;
+if(gameStarted)
+return;
 
-    gameTime =
-        TEMPO_TOTAL;
+gameStarted = true;
 
-    currentTurn = 0;
+gameTime =
+TEMPO_TOTAL;
 
-    iniciarJogoTela();
+currentTurn = 0;
 
-    transmitirEstado();
+criarTabuleiro();
+
+atualizarHUD();
+
+iniciarJogoTela();
+
+
+enviarParaTodos({
+
+type:"START",
+
+players:players,
+
+currentTurn:currentTurn,
+
+gameTime:gameTime
+
+});
 
 };
 
@@ -2816,17 +3524,25 @@ function(){
 
 function iniciarJogoTela(){
 
-    lobby.style.display =
-        "none";
+lobby.style.display =
+"none";
 
-    game.style.display =
-        "block";
+game.style.display =
+"block";
 
-    criarTabuleiro();
 
-    atualizarHUD();
+if(
+!board.children.length
+){
 
-    iniciarTimer();
+criarTabuleiro();
+
+}
+
+
+atualizarHUD();
+
+iniciarTimer();
 
 }
 
@@ -2836,19 +3552,19 @@ function iniciarJogoTela(){
 ========================================================= */
 
 window.addEventListener(
-    "resize",
-    () => {
+"resize",
+() => {
 
-        if(gameStarted){
+if(gameStarted){
 
-            setTimeout(
-                desenharCaminhos,
-                100
-            );
+setTimeout(
+desenharCaminhos,
+100
+);
 
-        }
+}
 
-    }
+}
 );
 
 
