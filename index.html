@@ -277,30 +277,59 @@ button{
 }
 
 /* =========================
-   JOGADORES
+   JOGADORES / PEÕES
 ========================= */
 
 .tokens{
     position:absolute;
     left:3px;
     right:3px;
-    bottom:3px;
+    bottom:2px;
     display:flex;
     justify-content:center;
+    align-items:flex-end;
     flex-wrap:wrap;
     gap:2px;
     z-index:5;
+    min-height:25px;
 }
 
 .token{
-    width:16px;
-    height:16px;
-    border-radius:50%;
-    border:2px solid white;
-    box-shadow:0 1px 3px rgba(0,0,0,.5);
+    position:relative;
+    width:18px;
+    height:23px;
+    border:1.5px solid white;
+    background:var(--token-color);
+    clip-path:polygon(
+        38% 0%,
+        62% 0%,
+        69% 12%,
+        68% 25%,
+        80% 38%,
+        96% 70%,
+        100% 100%,
+        0% 100%,
+        4% 70%,
+        20% 38%,
+        32% 25%,
+        31% 12%
+    );
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.55));
     transition:
         transform .15s ease,
-        box-shadow .15s ease;
+        filter .15s ease;
+}
+
+.token::before{
+    content:"";
+    position:absolute;
+    width:42%;
+    height:42%;
+    left:29%;
+    top:0;
+    border-radius:50%;
+    background:var(--token-color);
+    border:1px solid rgba(255,255,255,.8);
 }
 
 .token.moving{
@@ -314,7 +343,7 @@ button{
         transform:translateY(5px) scale(.75);
     }
     60%{
-        transform:translateY(-5px) scale(1.18);
+        transform:translateY(-6px) scale(1.18);
     }
     100%{
         transform:translateY(0) scale(1);
@@ -323,13 +352,15 @@ button{
 
 @keyframes tokenGlow{
     0%{
-        box-shadow:0 1px 3px rgba(0,0,0,.5);
+        filter:drop-shadow(0 2px 2px rgba(0,0,0,.55));
     }
     50%{
-        box-shadow:0 0 12px rgba(255,255,255,.9);
+        filter:
+            drop-shadow(0 0 8px rgba(255,255,255,.95))
+            brightness(1.25);
     }
     100%{
-        box-shadow:0 1px 3px rgba(0,0,0,.5);
+        filter:drop-shadow(0 2px 2px rgba(0,0,0,.55));
     }
 }
 
@@ -640,6 +671,48 @@ button{
     color:#176942;
 }
 
+/* =========================
+   BOTÕES DE ESCOLHA
+========================= */
+
+.choice-btn{
+    width:100%;
+    border:0;
+    border-radius:16px;
+    padding:15px;
+    margin:7px 0;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 4px 9px rgba(0,0,0,.2);
+    transition:.15s;
+}
+
+.choice-btn:active{
+    transform:scale(.97);
+}
+
+.choice-tree{
+    background:linear-gradient(135deg,#2e9b4e,#176b31);
+}
+
+.choice-water{
+    background:linear-gradient(135deg,#20a9d6,#126bb5);
+}
+
+.choice-denuncia{
+    background:linear-gradient(135deg,#8d43d5,#5a2098);
+}
+
+.choice-no{
+    background:linear-gradient(135deg,#777,#4d4d4d);
+}
+
+/* =========================
+   MENSAGEM
+========================= */
+
 #messageBox{
     position:fixed;
     left:50%;
@@ -720,9 +793,8 @@ button{
     }
 
     .token{
-        width:11px;
-        height:11px;
-        border-width:1px;
+        width:13px;
+        height:18px;
     }
 
     .legend-item{
@@ -784,8 +856,8 @@ button{
     }
 
     .token{
-        width:9px;
-        height:9px;
+        width:11px;
+        height:16px;
     }
 }
 </style>
@@ -975,6 +1047,10 @@ Aguardando o jogo começar...
 </section>
 
 
+<!-- =========================
+     PERGUNTA
+========================= -->
+
 <div id="questionModal" class="modal hidden">
 
 <div class="modal-box">
@@ -988,6 +1064,10 @@ Aguardando o jogo começar...
 </div>
 </div>
 
+
+<!-- =========================
+     EVENTO
+========================= -->
 
 <div id="eventModal" class="modal hidden">
 
@@ -1008,6 +1088,28 @@ Continuar
 </div>
 
 
+<!-- =========================
+     ESCOLHA DE ITEM / AÇÃO
+========================= -->
+
+<div id="choiceModal" class="modal hidden">
+
+<div class="modal-box">
+
+<h2 id="choiceTitle">Escolha</h2>
+
+<p id="choiceText"></p>
+
+<div id="choiceButtons"></div>
+
+</div>
+</div>
+
+
+<!-- =========================
+     ITENS
+========================= -->
+
 <div id="itemsModal" class="modal hidden">
 
 <div class="modal-box">
@@ -1027,6 +1129,10 @@ Fechar
 </div>
 
 
+<!-- =========================
+     COMO JOGAR
+========================= -->
+
 <div id="howModal" class="modal hidden">
 
 <div class="modal-box">
@@ -1044,8 +1150,9 @@ avançará o número de casas sorteado.
 </p>
 
 <p>
-🔴 <strong>Problemas:</strong> você poderá
-sofrer uma penalidade.
+🔴 <strong>Problemas:</strong> ao cair em uma
+casa de problema, você poderá escolher se
+quer usar um item para se proteger.
 </p>
 
 <p>
@@ -1059,8 +1166,15 @@ corretamente para ganhar casas extras.
 </p>
 
 <p>
+📢 <strong>Denúncia:</strong> se errar uma
+pergunta e possuir uma Denúncia, você poderá
+escolher se quer usá-la para tentar novamente.
+</p>
+
+<p>
 🎒 <strong>Itens:</strong> podem ajudar
-durante a partida.
+durante a partida, mas você decide quando
+usá-los.
 </p>
 
 <p>
@@ -1448,10 +1562,15 @@ let pendingQuestion = null;
 
 /*
  * NOVO:
- * Guarda qual foi o último turno recebido.
- * Isso impede que o botão seja liberado durante
- * a animação do movimento.
+ * Guarda uma decisão que precisa ser tomada
+ * pelo jogador.
+ *
+ * type:
+ * "problem"  = escolha de Árvore/Água/não usar
+ * "denuncia" = escolha de usar/não usar Denúncia
  */
+let pendingDecision = null;
+
 let lastKnownTurn = -1;
 
 /* =========================================================
@@ -1748,12 +1867,6 @@ function setupPeerHost(){
         conn.on("open",function(){
 
             try{
-
-                /*
-                 * Primeiro informa que a conexão está viva.
-                 * O estado também é enviado, mas o JOIN recebido
-                 * logo depois fará o estado correto ser enviado.
-                 */
 
                 conn.send({
                     type:"WELCOME",
@@ -2222,9 +2335,6 @@ function handleHostMessage(
 
         renderLobbyPlayers();
 
-        /*
-         * Envia o estado atualizado para TODOS.
-         */
         broadcastState();
 
         showMessage(
@@ -2289,6 +2399,44 @@ function handleHostMessage(
         return;
     }
 
+    /* =====================================================
+       NOVO: ESCOLHAS DE ITEM
+    ===================================================== */
+
+    if(data.type === "PROBLEM_CHOICE"){
+
+        if(
+            !gameStarted ||
+            gameFinished
+        ){
+            return;
+        }
+
+        processProblemChoice(
+            data.playerId,
+            data.choice
+        );
+
+        return;
+    }
+
+    if(data.type === "DENUNCIA_CHOICE"){
+
+        if(
+            !gameStarted ||
+            gameFinished
+        ){
+            return;
+        }
+
+        processDenunciaChoice(
+            data.playerId,
+            data.use
+        );
+
+        return;
+    }
+
 }
 
 /* =========================================================
@@ -2321,14 +2469,6 @@ function handleClientMessage(data){
 
     if(data.type === "QUESTION"){
 
-        /*
-         * CORREÇÃO IMPORTANTE:
-         * Antes a pergunta aparecia no cliente,
-         * mas pendingQuestion permanecia null.
-         * Agora o cliente sabe que aquela pergunta
-         * pertence a ele.
-         */
-
         if(data.question){
 
             pendingQuestion = {
@@ -2341,6 +2481,44 @@ function handleClientMessage(data){
             );
 
         }
+
+        return;
+    }
+
+    /* =====================================================
+       NOVO: RECEBER ESCOLHA DE PROBLEMA
+    ===================================================== */
+
+    if(data.type === "PROBLEM_CHOICE"){
+
+        pendingDecision = {
+            type:"problem",
+            playerId:myPlayerId,
+            house:data.house
+        };
+
+        showProblemChoice(
+            data.problem,
+            data.hasTree,
+            data.hasWater
+        );
+
+        return;
+    }
+
+    /* =====================================================
+       NOVO: RECEBER ESCOLHA DA DENÚNCIA
+    ===================================================== */
+
+    if(data.type === "DENUNCIA_CHOICE"){
+
+        pendingDecision = {
+            type:"denuncia",
+            playerId:myPlayerId,
+            house:data.house
+        };
+
+        showDenunciaChoice();
 
         return;
     }
@@ -2383,6 +2561,7 @@ function handleClientMessage(data){
         );
 
         closeModal("questionModal");
+        closeModal("choiceModal");
 
         showEvent(
             data.title,
@@ -2420,10 +2599,6 @@ function handleClientMessage(data){
 
         rolling = false;
 
-        /*
-         * Não desbloqueia cegamente.
-         * updateUI decidirá se é realmente a vez.
-         */
         actionLocked = false;
 
         updateUI();
@@ -2511,6 +2686,7 @@ function sendToPlayer(
         handleClientMessage(data);
 
         return;
+
     }
 
     const conn =
@@ -2561,6 +2737,9 @@ function startGame(){
     rolling = false;
     actionLocked = false;
 
+    pendingQuestion = null;
+    pendingDecision = null;
+
     lastKnownTurn = currentTurn;
 
     $("startBtn")
@@ -2594,10 +2773,6 @@ function startGameClient(){
     renderBoard();
     renderPlayers();
 
-    /*
-     * No começo, o jogador deve ficar bloqueado
-     * até receber o STATE correto.
-     */
     rolling = false;
 
     if(
@@ -2622,10 +2797,6 @@ function startGameClient(){
     gameStarted = true;
     gameFinished = false;
 
-    /*
-     * Somente o host mantém o timer principal.
-     * Os clientes recebem atualizações TIMER.
-     */
     if(!isHost){
         startClientTimer();
     }
@@ -2785,7 +2956,7 @@ function getCellElement(position){
 }
 
 /* =========================================================
-   TOKENS
+   TOKENS / PEÕES
 ========================================================= */
 
 function renderTokens(movingId=null){
@@ -2825,8 +2996,10 @@ function renderTokens(movingId=null){
                     : ""
             );
 
-        token.style.background =
-            player.color;
+        token.style.setProperty(
+            "--token-color",
+            player.color
+        );
 
         token.title =
             player.name;
@@ -3043,10 +3216,6 @@ function startTimer(){
 
 function startClientTimer(){
 
-    /*
-     * O cliente NÃO cria outro contador independente.
-     * O host é quem manda o tempo.
-     */
     clearInterval(
         timerInterval
     );
@@ -3222,12 +3391,6 @@ function rollDice(){
                         playerId:myPlayerId
                     });
 
-                    /*
-                     * IMPORTANTE:
-                     * Não deixamos rolling preso.
-                     * actionLocked continua true até
-                     * o host mudar o turno.
-                     */
                     rolling = false;
 
                     updateUI();
@@ -3359,11 +3522,6 @@ function handleDiceResult(data){
             : "Saiu " +
               data.value;
 
-    /*
-     * A animação do dado terminou.
-     * O botão continua bloqueado porque
-     * actionLocked continua true.
-     */
     if(
         data.playerId === myPlayerId
     ){
@@ -3433,9 +3591,6 @@ function animatePlayerMovement(
 
         renderPlayers();
 
-        /*
-         * O host transmite o movimento.
-         */
         broadcastState();
 
         setTimeout(
@@ -3464,6 +3619,10 @@ function resolveLanding(player){
 
         return;
     }
+
+    /* =====================================================
+       ITEM
+    ===================================================== */
 
     if(
         ITENS[player.position]
@@ -3500,6 +3659,10 @@ function resolveLanding(player){
         return;
     }
 
+    /* =====================================================
+       PERGUNTA
+    ===================================================== */
+
     if(
         PERGUNTAS[player.position]
     ){
@@ -3524,17 +3687,14 @@ function resolveLanding(player){
             }
         );
 
-        /*
-         * Para o host, sendToPlayer já chama
-         * handleClientMessage. Para garantir
-         * que a pergunta apareça corretamente,
-         * não chamamos showQuestion duas vezes.
-         */
-
         broadcastState();
 
         return;
     }
+
+    /* =====================================================
+       PROBLEMA
+    ===================================================== */
 
     if(
         PROBLEMAS[player.position]
@@ -3545,81 +3705,67 @@ function resolveLanding(player){
                 player.position
             ];
 
-        let penalty =
-            problem.penalidade;
-
-        const treeIndex =
-            player.items.indexOf(
+        const hasTree =
+            player.items.includes(
                 "🌳 Árvore"
             );
 
-        const waterIndex =
-            player.items.indexOf(
+        const hasWater =
+            player.items.includes(
                 "💧 Água"
             );
 
-        if(treeIndex !== -1){
+        /*
+         * IMPORTANTE:
+         *
+         * NUNCA usamos automaticamente.
+         *
+         * Se tiver Árvore ou Água, o jogador escolhe.
+         */
 
-            player.items.splice(
-                treeIndex,
-                1
-            );
+        if(
+            hasTree ||
+            hasWater
+        ){
 
-            penalty = 0;
+            pendingDecision = {
+                type:"problem",
+                playerId:player.id,
+                house:player.position
+            };
 
-            sendEvent(
+            sendToPlayer(
                 player.id,
-                "🌳 Árvore protegeu você!",
-                "Seu item anulou a penalidade do problema."
+                {
+                    type:"PROBLEM_CHOICE",
+                    house:player.position,
+                    problem:problem,
+                    hasTree:hasTree,
+                    hasWater:hasWater
+                }
             );
 
-        }else if(waterIndex !== -1){
+            broadcastState();
 
-            player.items.splice(
-                waterIndex,
-                1
-            );
-
-            penalty =
-                Math.max(
-                    0,
-                    penalty-1
-                );
-
-            sendEvent(
-                player.id,
-                "💧 Água ajudou você!",
-                "A penalidade foi reduzida."
-            );
-
+            return;
         }
 
-        if(penalty > 0){
+        /*
+         * Se não possui nenhum dos dois,
+         * aplica a penalidade normalmente.
+         */
 
-            player.position =
-                Math.max(
-                    1,
-                    player.position -
-                    penalty
-                );
-
-            sendEvent(
-                player.id,
-                problem.titulo,
-                problem.texto +
-                " Você voltou " +
-                penalty +
-                " casas."
-            );
-
-        }
-
-        broadcastState();
-
-        nextTurnAfterDelay(player);
+        applyProblemPenalty(
+            player,
+            "none"
+        );
 
         return;
     }
+
+    /* =====================================================
+       SOLUÇÃO
+    ===================================================== */
 
     if(
         SOLUCOES[player.position]
@@ -3666,6 +3812,400 @@ function resolveLanding(player){
     );
 
     nextTurnAfterDelay(player);
+
+}
+
+/* =========================================================
+   NOVO: ESCOLHA DO PROBLEMA
+========================================================= */
+
+function showProblemChoice(
+    problem,
+    hasTree,
+    hasWater
+){
+
+    $("choiceTitle")
+        .textContent =
+            problem.titulo;
+
+    $("choiceText")
+        .textContent =
+            problem.texto +
+            " Você possui itens que podem ajudar. Escolha o que deseja fazer.";
+
+    const buttons =
+        $("choiceButtons");
+
+    buttons.innerHTML = "";
+
+    if(hasTree){
+
+        const treeBtn =
+            document.createElement("button");
+
+        treeBtn.className =
+            "choice-btn choice-tree";
+
+        treeBtn.type =
+            "button";
+
+        treeBtn.textContent =
+            "🌳 Usar Árvore";
+
+        treeBtn.addEventListener(
+            "click",
+            function(){
+
+                sendProblemChoice(
+                    "tree"
+                );
+
+            }
+        );
+
+        buttons.appendChild(
+            treeBtn
+        );
+
+    }
+
+    if(hasWater){
+
+        const waterBtn =
+            document.createElement("button");
+
+        waterBtn.className =
+            "choice-btn choice-water";
+
+        waterBtn.type =
+            "button";
+
+        waterBtn.textContent =
+            "💧 Usar Água";
+
+        waterBtn.addEventListener(
+            "click",
+            function(){
+
+                sendProblemChoice(
+                    "water"
+                );
+
+            }
+        );
+
+        buttons.appendChild(
+            waterBtn
+        );
+
+    }
+
+    const noBtn =
+        document.createElement("button");
+
+    noBtn.className =
+        "choice-btn choice-no";
+
+    noBtn.type =
+        "button";
+
+    noBtn.textContent =
+        "❌ Não usar nenhum item";
+
+    noBtn.addEventListener(
+        "click",
+        function(){
+
+            sendProblemChoice(
+                "none"
+            );
+
+        }
+    );
+
+    buttons.appendChild(
+        noBtn
+    );
+
+    $("choiceModal")
+        .classList
+        .remove("hidden");
+
+}
+
+/* =========================================================
+   ENVIAR ESCOLHA DO PROBLEMA
+========================================================= */
+
+function sendProblemChoice(choice){
+
+    if(!pendingDecision){
+        return;
+    }
+
+    document
+        .querySelectorAll(
+            "#choiceButtons .choice-btn"
+        )
+        .forEach(function(btn){
+            btn.disabled = true;
+        });
+
+    if(isHost){
+
+        processProblemChoice(
+            myPlayerId,
+            choice
+        );
+
+        return;
+    }
+
+    const hostConn =
+        connections[roomId] ||
+        Object.values(
+            connections
+        )[0];
+
+    if(
+        hostConn &&
+        hostConn.open
+    ){
+
+        try{
+
+            hostConn.send({
+                type:"PROBLEM_CHOICE",
+                playerId:myPlayerId,
+                choice:choice
+            });
+
+        }catch(e){
+
+            console.error(e);
+
+            showMessage(
+                "⚠️ Não foi possível enviar sua escolha."
+            );
+
+        }
+
+    }else{
+
+        showMessage(
+            "⚠️ Conexão perdida."
+        );
+
+    }
+
+}
+
+/* =========================================================
+   PROCESSAR ESCOLHA DO PROBLEMA
+========================================================= */
+
+function processProblemChoice(
+    playerId,
+    choice
+){
+
+    if(
+        !pendingDecision ||
+        pendingDecision.type !==
+        "problem" ||
+        pendingDecision.playerId !==
+        playerId
+    ){
+        return;
+    }
+
+    const player =
+        playerById(
+            playerId
+        );
+
+    if(!player){
+        return;
+    }
+
+    const house =
+        pendingDecision.house;
+
+    const problem =
+        PROBLEMAS[house];
+
+    if(!problem){
+
+        pendingDecision = null;
+
+        closeModal(
+            "choiceModal"
+        );
+
+        return;
+    }
+
+    pendingDecision = null;
+
+    closeModal(
+        "choiceModal"
+    );
+
+    /*
+     * Segurança:
+     * o jogador só pode usar um item que realmente possui.
+     */
+
+    if(
+        choice === "tree" &&
+        player.items.includes("🌳 Árvore")
+    ){
+
+        applyProblemPenalty(
+            player,
+            "tree"
+        );
+
+        return;
+    }
+
+    if(
+        choice === "water" &&
+        player.items.includes("💧 Água")
+    ){
+
+        applyProblemPenalty(
+            player,
+            "water"
+        );
+
+        return;
+    }
+
+    applyProblemPenalty(
+        player,
+        "none"
+    );
+
+}
+
+/* =========================================================
+   APLICAR PENALIDADE
+========================================================= */
+
+function applyProblemPenalty(
+    player,
+    itemUsed
+){
+
+    const problem =
+        PROBLEMAS[
+            player.position
+        ];
+
+    if(!problem){
+
+        nextTurnAfterDelay(
+            player
+        );
+
+        return;
+    }
+
+    let penalty =
+        problem.penalidade;
+
+    if(itemUsed === "tree"){
+
+        const treeIndex =
+            player.items.indexOf(
+                "🌳 Árvore"
+            );
+
+        if(treeIndex !== -1){
+
+            player.items.splice(
+                treeIndex,
+                1
+            );
+
+            penalty = 0;
+
+            sendEvent(
+                player.id,
+                "🌳 Árvore utilizada!",
+                "Você escolheu usar a Árvore. A penalidade foi anulada."
+            );
+
+        }
+
+    }else if(itemUsed === "water"){
+
+        const waterIndex =
+            player.items.indexOf(
+                "💧 Água"
+            );
+
+        if(waterIndex !== -1){
+
+            player.items.splice(
+                waterIndex,
+                1
+            );
+
+            penalty =
+                Math.max(
+                    0,
+                    penalty - 1
+                );
+
+            sendEvent(
+                player.id,
+                "💧 Água utilizada!",
+                "Você escolheu usar a Água. A penalidade foi reduzida."
+            );
+
+        }
+
+    }
+
+    if(penalty > 0){
+
+        player.position =
+            Math.max(
+                1,
+                player.position -
+                penalty
+            );
+
+        sendEvent(
+            player.id,
+            problem.titulo,
+            problem.texto +
+            " Você voltou " +
+            penalty +
+            " casas."
+        );
+
+    }else if(itemUsed === "none"){
+
+        sendEvent(
+            player.id,
+            problem.titulo,
+            problem.texto +
+            " Você decidiu não usar nenhum item e voltou " +
+            penalty +
+            " casas."
+        );
+
+    }
+
+    broadcastState();
+
+    nextTurnAfterDelay(
+        player
+    );
 
 }
 
@@ -3739,17 +4279,8 @@ function answerQuestion(
     index
 ){
 
-    /*
-     * Se o modal é do jogador, pendingQuestion
-     * precisa existir.
-     */
     if(!pendingQuestion){
 
-        /*
-         * Segurança extra para o caso de uma pergunta
-         * ter sido recebida mas o estado local ainda
-         * não ter sido registrado.
-         */
         if(
             question &&
             typeof question.house === "number"
@@ -3842,6 +4373,10 @@ function answerQuestion(
 
 }
 
+/* =========================================================
+   PROCESSAR RESPOSTA
+========================================================= */
+
 function processAnswer(
     playerId,
     index
@@ -3882,8 +4417,11 @@ function processAnswer(
         index ===
         question.correta;
 
-    pendingQuestion = null;
-
+    /*
+     * A pergunta é encerrada neste momento.
+     * Se errar e possuir Denúncia, uma nova decisão
+     * será aberta abaixo.
+     */
     closeModal(
         "questionModal"
     );
@@ -3901,6 +4439,8 @@ function processAnswer(
 
     if(correct){
 
+        pendingQuestion = null;
+
         player.acertos++;
 
         player.position =
@@ -3915,60 +4455,345 @@ function processAnswer(
             "Você acertou a pergunta e avançou 2 casas."
         );
 
+        broadcastState();
+
+        setTimeout(function(){
+
+            nextTurnAfterDelay(
+                player
+            );
+
+        },1200);
+
+        return;
+    }
+
+    /* =====================================================
+       ERROU
+    ===================================================== */
+
+    const denuncia =
+        player.items.indexOf(
+            "📢 Denúncia"
+        );
+
+    if(denuncia !== -1){
+
+        /*
+         * NÃO consumimos a Denúncia aqui.
+         *
+         * Primeiro perguntamos ao jogador.
+         */
+
+        pendingDecision = {
+            type:"denuncia",
+            playerId:player.id,
+            house:pendingQuestion.house
+        };
+
+        sendToPlayer(
+            player.id,
+            {
+                type:"DENUNCIA_CHOICE",
+                house:pendingQuestion.house
+            }
+        );
+
+        broadcastState();
+
+        return;
+    }
+
+    /*
+     * Não possui Denúncia.
+     */
+
+    pendingQuestion = null;
+
+    sendEvent(
+        player.id,
+        "❌ Resposta incorreta",
+        "Você permanece nesta posição."
+    );
+
+    broadcastState();
+
+    setTimeout(function(){
+
+        nextTurnAfterDelay(
+            player
+        );
+
+    },1200);
+
+}
+
+/* =========================================================
+   NOVO: ESCOLHA DA DENÚNCIA
+========================================================= */
+
+function showDenunciaChoice(){
+
+    $("choiceTitle")
+        .textContent =
+            "📢 Denúncia disponível";
+
+    $("choiceText")
+        .textContent =
+            "Você errou a pergunta, mas possui uma Denúncia. Deseja usar a Denúncia para tentar responder novamente?";
+
+    const buttons =
+        $("choiceButtons");
+
+    buttons.innerHTML = "";
+
+    const useBtn =
+        document.createElement("button");
+
+    useBtn.className =
+        "choice-btn choice-denuncia";
+
+    useBtn.type =
+        "button";
+
+    useBtn.textContent =
+        "📢 Usar Denúncia e tentar novamente";
+
+    useBtn.addEventListener(
+        "click",
+        function(){
+
+            sendDenunciaChoice(
+                true
+            );
+
+        }
+    );
+
+    buttons.appendChild(
+        useBtn
+    );
+
+    const noBtn =
+        document.createElement("button");
+
+    noBtn.className =
+        "choice-btn choice-no";
+
+    noBtn.type =
+        "button";
+
+    noBtn.textContent =
+        "❌ Não usar Denúncia";
+
+    noBtn.addEventListener(
+        "click",
+        function(){
+
+            sendDenunciaChoice(
+                false
+            );
+
+        }
+    );
+
+    buttons.appendChild(
+        noBtn
+    );
+
+    $("choiceModal")
+        .classList
+        .remove("hidden");
+
+}
+
+/* =========================================================
+   ENVIAR ESCOLHA DA DENÚNCIA
+========================================================= */
+
+function sendDenunciaChoice(
+    use
+){
+
+    if(!pendingDecision){
+        return;
+    }
+
+    document
+        .querySelectorAll(
+            "#choiceButtons .choice-btn"
+        )
+        .forEach(function(btn){
+            btn.disabled = true;
+        });
+
+    if(isHost){
+
+        processDenunciaChoice(
+            myPlayerId,
+            use
+        );
+
+        return;
+    }
+
+    const hostConn =
+        connections[roomId] ||
+        Object.values(
+            connections
+        )[0];
+
+    if(
+        hostConn &&
+        hostConn.open
+    ){
+
+        try{
+
+            hostConn.send({
+                type:"DENUNCIA_CHOICE",
+                playerId:myPlayerId,
+                use:use
+            });
+
+        }catch(e){
+
+            console.error(e);
+
+            showMessage(
+                "⚠️ Não foi possível enviar sua escolha."
+            );
+
+        }
+
     }else{
 
-        const denuncia =
+        showMessage(
+            "⚠️ Conexão perdida."
+        );
+
+    }
+
+}
+
+/* =========================================================
+   PROCESSAR ESCOLHA DA DENÚNCIA
+========================================================= */
+
+function processDenunciaChoice(
+    playerId,
+    use
+){
+
+    if(
+        !pendingDecision ||
+        pendingDecision.type !==
+        "denuncia" ||
+        pendingDecision.playerId !==
+        playerId
+    ){
+        return;
+    }
+
+    const player =
+        playerById(
+            playerId
+        );
+
+    if(!player){
+        return;
+    }
+
+    const house =
+        pendingDecision.house;
+
+    const question =
+        PERGUNTAS[house];
+
+    if(!question){
+
+        pendingDecision = null;
+        pendingQuestion = null;
+
+        closeModal(
+            "choiceModal"
+        );
+
+        return;
+    }
+
+    pendingDecision = null;
+
+    closeModal(
+        "choiceModal"
+    );
+
+    if(
+        use &&
+        player.items.includes(
+            "📢 Denúncia"
+        )
+    ){
+
+        const denunciaIndex =
             player.items.indexOf(
                 "📢 Denúncia"
             );
 
-        if(denuncia !== -1){
+        player.items.splice(
+            denunciaIndex,
+            1
+        );
 
-            player.items.splice(
-                denuncia,
-                1
-            );
-
-            sendEvent(
-                player.id,
-                "📢 Denúncia utilizada",
-                "Você pode tentar responder novamente."
-            );
-
-            pendingQuestion = {
-                playerId:player.id,
-                house:player.position
-            };
-
-            setTimeout(function(){
-
-                const questionData = {
-                    house:player.position,
-                    ...question
-                };
-
-                sendToPlayer(
-                    player.id,
-                    {
-                        type:"QUESTION",
-                        question:questionData
-                    }
-                );
-
-            },500);
-
-            broadcastState();
-
-            return;
-        }
+        /*
+         * A Denúncia foi realmente consumida
+         * somente agora, porque o jogador escolheu usar.
+         */
 
         sendEvent(
             player.id,
-            "❌ Resposta incorreta",
-            "Você permanece nesta posição."
+            "📢 Denúncia utilizada!",
+            "Você escolheu usar sua Denúncia. Prepare-se para uma nova tentativa."
         );
 
+        pendingQuestion = {
+            playerId:player.id,
+            house:house
+        };
+
+        broadcastState();
+
+        setTimeout(function(){
+
+            const questionData = {
+                house:house,
+                ...question
+            };
+
+            sendToPlayer(
+                player.id,
+                {
+                    type:"QUESTION",
+                    question:questionData
+                }
+            );
+
+        },700);
+
+        return;
     }
+
+    /*
+     * Jogador escolheu não usar.
+     */
+
+    pendingQuestion = null;
+
+    sendEvent(
+        player.id,
+        "❌ Denúncia não utilizada",
+        "Você decidiu guardar a Denúncia. Você permanece nesta posição."
+    );
 
     broadcastState();
 
@@ -4013,12 +4838,6 @@ function nextTurnAfterDelay(player){
 
         if(isHost){
 
-            /*
-             * Só aqui o turno muda.
-             * Isso é importante para que o jogador
-             * não possa jogar duas vezes.
-             */
-
             currentTurn =
                 (
                     index+1
@@ -4028,6 +4847,9 @@ function nextTurnAfterDelay(player){
             rolling = false;
             actionLocked = false;
 
+            pendingQuestion = null;
+            pendingDecision = null;
+
             lastKnownTurn = currentTurn;
 
             broadcastState();
@@ -4035,11 +4857,6 @@ function nextTurnAfterDelay(player){
             updateUI();
 
         }else{
-
-            /*
-             * O cliente NÃO muda currentTurn sozinho.
-             * Ele espera o STATE enviado pelo host.
-             */
 
             rolling = false;
 
@@ -4069,11 +4886,6 @@ function sendEvent(
             text:text
         }
     );
-
-    /*
-     * Para o host, sendToPlayer já mostra o evento.
-     * Para clientes, o EVENT é recebido normalmente.
-     */
 
 }
 
@@ -4232,6 +5044,9 @@ function finishGame(player){
     rolling = false;
     actionLocked = true;
 
+    pendingQuestion = null;
+    pendingDecision = null;
+
     clearInterval(
         timerInterval
     );
@@ -4313,9 +5128,6 @@ function applyGameState(state){
 
         }
 
-        /*
-         * Detecta mudança REAL de turno.
-         */
         const turnChanged =
             oldTurn !== currentTurn ||
             lastKnownTurn !== currentTurn;
@@ -4337,9 +5149,6 @@ function applyGameState(state){
                 !gameFinished
             ){
 
-                /*
-                 * AGORA é seguro liberar o botão.
-                 */
                 actionLocked = false;
 
             }else{
@@ -4350,10 +5159,6 @@ function applyGameState(state){
 
         }
 
-        /*
-         * Se for a primeira atualização do jogo,
-         * configura corretamente o botão.
-         */
         if(lastKnownTurn === -1){
 
             lastKnownTurn =
@@ -4641,10 +5446,25 @@ function initializeModals(){
                 "click",
                 function(event){
 
+                    /*
+                     * Não permitimos fechar a escolha
+                     * de item clicando fora.
+                     *
+                     * Isso é importante porque o jogador
+                     * precisa tomar uma decisão.
+                     */
+
                     if(
                         event.target ===
                         modal
                     ){
+
+                        if(
+                            modal.id ===
+                            "choiceModal"
+                        ){
+                            return;
+                        }
 
                         modal.classList
                             .add("hidden");
