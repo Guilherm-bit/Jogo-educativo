@@ -32,6 +32,7 @@ body{
 
 button{
     font-family:inherit;
+    -webkit-tap-highlight-color:transparent;
 }
 
 .hidden{
@@ -96,10 +97,15 @@ button{
     margin-top:8px;
     color:white;
     transition:.2s;
+    touch-action:manipulation;
 }
 
 .btn:hover{
     transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:scale(.98);
 }
 
 .btn:disabled{
@@ -387,6 +393,7 @@ button{
     display:inline-block;
     cursor:pointer;
     user-select:none;
+    touch-action:manipulation;
 }
 
 .dice{
@@ -486,6 +493,7 @@ button{
     cursor:pointer;
     box-shadow:0 5px 10px rgba(0,0,0,.25);
     transition:.15s;
+    touch-action:manipulation;
 }
 
 .action-btn:active{
@@ -552,11 +560,6 @@ button{
     font-size:13px;
     font-weight:bold;
     border:2px solid transparent;
-}
-
-.player-mini.active{
-    border-color:#ffd34f;
-    background:#34422d;
 }
 
 /* =========================
@@ -813,14 +816,14 @@ autocomplete="off"
 <button
 id="createBtn"
 class="btn btn-green"
-onclick="createRoom()">
+type="button">
 🌳 Criar sala
 </button>
 
 <button
 id="joinBtn"
 class="btn btn-blue"
-onclick="showJoin()">
+type="button">
 👥 Entrar em uma sala
 </button>
 
@@ -839,7 +842,7 @@ style="text-transform:uppercase"
 <button
 id="joinRoomBtn"
 class="btn btn-blue"
-onclick="joinRoom()">
+type="button">
 🚪 Entrar
 </button>
 
@@ -852,8 +855,9 @@ Sala: <span id="roomCode">----</span>
 </div>
 
 <button
+id="copyRoomBtn"
 class="btn btn-purple"
-onclick="copyRoomCode()">
+type="button">
 📋 Copiar código
 </button>
 
@@ -862,7 +866,7 @@ onclick="copyRoomCode()">
 <button
 id="startBtn"
 class="btn btn-green hidden"
-onclick="startGame()">
+type="button">
 ▶️ Começar jogo
 </button>
 
@@ -914,7 +918,7 @@ Acertos: 0
 
 <div class="dice-area">
 
-<div id="diceBox" class="dice-box" onclick="rollDice()">
+<div id="diceBox" class="dice-box">
 
 <div id="dice" class="dice">
 ⚀
@@ -933,19 +937,21 @@ Acertos: 0
 <button
 id="rollButton"
 class="action-btn roll"
-onclick="rollDice()">
+type="button">
 🎲 Jogar dado
 </button>
 
 <button
+id="itemsButton"
 class="action-btn items"
-onclick="openItems()">
+type="button">
 🎒 Meus itens
 </button>
 
 <button
+id="howButton"
 class="action-btn how"
-onclick="openHowToPlay()">
+type="button">
 ❓ Como jogar
 </button>
 
@@ -992,8 +998,9 @@ Aguardando o jogo começar...
 <p id="eventText"></p>
 
 <button
+id="eventContinueBtn"
 class="close-btn"
-onclick="closeEvent()">
+type="button">
 Continuar
 </button>
 
@@ -1010,8 +1017,9 @@ Continuar
 <div id="itemsList"></div>
 
 <button
+id="itemsCloseBtn"
 class="close-btn"
-onclick="closeModal('itemsModal')">
+type="button">
 Fechar
 </button>
 
@@ -1061,8 +1069,9 @@ vence.
 </p>
 
 <button
+id="howCloseBtn"
 class="close-btn"
-onclick="closeModal('howModal')">
+type="button">
 Fechar
 </button>
 
@@ -1074,6 +1083,7 @@ Fechar
 
 
 <script>
+"use strict";
 
 /* =========================================================
    CONFIGURAÇÕES
@@ -1084,451 +1094,390 @@ const TEMPO_TOTAL = 30 * 60;
 const MAX_JOGADORES = 11;
 
 const CORES = [
-"#e53935",
-"#1e88e5",
-"#43a047",
-"#fb8c00",
-"#8e24aa",
-"#00acc1",
-"#f4511e",
-"#6d4c41",
-"#3949ab",
-"#00897b",
-"#c0ca33"
+    "#e53935",
+    "#1e88e5",
+    "#43a047",
+    "#fb8c00",
+    "#8e24aa",
+    "#00acc1",
+    "#f4511e",
+    "#6d4c41",
+    "#3949ab",
+    "#00897b",
+    "#c0ca33"
 ];
 
 const DADOS = [
-"⚀","⚁","⚂","⚃","⚄","⚅"
+    "⚀",
+    "⚁",
+    "⚂",
+    "⚃",
+    "⚄",
+    "⚅"
 ];
-
 
 /* =========================================================
    CASAS ESPECIAIS
 ========================================================= */
 
 const PROBLEMAS = {
-
-7:{
-titulo:"🌊 Alagamento",
-texto:"A falta de infraestrutura adequada provocou alagamentos na comunidade.",
-penalidade:3
-},
-
-16:{
-titulo:"🏭 Poluição",
-texto:"A região foi afetada pela poluição e pela falta de fiscalização.",
-penalidade:3
-},
-
-25:{
-titulo:"💧 Falta de água",
-texto:"A comunidade enfrenta dificuldades de acesso à água.",
-penalidade:3
-},
-
-34:{
-titulo:"🚽 Falta de saneamento",
-texto:"A falta de saneamento básico prejudica a qualidade de vida.",
-penalidade:3
-},
-
-43:{
-titulo:"🌳 Poucas áreas verdes",
-texto:"A ausência de áreas verdes aumenta os impactos ambientais.",
-penalidade:3
-},
-
-52:{
-titulo:"🌧️ Enchentes",
-texto:"A falta de planejamento urbano aumenta os riscos de enchentes.",
-penalidade:3
-},
-
-61:{
-titulo:"🗑️ Descarte irregular",
-texto:"O descarte inadequado de resíduos prejudica o ambiente.",
-penalidade:3
-},
-
-70:{
-titulo:"🏭 Contaminação",
-texto:"A comunidade foi afetada por uma área contaminada.",
-penalidade:3
-},
-
-79:{
-titulo:"💨 Ar poluído",
-texto:"A poluição do ar afeta principalmente comunidades mais vulneráveis.",
-penalidade:3
-},
-
-88:{
-titulo:"💧 Água contaminada",
-texto:"A contaminação da água prejudicou os moradores.",
-penalidade:3
-},
-
-96:{
-titulo:"🌧️ Novo alagamento",
-texto:"A ausência de políticas públicas adequadas provocou novos alagamentos.",
-penalidade:3
-}
-
+    7:{
+        titulo:"🌊 Alagamento",
+        texto:"A falta de infraestrutura adequada provocou alagamentos na comunidade.",
+        penalidade:3
+    },
+    16:{
+        titulo:"🏭 Poluição",
+        texto:"A região foi afetada pela poluição e pela falta de fiscalização.",
+        penalidade:3
+    },
+    25:{
+        titulo:"💧 Falta de água",
+        texto:"A comunidade enfrenta dificuldades de acesso à água.",
+        penalidade:3
+    },
+    34:{
+        titulo:"🚽 Falta de saneamento",
+        texto:"A falta de saneamento básico prejudica a qualidade de vida.",
+        penalidade:3
+    },
+    43:{
+        titulo:"🌳 Poucas áreas verdes",
+        texto:"A ausência de áreas verdes aumenta os impactos ambientais.",
+        penalidade:3
+    },
+    52:{
+        titulo:"🌧️ Enchentes",
+        texto:"A falta de planejamento urbano aumenta os riscos de enchentes.",
+        penalidade:3
+    },
+    61:{
+        titulo:"🗑️ Descarte irregular",
+        texto:"O descarte inadequado de resíduos prejudica o ambiente.",
+        penalidade:3
+    },
+    70:{
+        titulo:"🏭 Contaminação",
+        texto:"A comunidade foi afetada por uma área contaminada.",
+        penalidade:3
+    },
+    79:{
+        titulo:"💨 Ar poluído",
+        texto:"A poluição do ar afeta principalmente comunidades mais vulneráveis.",
+        penalidade:3
+    },
+    88:{
+        titulo:"💧 Água contaminada",
+        texto:"A contaminação da água prejudicou os moradores.",
+        penalidade:3
+    },
+    96:{
+        titulo:"🌧️ Novo alagamento",
+        texto:"A ausência de políticas públicas adequadas provocou novos alagamentos.",
+        penalidade:3
+    }
 };
-
 
 const SOLUCOES = {
-
-11:{
-titulo:"🚰 Saneamento",
-texto:"Investimentos em saneamento ajudam a melhorar a qualidade de vida.",
-bonus:2
-},
-
-20:{
-titulo:"🔎 Fiscalização",
-texto:"A fiscalização ambiental ajuda a combater atividades poluidoras.",
-bonus:2
-},
-
-29:{
-titulo:"♻️ Coleta de resíduos",
-texto:"Uma coleta adequada reduz problemas ambientais.",
-bonus:2
-},
-
-38:{
-titulo:"🌧️ Prevenção de enchentes",
-texto:"Políticas de prevenção reduzem os riscos de alagamentos.",
-bonus:2
-},
-
-47:{
-titulo:"🌳 Arborização",
-texto:"Mais árvores ajudam a melhorar o ambiente urbano.",
-bonus:2
-},
-
-56:{
-titulo:"💧 Acesso à água",
-texto:"Políticas públicas podem garantir acesso justo à água.",
-bonus:2
-},
-
-65:{
-titulo:"♻️ Reciclagem",
-texto:"A reciclagem contribui para reduzir a quantidade de resíduos.",
-bonus:2
-},
-
-74:{
-titulo:"🏘️ Planejamento urbano",
-texto:"Um planejamento urbano adequado pode reduzir desigualdades ambientais.",
-bonus:2
-},
-
-83:{
-titulo:"🌱 Recuperação ambiental",
-texto:"A recuperação de áreas degradadas beneficia toda a comunidade.",
-bonus:2
-},
-
-92:{
-titulo:"⚖️ Justiça ambiental",
-texto:"Políticas de justiça ambiental ajudam a combater desigualdades.",
-bonus:2
-}
-
+    11:{
+        titulo:"🚰 Saneamento",
+        texto:"Investimentos em saneamento ajudam a melhorar a qualidade de vida.",
+        bonus:2
+    },
+    20:{
+        titulo:"🔎 Fiscalização",
+        texto:"A fiscalização ambiental ajuda a combater atividades poluidoras.",
+        bonus:2
+    },
+    29:{
+        titulo:"♻️ Coleta de resíduos",
+        texto:"Uma coleta adequada reduz problemas ambientais.",
+        bonus:2
+    },
+    38:{
+        titulo:"🌧️ Prevenção de enchentes",
+        texto:"Políticas de prevenção reduzem os riscos de alagamentos.",
+        bonus:2
+    },
+    47:{
+        titulo:"🌳 Arborização",
+        texto:"Mais árvores ajudam a melhorar o ambiente urbano.",
+        bonus:2
+    },
+    56:{
+        titulo:"💧 Acesso à água",
+        texto:"Políticas públicas podem garantir acesso justo à água.",
+        bonus:2
+    },
+    65:{
+        titulo:"♻️ Reciclagem",
+        texto:"A reciclagem contribui para reduzir a quantidade de resíduos.",
+        bonus:2
+    },
+    74:{
+        titulo:"🏘️ Planejamento urbano",
+        texto:"Um planejamento urbano adequado pode reduzir desigualdades ambientais.",
+        bonus:2
+    },
+    83:{
+        titulo:"🌱 Recuperação ambiental",
+        texto:"A recuperação de áreas degradadas beneficia toda a comunidade.",
+        bonus:2
+    },
+    92:{
+        titulo:"⚖️ Justiça ambiental",
+        texto:"Políticas de justiça ambiental ajudam a combater desigualdades.",
+        bonus:2
+    }
 };
-
 
 const ITENS = {
-
-9:{
-nome:"🌳 Árvore",
-descricao:"Protege contra uma penalidade de problema."
-},
-
-18:{
-nome:"📢 Denúncia",
-descricao:"Pode permitir uma nova tentativa após errar uma pergunta."
-},
-
-27:{
-nome:"💧 Água",
-descricao:"Reduz uma penalidade de problema."
-},
-
-36:{
-nome:"♻️ Coleta seletiva",
-descricao:"Ajuda nas situações relacionadas a resíduos."
-},
-
-45:{
-nome:"🌱 Semente",
-descricao:"Representa ações de recuperação ambiental."
-},
-
-54:{
-nome:"🧰 Kit de emergência",
-descricao:"Ajuda a enfrentar situações ambientais."
-},
-
-63:{
-nome:"📚 Livro",
-descricao:"Representa conhecimento e educação ambiental."
-},
-
-72:{
-nome:"📣 Megafone",
-descricao:"Representa mobilização comunitária."
-},
-
-81:{
-nome:"☀️ Energia solar",
-descricao:"Representa energia renovável."
-},
-
-90:{
-nome:"📱 Telefone",
-descricao:"Representa comunicação e mobilização."
-},
-
-99:{
-nome:"🧤 Luvas",
-descricao:"Representam ações de cuidado e limpeza."
-},
-
-108:{
-nome:"🗺️ Mapa",
-descricao:"Ajuda no planejamento das ações."
-},
-
-117:{
-nome:"🪴 Mudas",
-descricao:"Representam recuperação de áreas verdes."
-},
-
-126:{
-nome:"🗑️ Lixeira",
-descricao:"Representa descarte correto de resíduos."
-},
-
-135:{
-nome:"📄 Documento",
-descricao:"Representa direitos e políticas públicas."
-}
-
+    9:{
+        nome:"🌳 Árvore",
+        descricao:"Protege contra uma penalidade de problema."
+    },
+    18:{
+        nome:"📢 Denúncia",
+        descricao:"Pode permitir uma nova tentativa após errar uma pergunta."
+    },
+    27:{
+        nome:"💧 Água",
+        descricao:"Reduz uma penalidade de problema."
+    },
+    36:{
+        nome:"♻️ Coleta seletiva",
+        descricao:"Ajuda nas situações relacionadas a resíduos."
+    },
+    45:{
+        nome:"🌱 Semente",
+        descricao:"Representa ações de recuperação ambiental."
+    },
+    54:{
+        nome:"🧰 Kit de emergência",
+        descricao:"Ajuda a enfrentar situações ambientais."
+    },
+    63:{
+        nome:"📚 Livro",
+        descricao:"Representa conhecimento e educação ambiental."
+    },
+    72:{
+        nome:"📣 Megafone",
+        descricao:"Representa mobilização comunitária."
+    },
+    81:{
+        nome:"☀️ Energia solar",
+        descricao:"Representa energia renovável."
+    },
+    90:{
+        nome:"📱 Telefone",
+        descricao:"Representa comunicação e mobilização."
+    },
+    99:{
+        nome:"🧤 Luvas",
+        descricao:"Representam ações de cuidado e limpeza."
+    },
+    108:{
+        nome:"🗺️ Mapa",
+        descricao:"Ajuda no planejamento das ações."
+    },
+    117:{
+        nome:"🪴 Mudas",
+        descricao:"Representam recuperação de áreas verdes."
+    },
+    126:{
+        nome:"🗑️ Lixeira",
+        descricao:"Representa descarte correto de resíduos."
+    },
+    135:{
+        nome:"📄 Documento",
+        descricao:"Representa direitos e políticas públicas."
+    }
 };
-
 
 /* =========================================================
    PERGUNTAS
 ========================================================= */
 
 const PERGUNTAS = {
-
-4:{
-pergunta:"O que é racismo ambiental?",
-respostas:[
-"Uma desigualdade ambiental que afeta determinados grupos de forma desproporcional.",
-"Uma competição entre bairros.",
-"Uma forma de reciclagem.",
-"Uma campanha de limpeza."
-],
-correta:0
-},
-
-13:{
-pergunta:"Qual situação pode representar injustiça ambiental?",
-respostas:[
-"Distribuição igual de áreas verdes.",
-"Comunidades vulneráveis sofrerem mais com poluição.",
-"Aumento da arborização.",
-"Criação de parques."
-],
-correta:1
-},
-
-22:{
-pergunta:"Por que o saneamento básico é importante?",
-respostas:[
-"Somente para deixar as cidades bonitas.",
-"Porque contribui para saúde, qualidade de vida e proteção ambiental.",
-"Somente para aumentar o trânsito.",
-"Não possui relação com a saúde."
-],
-correta:1
-},
-
-31:{
-pergunta:"Qual ação ajuda a combater problemas ambientais?",
-respostas:[
-"Descartar lixo nos rios.",
-"Evitar a fiscalização.",
-"Ampliar políticas públicas ambientais.",
-"Reduzir o acesso à água."
-],
-correta:2
-},
-
-40:{
-pergunta:"Quem deve participar da construção da justiça ambiental?",
-respostas:[
-"Somente empresas.",
-"Somente o governo.",
-"Somente estudantes.",
-"Governo, comunidades e sociedade."
-],
-correta:3
-},
-
-49:{
-pergunta:"O acesso à água potável é:",
-respostas:[
-"Um direito importante para a qualidade de vida.",
-"Um privilégio de poucas pessoas.",
-"Desnecessário.",
-"Importante apenas nas cidades."
-],
-correta:0
-},
-
-58:{
-pergunta:"Qual atitude contribui para uma cidade mais sustentável?",
-respostas:[
-"Aumentar o descarte irregular.",
-"Reduzir áreas verdes.",
-"Investir em transporte sustentável e áreas verdes.",
-"Ignorar problemas ambientais."
-],
-correta:2
-},
-
-67:{
-pergunta:"O que significa participação comunitária?",
-respostas:[
-"A comunidade não participar das decisões.",
-"Moradores participarem da busca por soluções.",
-"Somente empresas decidirem.",
-"Evitar debates."
-],
-correta:1
-},
-
-76:{
-pergunta:"Qual é uma consequência da poluição dos rios?",
-respostas:[
-"Melhoria da água.",
-"Aumento da biodiversidade automaticamente.",
-"Prejuízos à saúde e ao ambiente.",
-"Nenhuma consequência."
-],
-correta:2
-},
-
-85:{
-pergunta:"A justiça ambiental busca:",
-respostas:[
-"Aumentar desigualdades.",
-"Garantir uma distribuição mais justa dos benefícios e riscos ambientais.",
-"Impedir a participação social.",
-"Concentrar recursos em poucos lugares."
-],
-correta:1
-},
-
-94:{
-pergunta:"Qual atitude ajuda na prevenção de enchentes?",
-respostas:[
-"Jogar lixo nas ruas.",
-"Impermeabilizar todas as áreas.",
-"Cuidar da drenagem e preservar áreas verdes.",
-"Obstruir bueiros."
-],
-correta:2
-},
-
-98:{
-pergunta:"Por que educação ambiental é importante?",
-respostas:[
-"Porque ajuda as pessoas a compreenderem problemas e soluções ambientais.",
-"Porque elimina a necessidade de políticas públicas.",
-"Porque impede a participação comunitária.",
-"Porque serve somente para crianças."
-],
-correta:0
-}
-
+    4:{
+        pergunta:"O que é racismo ambiental?",
+        respostas:[
+            "Uma desigualdade ambiental que afeta determinados grupos de forma desproporcional.",
+            "Uma competição entre bairros.",
+            "Uma forma de reciclagem.",
+            "Uma campanha de limpeza."
+        ],
+        correta:0
+    },
+    13:{
+        pergunta:"Qual situação pode representar injustiça ambiental?",
+        respostas:[
+            "Distribuição igual de áreas verdes.",
+            "Comunidades vulneráveis sofrerem mais com poluição.",
+            "Aumento da arborização.",
+            "Criação de parques."
+        ],
+        correta:1
+    },
+    22:{
+        pergunta:"Por que o saneamento básico é importante?",
+        respostas:[
+            "Somente para deixar as cidades bonitas.",
+            "Porque contribui para saúde, qualidade de vida e proteção ambiental.",
+            "Somente para aumentar o trânsito.",
+            "Não possui relação com a saúde."
+        ],
+        correta:1
+    },
+    31:{
+        pergunta:"Qual ação ajuda a combater problemas ambientais?",
+        respostas:[
+            "Descartar lixo nos rios.",
+            "Evitar a fiscalização.",
+            "Ampliar políticas públicas ambientais.",
+            "Reduzir o acesso à água."
+        ],
+        correta:2
+    },
+    40:{
+        pergunta:"Quem deve participar da construção da justiça ambiental?",
+        respostas:[
+            "Somente empresas.",
+            "Somente o governo.",
+            "Somente estudantes.",
+            "Governo, comunidades e sociedade."
+        ],
+        correta:3
+    },
+    49:{
+        pergunta:"O acesso à água potável é:",
+        respostas:[
+            "Um direito importante para a qualidade de vida.",
+            "Um privilégio de poucas pessoas.",
+            "Desnecessário.",
+            "Importante apenas nas cidades."
+        ],
+        correta:0
+    },
+    58:{
+        pergunta:"Qual atitude contribui para uma cidade mais sustentável?",
+        respostas:[
+            "Aumentar o descarte irregular.",
+            "Reduzir áreas verdes.",
+            "Investir em transporte sustentável e áreas verdes.",
+            "Ignorar problemas ambientais."
+        ],
+        correta:2
+    },
+    67:{
+        pergunta:"O que significa participação comunitária?",
+        respostas:[
+            "A comunidade não participar das decisões.",
+            "Moradores participarem da busca por soluções.",
+            "Somente empresas decidirem.",
+            "Evitar debates."
+        ],
+        correta:1
+    },
+    76:{
+        pergunta:"Qual é uma consequência da poluição dos rios?",
+        respostas:[
+            "Melhoria da água.",
+            "Aumento da biodiversidade automaticamente.",
+            "Prejuízos à saúde e ao ambiente.",
+            "Nenhuma consequência."
+        ],
+        correta:2
+    },
+    85:{
+        pergunta:"A justiça ambiental busca:",
+        respostas:[
+            "Aumentar desigualdades.",
+            "Garantir uma distribuição mais justa dos benefícios e riscos ambientais.",
+            "Impedir a participação social.",
+            "Concentrar recursos em poucos lugares."
+        ],
+        correta:1
+    },
+    94:{
+        pergunta:"Qual atitude ajuda na prevenção de enchentes?",
+        respostas:[
+            "Jogar lixo nas ruas.",
+            "Impermeabilizar todas as áreas.",
+            "Cuidar da drenagem e preservar áreas verdes.",
+            "Obstruir bueiros."
+        ],
+        correta:2
+    },
+    98:{
+        pergunta:"Por que educação ambiental é importante?",
+        respostas:[
+            "Porque ajuda as pessoas a compreenderem problemas e soluções ambientais.",
+            "Porque elimina a necessidade de políticas públicas.",
+            "Porque impede a participação comunitária.",
+            "Porque serve somente para crianças."
+        ],
+        correta:0
+    }
 };
-
 
 /* =========================================================
    ESTADO
 ========================================================= */
 
 let peer = null;
-
 let connections = {};
-
 let isHost = false;
-
 let myId = "";
-
 let roomId = "";
-
 let myPlayerId = "";
-
 let players = [];
-
 let currentTurn = 0;
-
 let gameStarted = false;
-
 let gameFinished = false;
-
 let timeLeft = TEMPO_TOTAL;
-
 let timerInterval = null;
-
 let rolling = false;
-
 let actionLocked = false;
-
 let pendingQuestion = null;
-
 
 /* =========================================================
    ELEMENTOS
 ========================================================= */
 
-const $ = id => document.getElementById(id);
-
+function $(id){
+    return document.getElementById(id);
+}
 
 /* =========================================================
    UTILIDADES
 ========================================================= */
 
 function setStatus(text){
-    $("lobbyStatus").textContent = text;
+    const status = $("lobbyStatus");
+    if(status){
+        status.textContent = text;
+    }
 }
-
 
 function showMessage(text,duration=3500){
 
     const box = $("messageBox");
+
+    if(!box){
+        return;
+    }
 
     box.innerHTML = "";
 
     const div = document.createElement("div");
 
     div.className = "message";
-
     div.textContent = text;
 
     box.appendChild(div);
 
-    setTimeout(()=>{
+    setTimeout(function(){
 
         if(box.contains(div)){
             div.remove();
@@ -1537,7 +1486,6 @@ function showMessage(text,duration=3500){
     },duration);
 }
 
-
 function normalizeName(name){
 
     return String(name || "")
@@ -1545,7 +1493,6 @@ function normalizeName(name){
         .replace(/\s+/g," ")
         .slice(0,20);
 }
-
 
 function randomRoomCode(){
 
@@ -1556,18 +1503,16 @@ function randomRoomCode(){
 
     for(let i=0;i<6;i++){
 
-        code +=
-            chars[
-                Math.floor(
-                    Math.random()*chars.length
-                )
-            ];
+        code += chars[
+            Math.floor(
+                Math.random()*chars.length
+            )
+        ];
 
     }
 
     return code;
 }
-
 
 function generateId(){
 
@@ -1577,31 +1522,26 @@ function generateId(){
         Date.now().toString(36);
 }
 
-
 function playerById(id){
 
-    return players.find(
-        p=>p.id === id
-    );
+    return players.find(function(p){
+        return p.id === id;
+    });
 }
-
 
 function currentPlayer(){
-
     return players[currentTurn];
 }
-
 
 function escapeHTML(text){
 
     return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
-
 
 /* =========================================================
    LOBBY
@@ -1619,7 +1559,6 @@ function showJoin(){
         "Digite o código da sala criada pelo outro jogador."
     );
 }
-
 
 /* =========================================================
    CRIAR SALA
@@ -1644,7 +1583,7 @@ function createRoom(){
     if(typeof Peer === "undefined"){
 
         alert(
-            "Não foi possível carregar o sistema multiplayer. Verifique sua internet e recarregue a página."
+            "O sistema multiplayer não carregou. Verifique sua internet e recarregue a página."
         );
 
         return;
@@ -1659,48 +1598,44 @@ function createRoom(){
     );
 
     $("createBtn").disabled = true;
-
     $("joinBtn").disabled = true;
-
-    /*
-     * CORREÇÃO PRINCIPAL:
-     *
-     * O código da sala será também o ID público
-     * do PeerJS do host.
-     *
-     * Dessa maneira, outro celular pode conectar
-     * diretamente usando somente o código.
-     */
 
     roomId = randomRoomCode();
 
-    peer = new Peer(roomId,{
-        debug:0
-    });
+    try{
 
+        peer = new Peer(roomId,{
+            debug:0
+        });
 
-    peer.on("open",id=>{
+    }catch(error){
+
+        console.error(error);
+
+        setStatus(
+            "Erro ao iniciar o multiplayer."
+        );
+
+        $("createBtn").disabled = false;
+        $("joinBtn").disabled = false;
+
+        return;
+    }
+
+    peer.on("open",function(id){
 
         myId = id;
 
         players = [
-
             {
                 id:myPlayerId,
-
                 peerId:myId,
-
                 name:name,
-
                 position:1,
-
                 items:[],
-
                 acertos:0,
-
                 color:CORES[0]
             }
-
         ];
 
         $("roomCode").textContent =
@@ -1724,54 +1659,53 @@ function createRoom(){
 
     });
 
+    peer.on("error",function(err){
 
-    peer.on("error",err=>{
+        console.error("PeerJS:",err);
 
-        console.error(err);
-
-        if(err && err.type === "unavailable-id"){
+        if(
+            err &&
+            err.type === "unavailable-id"
+        ){
 
             setStatus(
-                "Esse código de sala já está em uso. Criando outra sala..."
+                "Esse código já está em uso. Criando outra sala..."
             );
 
-            if(peer){
+            try{
+                peer.destroy();
+            }catch(e){}
 
-                try{
-                    peer.destroy();
-                }catch(e){}
-
-            }
-
-            setTimeout(()=>{
+            setTimeout(function(){
 
                 $("createBtn").disabled = false;
-
                 $("joinBtn").disabled = false;
 
                 isHost = false;
 
                 createRoom();
 
-            },300);
+            },500);
 
             return;
         }
 
-
         setStatus(
             "Erro de conexão: " +
-            (err.message || "tente novamente.")
+            (
+                err &&
+                err.message
+                    ? err.message
+                    : "tente novamente."
+            )
         );
 
         $("createBtn").disabled = false;
-
         $("joinBtn").disabled = false;
 
     });
 
 }
-
 
 /* =========================================================
    HOST
@@ -1779,31 +1713,37 @@ function createRoom(){
 
 function setupPeerHost(){
 
-    peer.on("connection",conn=>{
+    if(!peer){
+        return;
+    }
 
-        /*
-         * Uma conexão nova pode chegar antes do open.
-         * Configuramos os listeners imediatamente.
-         */
+    peer.on("connection",function(conn){
 
         connections[conn.peer] = conn;
 
-        conn.on("open",()=>{
+        conn.on("open",function(){
 
-            conn.send({
-                type:"WELCOME",
-                roomId:roomId
-            });
+            try{
 
-            conn.send({
-                type:"STATE",
-                state:getGameState()
-            });
+                conn.send({
+                    type:"WELCOME",
+                    roomId:roomId
+                });
+
+                conn.send({
+                    type:"STATE",
+                    state:getGameState()
+                });
+
+            }catch(e){
+
+                console.error(e);
+
+            }
 
         });
 
-
-        conn.on("data",data=>{
+        conn.on("data",function(data){
 
             handleHostMessage(
                 conn,
@@ -1812,8 +1752,7 @@ function setupPeerHost(){
 
         });
 
-
-        conn.on("close",()=>{
+        conn.on("close",function(){
 
             const disconnectedPeer =
                 conn.peer;
@@ -1822,20 +1761,14 @@ function setupPeerHost(){
                 disconnectedPeer
             ];
 
-            /*
-             * O jogador só é removido do lobby.
-             * Depois que o jogo começou, mantemos
-             * o jogador no estado para não bagunçar
-             * os índices dos turnos.
-             */
-
             if(!gameStarted){
 
                 const index =
                     players.findIndex(
-                        p =>
-                            p.peerId ===
-                            disconnectedPeer
+                        function(p){
+                            return p.peerId ===
+                                disconnectedPeer;
+                        }
                     );
 
                 if(index !== -1){
@@ -1859,8 +1792,7 @@ function setupPeerHost(){
 
         });
 
-
-        conn.on("error",err=>{
+        conn.on("error",function(err){
 
             console.error(
                 "Erro na conexão:",
@@ -1873,9 +1805,8 @@ function setupPeerHost(){
 
 }
 
-
 /* =========================================================
-   LOBBY
+   RENDER LOBBY
 ========================================================= */
 
 function renderLobbyPlayers(){
@@ -1883,9 +1814,13 @@ function renderLobbyPlayers(){
     const box =
         $("playersLobby");
 
+    if(!box){
+        return;
+    }
+
     box.innerHTML = "";
 
-    players.forEach((player,index)=>{
+    players.forEach(function(player,index){
 
         const div =
             document.createElement("div");
@@ -1894,7 +1829,12 @@ function renderLobbyPlayers(){
             "lobby-player";
 
         div.innerHTML =
-            `${index===0 ? "👑 " : "🟢 "}${escapeHTML(player.name)}`;
+            (
+                index === 0
+                    ? "👑 "
+                    : "🟢 "
+            ) +
+            escapeHTML(player.name);
 
         box.appendChild(div);
 
@@ -1908,7 +1848,6 @@ function renderLobbyPlayers(){
     }
 
 }
-
 
 /* =========================================================
    ENTRAR NA SALA
@@ -1931,7 +1870,6 @@ function joinRoom(){
                 ""
             );
 
-
     if(!name){
 
         alert("Digite seu nome primeiro.");
@@ -1940,7 +1878,6 @@ function joinRoom(){
 
         return;
     }
-
 
     if(!code){
 
@@ -1951,23 +1888,18 @@ function joinRoom(){
         return;
     }
 
-
     if(typeof Peer === "undefined"){
 
         alert(
-            "Não foi possível carregar o sistema multiplayer."
+            "O sistema multiplayer não carregou. Verifique sua internet."
         );
 
         return;
     }
 
-
     $("createBtn").disabled = true;
-
     $("joinBtn").disabled = true;
-
     $("joinRoomBtn").disabled = true;
-
 
     setStatus(
         "Conectando à sala " +
@@ -1975,31 +1907,34 @@ function joinRoom(){
         "..."
     );
 
-
     isHost = false;
-
     myPlayerId = generateId();
+    roomId = code;
 
+    try{
 
-    /*
-     * O jogador recebe um Peer ID próprio.
-     */
+        peer = new Peer(undefined,{
+            debug:0
+        });
 
-    peer = new Peer(undefined,{
-        debug:0
-    });
+    }catch(error){
 
+        console.error(error);
 
-    peer.on("open",id=>{
+        setStatus(
+            "Erro ao iniciar o multiplayer."
+        );
+
+        $("createBtn").disabled = false;
+        $("joinBtn").disabled = false;
+        $("joinRoomBtn").disabled = false;
+
+        return;
+    }
+
+    peer.on("open",function(id){
 
         myId = id;
-
-        /*
-         * CORREÇÃO PRINCIPAL:
-         *
-         * O código digitado é diretamente o
-         * Peer ID do host.
-         */
 
         connectUsingRoomCode(
             code,
@@ -2008,26 +1943,27 @@ function joinRoom(){
 
     });
 
+    peer.on("error",function(err){
 
-    peer.on("error",err=>{
-
-        console.error(err);
+        console.error("PeerJS:",err);
 
         setStatus(
             "Erro de conexão: " +
-            (err.message || "verifique o código e a internet.")
+            (
+                err &&
+                err.message
+                    ? err.message
+                    : "verifique o código e a internet."
+            )
         );
 
         $("createBtn").disabled = false;
-
         $("joinBtn").disabled = false;
-
         $("joinRoomBtn").disabled = false;
 
     });
 
 }
-
 
 /* =========================================================
    CONECTAR AO HOST
@@ -2038,12 +1974,9 @@ function connectUsingRoomCode(
     name
 ){
 
-    /*
-     * NÃO usamos localStorage.
-     *
-     * O próprio código da sala é o Peer ID
-     * do host.
-     */
+    if(!peer){
+        return;
+    }
 
     const conn =
         peer.connect(
@@ -2053,7 +1986,6 @@ function connectUsingRoomCode(
             }
         );
 
-
     if(!conn){
 
         setStatus(
@@ -2061,60 +1993,57 @@ function connectUsingRoomCode(
         );
 
         $("createBtn").disabled = false;
-
         $("joinBtn").disabled = false;
-
         $("joinRoomBtn").disabled = false;
 
         return;
     }
 
-
     connections[code] = conn;
 
-
-    conn.on("open",()=>{
+    conn.on("open",function(){
 
         setStatus(
             "Conectado! Entrando na sala..."
         );
 
+        try{
 
-        conn.send({
+            conn.send({
 
-            type:"JOIN",
+                type:"JOIN",
 
-            player:{
+                player:{
+                    id:myPlayerId,
+                    peerId:myId,
+                    name:name,
+                    position:1,
+                    items:[],
+                    acertos:0,
+                    color:"#1e88e5"
+                }
 
-                id:myPlayerId,
+            });
 
-                peerId:myId,
+        }catch(e){
 
-                name:name,
+            console.error(e);
 
-                position:1,
+            setStatus(
+                "Não foi possível enviar os dados."
+            );
 
-                items:[],
-
-                acertos:0,
-
-                color:"#1e88e5"
-
-            }
-
-        });
+        }
 
     });
 
-
-    conn.on("data",data=>{
+    conn.on("data",function(data){
 
         handleClientMessage(data);
 
     });
 
-
-    conn.on("close",()=>{
+    conn.on("close",function(){
 
         setStatus(
             "A conexão com o criador da sala foi encerrada."
@@ -2126,8 +2055,7 @@ function connectUsingRoomCode(
 
     });
 
-
-    conn.on("error",err=>{
+    conn.on("error",function(err){
 
         console.error(err);
 
@@ -2136,15 +2064,12 @@ function connectUsingRoomCode(
         );
 
         $("createBtn").disabled = false;
-
         $("joinBtn").disabled = false;
-
         $("joinRoomBtn").disabled = false;
 
     });
 
 }
-
 
 /* =========================================================
    COPIAR CÓDIGO
@@ -2162,12 +2087,14 @@ function copyRoomCode(){
         return;
     }
 
-
-    if(navigator.clipboard){
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
 
         navigator.clipboard
             .writeText(code)
-            .then(()=>{
+            .then(function(){
 
                 showMessage(
                     "Código copiado: " +
@@ -2175,7 +2102,7 @@ function copyRoomCode(){
                 );
 
             })
-            .catch(()=>{
+            .catch(function(){
 
                 showMessage(
                     "Código da sala: " +
@@ -2195,7 +2122,6 @@ function copyRoomCode(){
 
 }
 
-
 /* =========================================================
    MENSAGENS DO HOST
 ========================================================= */
@@ -2209,23 +2135,17 @@ function handleHostMessage(
         return;
     }
 
-
     if(data.type === "JOIN"){
 
         if(gameStarted){
 
             conn.send({
-
                 type:"ERROR",
-
-                message:
-                    "O jogo já começou."
-
+                message:"O jogo já começou."
             });
 
             return;
         }
-
 
         if(
             players.length >=
@@ -2233,21 +2153,15 @@ function handleHostMessage(
         ){
 
             conn.send({
-
                 type:"ERROR",
-
-                message:
-                    "A sala está cheia."
-
+                message:"A sala está cheia."
             });
 
             return;
         }
 
-
         const incoming =
             data.player;
-
 
         if(
             !incoming ||
@@ -2256,21 +2170,13 @@ function handleHostMessage(
             return;
         }
 
-
-        /*
-         * Evita jogador duplicado.
-         */
-
         if(
-            players.some(
-                p =>
-                    p.id ===
-                    incoming.id
-            )
+            players.some(function(p){
+                return p.id === incoming.id;
+            })
         ){
             return;
         }
-
 
         incoming.color =
             CORES[
@@ -2279,21 +2185,13 @@ function handleHostMessage(
             ];
 
         incoming.position = 1;
-
         incoming.items = [];
-
         incoming.acertos = 0;
 
-
-        players.push(
-            incoming
-        );
-
+        players.push(incoming);
 
         renderLobbyPlayers();
-
         broadcastState();
-
 
         showMessage(
             incoming.name +
@@ -2302,7 +2200,6 @@ function handleHostMessage(
 
         return;
     }
-
 
     if(data.type === "ROLL_REQUEST"){
 
@@ -2313,22 +2210,14 @@ function handleHostMessage(
             return;
         }
 
-
         const player =
             playerById(
                 data.playerId
             );
 
-
         if(!player){
             return;
         }
-
-
-        /*
-         * O host verifica se realmente
-         * é a vez daquele jogador.
-         */
 
         if(
             !players[currentTurn] ||
@@ -2337,31 +2226,17 @@ function handleHostMessage(
         ){
 
             conn.send({
-
                 type:"ERROR",
-
-                message:
-                    "Ainda não é sua vez."
-
+                message:"Ainda não é sua vez."
             });
 
             return;
         }
 
-
-        /*
-         * O host sorteia o dado.
-         * Isso evita que um cliente possa
-         * escolher o resultado.
-         */
-
-        processRoll(
-            player
-        );
+        processRoll(player);
 
         return;
     }
-
 
     if(data.type === "ANSWER"){
 
@@ -2371,7 +2246,6 @@ function handleHostMessage(
         ){
             return;
         }
-
 
         processAnswer(
             data.playerId,
@@ -2383,7 +2257,6 @@ function handleHostMessage(
 
 }
 
-
 /* =========================================================
    MENSAGENS DO CLIENTE
 ========================================================= */
@@ -2394,7 +2267,6 @@ function handleClientMessage(data){
         return;
     }
 
-
     if(data.type === "STATE"){
 
         applyGameState(
@@ -2404,7 +2276,6 @@ function handleClientMessage(data){
         return;
     }
 
-
     if(data.type === "QUESTION"){
 
         showQuestion(
@@ -2413,7 +2284,6 @@ function handleClientMessage(data){
 
         return;
     }
-
 
     if(data.type === "EVENT"){
 
@@ -2425,7 +2295,6 @@ function handleClientMessage(data){
         return;
     }
 
-
     if(data.type === "MESSAGE"){
 
         showMessage(
@@ -2435,14 +2304,12 @@ function handleClientMessage(data){
         return;
     }
 
-
     if(data.type === "START"){
 
         startGameClient();
 
         return;
     }
-
 
     if(data.type === "GAME_OVER"){
 
@@ -2462,7 +2329,6 @@ function handleClientMessage(data){
         return;
     }
 
-
     if(data.type === "TIMER"){
 
         timeLeft =
@@ -2473,6 +2339,12 @@ function handleClientMessage(data){
         return;
     }
 
+    if(data.type === "DICE_RESULT"){
+
+        handleDiceResult(data);
+
+        return;
+    }
 
     if(data.type === "ERROR"){
 
@@ -2482,7 +2354,6 @@ function handleClientMessage(data){
         );
 
         rolling = false;
-
         actionLocked = false;
 
         updateUI();
@@ -2491,7 +2362,6 @@ function handleClientMessage(data){
     }
 
 }
-
 
 /* =========================================================
    ESTADO
@@ -2503,29 +2373,23 @@ function getGameState(){
 
         players:
             JSON.parse(
-                JSON.stringify(
-                    players
-                )
+                JSON.stringify(players)
             ),
 
         currentTurn,
-
         gameStarted,
-
         gameFinished,
-
         timeLeft
 
     };
 
 }
 
-
 function broadcast(data){
 
     Object.values(
         connections
-    ).forEach(conn=>{
+    ).forEach(function(conn){
 
         try{
 
@@ -2548,20 +2412,14 @@ function broadcast(data){
 
 }
 
-
 function broadcastState(){
 
     broadcast({
-
         type:"STATE",
-
-        state:
-            getGameState()
-
+        state:getGameState()
     });
 
 }
-
 
 function sendToPlayer(
     playerId,
@@ -2569,39 +2427,26 @@ function sendToPlayer(
 ){
 
     const player =
-        playerById(
-            playerId
-        );
-
+        playerById(playerId);
 
     if(!player){
         return;
     }
-
-
-    /*
-     * Se for o próprio host,
-     * atualiza diretamente.
-     */
 
     if(
         player.id ===
         myPlayerId
     ){
 
-        handleClientMessage(
-            data
-        );
+        handleClientMessage(data);
 
         return;
     }
-
 
     const conn =
         connections[
             player.peerId
         ];
-
 
     if(
         conn &&
@@ -2622,7 +2467,6 @@ function sendToPlayer(
 
 }
 
-
 /* =========================================================
    INICIAR JOGO
 ========================================================= */
@@ -2633,32 +2477,22 @@ function startGame(){
         return;
     }
 
-
     if(players.length < 1){
         return;
     }
 
-
     gameStarted = true;
-
     gameFinished = false;
-
     currentTurn = 0;
-
     timeLeft = TEMPO_TOTAL;
-
 
     $("startBtn")
         .classList
         .add("hidden");
 
-
     broadcast({
-
         type:"START"
-
     });
-
 
     startGameClient();
 
@@ -2667,7 +2501,6 @@ function startGame(){
     startTimer();
 
 }
-
 
 /* =========================================================
    JOGO CLIENTE
@@ -2681,23 +2514,15 @@ function startGameClient(){
     $("game").style.display =
         "block";
 
-
     renderBoard();
-
     renderPlayers();
-
     updateUI();
-
     updateTimer();
 
-
     gameStarted = true;
-
     gameFinished = false;
 
-
     startClientTimer();
-
 
     showMessage(
         "O jogo começou! Boa sorte! 🌱",
@@ -2706,44 +2531,34 @@ function startGameClient(){
 
 }
 
-
 /* =========================================================
    TABULEIRO
 ========================================================= */
 
 function getCellType(num){
 
-    if(
-        num === TOTAL_CASAS
-    ){
+    if(num === TOTAL_CASAS){
         return "finish";
     }
-
 
     if(PROBLEMAS[num]){
         return "problem";
     }
 
-
     if(SOLUCOES[num]){
         return "solution";
     }
-
 
     if(PERGUNTAS[num]){
         return "question";
     }
 
-
     if(ITENS[num]){
         return "item";
     }
 
-
     return "normal";
-
 }
-
 
 function renderBoard(){
 
@@ -2752,27 +2567,16 @@ function renderBoard(){
 
     board.innerHTML = "";
 
-
     const cells = [];
 
-
-    for(
-        let row=0;
-        row<15;
-        row++
-    ){
+    for(let row=0;row<15;row++){
 
         const start =
             row*10+1;
 
         const nums = [];
 
-
-        for(
-            let i=0;
-            i<10;
-            i++
-        ){
+        for(let i=0;i<10;i++){
 
             nums.push(
                 start+i
@@ -2780,255 +2584,151 @@ function renderBoard(){
 
         }
 
-
-        if(
-            row%2===1
-        ){
-
+        if(row%2===1){
             nums.reverse();
-
         }
 
-
-        nums.forEach(
-            num =>
-                cells.push(num)
-        );
+        nums.forEach(function(num){
+            cells.push(num);
+        });
 
     }
 
-
-    cells.forEach(num=>{
+    cells.forEach(function(num){
 
         const cell =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         const type =
             getCellType(num);
 
-
         cell.className =
-            "cell " +
-            type;
-
+            "cell " + type;
 
         cell.dataset.number =
             num;
 
-
-        if(
-            type ===
-            "normal"
-        ){
+        if(type === "normal"){
 
             cell.innerHTML = `
-
-                <span class="number">
-                    ${num}
-                </span>
-
+                <span class="number">${num}</span>
                 <div class="tokens"></div>
-
             `;
 
         }else{
 
             let icon = "";
-
             let label = "";
 
-
-            if(
-                type ===
-                "problem"
-            ){
-
+            if(type === "problem"){
                 icon = "🔴";
-
-                label =
-                    "PROBLEMA";
-
+                label = "PROBLEMA";
             }
 
-
-            if(
-                type ===
-                "solution"
-            ){
-
+            if(type === "solution"){
                 icon = "🟢";
-
-                label =
-                    "SOLUÇÃO";
-
+                label = "SOLUÇÃO";
             }
 
-
-            if(
-                type ===
-                "question"
-            ){
-
+            if(type === "question"){
                 icon = "❓";
-
-                label =
-                    "PERGUNTA";
-
+                label = "PERGUNTA";
             }
 
-
-            if(
-                type ===
-                "item"
-            ){
-
+            if(type === "item"){
                 icon = "🎒";
-
-                label =
-                    "ITEM";
-
+                label = "ITEM";
             }
 
-
-            if(
-                type ===
-                "finish"
-            ){
-
+            if(type === "finish"){
                 icon = "🏆";
-
-                label =
-                    "CHEGADA";
-
+                label = "CHEGADA";
             }
-
 
             cell.innerHTML = `
-
                 <div>
-
-                    <div class="special-icon">
-                        ${icon}
-                    </div>
-
-                    <div class="special-label">
-                        ${label}
-                    </div>
-
+                    <div class="special-icon">${icon}</div>
+                    <div class="special-label">${label}</div>
                 </div>
-
                 <div class="tokens"></div>
-
             `;
 
         }
 
-
-        board.appendChild(
-            cell
-        );
+        board.appendChild(cell);
 
     });
-
 
     renderTokens();
 
 }
 
-
 /* =========================================================
    POSIÇÃO
 ========================================================= */
 
-function getCellElement(
-    position
-){
+function getCellElement(position){
 
     return document.querySelector(
-        `.cell[data-number="${position}"]`
+        '.cell[data-number="' +
+        position +
+        '"]'
     );
 
 }
-
 
 /* =========================================================
    TOKENS
 ========================================================= */
 
-function renderTokens(
-    movingId=null
-){
+function renderTokens(movingId=null){
 
     document
-        .querySelectorAll(
-            ".tokens"
-        )
-        .forEach(t=>{
+        .querySelectorAll(".tokens")
+        .forEach(function(t){
             t.innerHTML = "";
         });
 
+    players.forEach(function(player){
 
-    players.forEach(
-        player=>{
-
-            const cell =
-                getCellElement(
-                    player.position
-                );
-
-
-            if(!cell){
-                return;
-            }
-
-
-            const container =
-                cell.querySelector(
-                    ".tokens"
-                );
-
-
-            if(!container){
-                return;
-            }
-
-
-            const token =
-                document.createElement(
-                    "div"
-                );
-
-
-            token.className =
-                "token" +
-                (
-                    player.id ===
-                    movingId
-                        ? " moving"
-                        : ""
-                );
-
-
-            token.style.background =
-                player.color;
-
-
-            token.title =
-                player.name;
-
-
-            container.appendChild(
-                token
+        const cell =
+            getCellElement(
+                player.position
             );
 
+        if(!cell){
+            return;
         }
-    );
+
+        const container =
+            cell.querySelector(".tokens");
+
+        if(!container){
+            return;
+        }
+
+        const token =
+            document.createElement("div");
+
+        token.className =
+            "token" +
+            (
+                player.id === movingId
+                    ? " moving"
+                    : ""
+            );
+
+        token.style.background =
+            player.color;
+
+        token.title =
+            player.name;
+
+        container.appendChild(token);
+
+    });
 
 }
-
 
 /* =========================================================
    JOGADORES
@@ -3041,50 +2741,37 @@ function renderPlayers(){
 
     list.innerHTML = "";
 
+    players.forEach(function(player,index){
 
-    players.forEach(
-        (player,index)=>{
+        const div =
+            document.createElement("div");
 
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "player-mini" +
-                (
-                    index ===
-                    currentTurn
-                        ? " active"
-                        : ""
-                );
-
-
-            div.style.borderColor =
-                player.color;
-
-
-            div.textContent =
-                (
-                    index===0
-                        ? "👑 "
-                        : ""
-                ) +
-                player.name +
-                " • " +
-                player.position;
-
-
-            list.appendChild(
-                div
+        div.className =
+            "player-mini" +
+            (
+                index === currentTurn
+                    ? " active"
+                    : ""
             );
 
-        }
-    );
+        div.style.borderColor =
+            player.color;
+
+        div.textContent =
+            (
+                index === 0
+                    ? "👑 "
+                    : ""
+            ) +
+            player.name +
+            " • " +
+            player.position;
+
+        list.appendChild(div);
+
+    });
 
 }
-
 
 /* =========================================================
    UI
@@ -3093,24 +2780,19 @@ function renderPlayers(){
 function updateUI(){
 
     renderPlayers();
-
     renderTokens();
-
 
     const player =
         currentPlayer();
-
 
     if(!player){
         return;
     }
 
-
     $("currentPlayerName")
         .textContent =
             "🎮 Vez de " +
             player.name;
-
 
     $("currentPlayerStats")
         .innerHTML =
@@ -3125,7 +2807,6 @@ function updateUI(){
             "🎒 Itens: " +
             player.items.length;
 
-
     if(
         player.id ===
         myPlayerId
@@ -3137,13 +2818,11 @@ function updateUI(){
                     ? "🏁 Jogo encerrado"
                     : "🎯 É a sua vez! Jogue o dado.";
 
-
         $("rollButton")
             .disabled =
                 rolling ||
                 actionLocked ||
                 gameFinished;
-
 
         $("diceBox")
             .style.pointerEvents =
@@ -3160,10 +2839,8 @@ function updateUI(){
                 "⏳ Aguarde. É a vez de " +
                 player.name;
 
-
         $("rollButton")
             .disabled = true;
-
 
         $("diceBox")
             .style.pointerEvents =
@@ -3172,7 +2849,6 @@ function updateUI(){
     }
 
 }
-
 
 function updateTimer(){
 
@@ -3183,7 +2859,6 @@ function updateTimer(){
         .toString()
         .padStart(2,"0");
 
-
     const sec =
         Math.max(
             0,
@@ -3192,12 +2867,10 @@ function updateTimer(){
         .toString()
         .padStart(2,"0");
 
-
     $("timer").textContent =
         min + ":" + sec;
 
 }
-
 
 /* =========================================================
    TIMER
@@ -3209,9 +2882,8 @@ function startTimer(){
         timerInterval
     );
 
-
     timerInterval =
-        setInterval(()=>{
+        setInterval(function(){
 
             if(
                 !gameStarted ||
@@ -3220,35 +2892,20 @@ function startTimer(){
                 return;
             }
 
-
             timeLeft--;
 
-
-            if(
-                timeLeft < 0
-            ){
-
+            if(timeLeft < 0){
                 timeLeft = 0;
-
             }
-
 
             updateTimer();
 
-
             broadcast({
-
                 type:"TIMER",
-
-                time:
-                    timeLeft
-
+                time:timeLeft
             });
 
-
-            if(
-                timeLeft <= 0
-            ){
+            if(timeLeft <= 0){
 
                 clearInterval(
                     timerInterval
@@ -3262,7 +2919,6 @@ function startTimer(){
 
 }
 
-
 function startClientTimer(){
 
     clearInterval(
@@ -3271,13 +2927,7 @@ function startClientTimer(){
 
     updateTimer();
 
-    /*
-     * O cliente não conta o tempo sozinho.
-     * O host é a autoridade do cronômetro.
-     */
-
 }
-
 
 function finishByTime(){
 
@@ -3285,36 +2935,26 @@ function finishByTime(){
         return;
     }
 
-
     gameFinished = true;
-
 
     clearInterval(
         timerInterval
     );
 
-
     const ranking =
-        [...players]
-            .sort(
-                (a,b)=>
-                    b.position -
-                    a.position
-            );
-
+        [...players].sort(function(a,b){
+            return b.position-a.position;
+        });
 
     const winner =
         ranking[0];
-
 
     if(!winner){
         return;
     }
 
-
     const title =
         "⏰ Tempo esgotado!";
-
 
     const text =
         "O tempo acabou! " +
@@ -3323,30 +2963,21 @@ function finishByTime(){
         winner.position +
         ".";
 
-
     showEvent(
         title,
         text
     );
 
-
     broadcast({
-
         type:"GAME_OVER",
-
-        title,
-
-        text
-
+        title:title,
+        text:text
     });
 
-
     broadcastState();
-
     updateUI();
 
 }
-
 
 /* =========================================================
    DADO
@@ -3361,15 +2992,12 @@ function rollDice(){
         return;
     }
 
-
     const player =
         currentPlayer();
-
 
     if(!player){
         return;
     }
-
 
     if(
         player.id !==
@@ -3378,7 +3006,6 @@ function rollDice(){
         return;
     }
 
-
     if(
         rolling ||
         actionLocked
@@ -3386,60 +3013,44 @@ function rollDice(){
         return;
     }
 
-
     rolling = true;
-
     actionLocked = true;
 
-
-    $("rollButton")
-        .disabled = true;
-
+    $("rollButton").disabled = true;
 
     $("diceBox")
         .style.pointerEvents =
             "none";
 
-
     const dice =
         $("dice");
-
 
     dice.classList.remove(
         "rolling"
     );
 
-
     void dice.offsetWidth;
-
 
     dice.classList.add(
         "rolling"
     );
 
-
     let animationCount = 0;
 
-
     const visualInterval =
-        setInterval(()=>{
+        setInterval(function(){
 
             const random =
                 Math.floor(
                     Math.random()*6
                 );
 
-
             dice.textContent =
                 DADOS[random];
 
-
             animationCount++;
 
-
-            if(
-                animationCount >= 6
-            ){
+            if(animationCount >= 6){
 
                 clearInterval(
                     visualInterval
@@ -3449,22 +3060,11 @@ function rollDice(){
 
         },110);
 
-
-    /*
-     * IMPORTANTE:
-     *
-     * O cliente NÃO envia mais
-     * o resultado do dado.
-     *
-     * O host sorteia o resultado.
-     */
-
-    setTimeout(()=>{
+    setTimeout(function(){
 
         dice.classList.remove(
             "rolling"
         );
-
 
         if(isHost){
 
@@ -3475,40 +3075,46 @@ function rollDice(){
         }else{
 
             const hostConn =
-                connections[
-                    roomId
-                ] ||
+                connections[roomId] ||
                 Object.values(
                     connections
                 )[0];
-
 
             if(
                 hostConn &&
                 hostConn.open
             ){
 
-                hostConn.send({
+                try{
 
-                    type:
-                        "ROLL_REQUEST",
+                    hostConn.send({
+                        type:"ROLL_REQUEST",
+                        playerId:myPlayerId
+                    });
 
-                    playerId:
-                        myPlayerId
+                }catch(e){
 
-                });
+                    console.error(e);
+
+                    rolling = false;
+                    actionLocked = false;
+
+                    showMessage(
+                        "⚠️ Não foi possível enviar a jogada."
+                    );
+
+                    updateUI();
+
+                }
 
             }else{
 
                 rolling = false;
-
                 actionLocked = false;
-
 
                 showMessage(
                     "⚠️ Conexão perdida com o criador da sala."
                 );
-
 
                 updateUI();
 
@@ -3519,7 +3125,6 @@ function rollDice(){
     },750);
 
 }
-
 
 /* =========================================================
    PROCESSAR DADO
@@ -3534,20 +3139,13 @@ function processRoll(
         return;
     }
 
-
     if(
         !players[currentTurn] ||
         players[currentTurn].id !==
         player.id
     ){
-
         return;
     }
-
-
-    /*
-     * Somente o host sorteia.
-     */
 
     const value =
         isHost
@@ -3556,49 +3154,32 @@ function processRoll(
               ) + 1
             : forcedValue;
 
-
     if(!value){
         return;
     }
 
-
     sendToPlayer(
         player.id,
         {
-
             type:"MESSAGE",
-
             text:
                 player.name +
                 " tirou " +
                 value +
                 " no dado."
-
         }
     );
 
-
-    /*
-     * O resultado também é enviado
-     * para todos os jogadores.
-     */
-
     broadcast({
-
         type:"DICE_RESULT",
-
-        playerId:
-            player.id,
-
-        value
-
+        playerId:player.id,
+        value:value
     });
-
 
     animatePlayerMovement(
         player,
         value,
-        ()=>{
+        function(){
 
             resolveLanding(
                 player
@@ -3609,28 +3190,15 @@ function processRoll(
 
 }
 
-
 /* =========================================================
-   RECEBER RESULTADO DO DADO
+   RESULTADO DO DADO
 ========================================================= */
 
-function handleDiceResult(
-    data
-){
+function handleDiceResult(data){
 
-    if(
-        !data ||
-        data.playerId ===
-        myPlayerId
-    ){
+    if(!data){
         return;
     }
-
-
-    /*
-     * Só mostra o resultado visual.
-     * O movimento é recebido pelo STATE.
-     */
 
     $("dice").textContent =
         DADOS[
@@ -3638,15 +3206,13 @@ function handleDiceResult(
         ];
 
     $("diceText").textContent =
-        data.playerId ===
-        myPlayerId
+        data.playerId === myPlayerId
             ? "Você tirou " +
               data.value
             : "Saiu " +
               data.value;
 
 }
-
 
 /* =========================================================
    MOVIMENTO
@@ -3663,19 +3229,9 @@ function animatePlayerMovement(
     const startPosition =
         player.position;
 
-
-    /*
-     * Durante o movimento do host,
-     * enviamos estados intermediários.
-     *
-     * Isso mantém os celulares sincronizados.
-     */
-
     function step(){
 
-        if(
-            moved >= steps
-        ){
+        if(moved >= steps){
 
             player.position =
                 Math.min(
@@ -3684,29 +3240,22 @@ function animatePlayerMovement(
                     moved
                 );
 
-
             broadcastState();
-
 
             renderTokens(
                 player.id
             );
 
-
             updateUI();
-
 
             if(onComplete){
                 onComplete();
             }
 
-
             return;
         }
 
-
         moved++;
-
 
         player.position =
             Math.min(
@@ -3715,17 +3264,13 @@ function animatePlayerMovement(
                 moved
             );
 
-
         renderTokens(
             player.id
         );
 
-
         renderPlayers();
 
-
         broadcastState();
-
 
         setTimeout(
             step,
@@ -3734,32 +3279,25 @@ function animatePlayerMovement(
 
     }
 
-
     step();
 
 }
-
 
 /* =========================================================
    RESOLVER CASA
 ========================================================= */
 
-function resolveLanding(
-    player
-){
+function resolveLanding(player){
 
     if(
         player.position >=
         TOTAL_CASAS
     ){
 
-        finishGame(
-            player
-        );
+        finishGame(player);
 
         return;
     }
-
 
     if(
         ITENS[player.position]
@@ -3769,7 +3307,6 @@ function resolveLanding(
             ITENS[
                 player.position
             ];
-
 
         if(
             !player.items.includes(
@@ -3783,7 +3320,6 @@ function resolveLanding(
 
         }
 
-
         sendEvent(
             player.id,
             item.nome,
@@ -3791,56 +3327,34 @@ function resolveLanding(
             item.descricao
         );
 
-
         broadcastState();
 
-
-        nextTurnAfterDelay(
-            player
-        );
+        nextTurnAfterDelay(player);
 
         return;
     }
-
 
     if(
         PERGUNTAS[player.position]
     ){
 
         pendingQuestion = {
-
-            playerId:
-                player.id,
-
-            house:
-                player.position
-
+            playerId:player.id,
+            house:player.position
         };
-
 
         sendToPlayer(
             player.id,
             {
-
                 type:"QUESTION",
-
                 question:{
-                    house:
-                        player.position,
-
+                    house:player.position,
                     ...PERGUNTAS[
                         player.position
                     ]
-
                 }
-
             }
         );
-
-
-        /*
-         * O host precisa abrir sua própria pergunta.
-         */
 
         if(
             player.id ===
@@ -3848,24 +3362,18 @@ function resolveLanding(
         ){
 
             showQuestion({
-
-                house:
-                    player.position,
-
+                house:player.position,
                 ...PERGUNTAS[
                     player.position
                 ]
-
             });
 
         }
-
 
         broadcastState();
 
         return;
     }
-
 
     if(
         PROBLEMAS[player.position]
@@ -3876,35 +3384,27 @@ function resolveLanding(
                 player.position
             ];
 
-
         let penalty =
             problem.penalidade;
-
 
         const treeIndex =
             player.items.indexOf(
                 "🌳 Árvore"
             );
 
-
         const waterIndex =
             player.items.indexOf(
                 "💧 Água"
             );
 
-
-        if(
-            treeIndex !== -1
-        ){
+        if(treeIndex !== -1){
 
             player.items.splice(
                 treeIndex,
                 1
             );
 
-
             penalty = 0;
-
 
             sendEvent(
                 player.id,
@@ -3912,22 +3412,18 @@ function resolveLanding(
                 "Seu item anulou a penalidade do problema."
             );
 
-        }else if(
-            waterIndex !== -1
-        ){
+        }else if(waterIndex !== -1){
 
             player.items.splice(
                 waterIndex,
                 1
             );
 
-
             penalty =
                 Math.max(
                     0,
                     penalty-1
                 );
-
 
             sendEvent(
                 player.id,
@@ -3937,10 +3433,7 @@ function resolveLanding(
 
         }
 
-
-        if(
-            penalty > 0
-        ){
+        if(penalty > 0){
 
             player.position =
                 Math.max(
@@ -3948,7 +3441,6 @@ function resolveLanding(
                     player.position -
                     penalty
                 );
-
 
             sendEvent(
                 player.id,
@@ -3961,17 +3453,12 @@ function resolveLanding(
 
         }
 
-
         broadcastState();
 
-
-        nextTurnAfterDelay(
-            player
-        );
+        nextTurnAfterDelay(player);
 
         return;
     }
-
 
     if(
         SOLUCOES[player.position]
@@ -3982,10 +3469,8 @@ function resolveLanding(
                 player.position
             ];
 
-
         const bonus =
             solution.bonus;
-
 
         player.position =
             Math.min(
@@ -3993,7 +3478,6 @@ function resolveLanding(
                 player.position +
                 bonus
             );
-
 
         sendEvent(
             player.id,
@@ -4004,98 +3488,80 @@ function resolveLanding(
             " casas!"
         );
 
-
         broadcastState();
 
-
-        nextTurnAfterDelay(
-            player
-        );
+        nextTurnAfterDelay(player);
 
         return;
     }
 
-
     sendToPlayer(
         player.id,
         {
-
             type:"MESSAGE",
-
             text:
                 "Você caiu em uma casa normal."
-
         }
     );
 
-
-    nextTurnAfterDelay(
-        player
-    );
+    nextTurnAfterDelay(player);
 
 }
-
 
 /* =========================================================
    PERGUNTAS
 ========================================================= */
 
-function showQuestion(
-    question
-){
+function showQuestion(question){
 
     $("questionText")
         .textContent =
             question.pergunta;
 
-
     const answers =
         $("answers");
 
-
     answers.innerHTML = "";
 
+    question.respostas.forEach(
+        function(answer,index){
 
-    question.respostas
-        .forEach(
-            (answer,index)=>{
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                button.className =
-                    "answer-btn";
-
-
-                button.textContent =
-                    String.fromCharCode(
-                        65+index
-                    ) +
-                    ") " +
-                    answer;
-
-
-                button.onclick =
-                    ()=>{
-
-                        answerQuestion(
-                            question,
-                            index
-                        );
-
-                    };
-
-
-                answers.appendChild(
-                    button
+            const button =
+                document.createElement(
+                    "button"
                 );
 
-            }
-        );
+            button.className =
+                "answer-btn";
 
+            button.type =
+                "button";
+
+            button.textContent =
+                String.fromCharCode(
+                    65+index
+                ) +
+                ") " +
+                answer;
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    answerQuestion(
+                        question,
+                        index
+                    );
+
+                }
+            );
+
+            answers.appendChild(
+                button
+            );
+
+        }
+    );
 
     $("questionModal")
         .classList
@@ -4103,24 +3569,19 @@ function showQuestion(
 
 }
 
-
 function answerQuestion(
     question,
     index
 ){
 
-    if(
-        !pendingQuestion
-    ){
+    if(!pendingQuestion){
         return;
     }
-
 
     const player =
         playerById(
             pendingQuestion.playerId
         );
-
 
     if(!player){
 
@@ -4128,28 +3589,18 @@ function answerQuestion(
             "questionModal"
         );
 
-        pendingQuestion =
-            null;
+        pendingQuestion = null;
 
         return;
     }
-
-
-    /*
-     * Desabilita respostas para evitar
-     * dois cliques rápidos.
-     */
 
     document
         .querySelectorAll(
             "#answers .answer-btn"
         )
-        .forEach(
-            btn=>{
-                btn.disabled = true;
-            }
-        );
-
+        .forEach(function(btn){
+            btn.disabled = true;
+        });
 
     if(isHost){
 
@@ -4161,29 +3612,33 @@ function answerQuestion(
     }else{
 
         const hostConn =
-            connections[
-                roomId
-            ] ||
+            connections[roomId] ||
             Object.values(
                 connections
             )[0];
-
 
         if(
             hostConn &&
             hostConn.open
         ){
 
-            hostConn.send({
+            try{
 
-                type:"ANSWER",
+                hostConn.send({
+                    type:"ANSWER",
+                    playerId:player.id,
+                    answer:index
+                });
 
-                playerId:
-                    player.id,
+            }catch(e){
 
-                answer:index
+                console.error(e);
 
-            });
+                showMessage(
+                    "⚠️ Não foi possível enviar a resposta."
+                );
+
+            }
 
         }else{
 
@@ -4197,7 +3652,6 @@ function answerQuestion(
 
 }
 
-
 function processAnswer(
     playerId,
     index
@@ -4208,14 +3662,12 @@ function processAnswer(
             playerId
         );
 
-
     if(
         !player ||
         !pendingQuestion
     ){
         return;
     }
-
 
     if(
         pendingQuestion.playerId !==
@@ -4224,47 +3676,42 @@ function processAnswer(
         return;
     }
 
-
     const question =
         PERGUNTAS[
             pendingQuestion.house
         ];
 
-
     if(!question){
+
         pendingQuestion = null;
+
         return;
     }
-
 
     const correct =
         index ===
         question.correta;
 
+    pendingQuestion = null;
 
-    pendingQuestion =
-        null;
-
+    closeModal(
+        "questionModal"
+    );
 
     sendToPlayer(
         player.id,
         {
-
             type:"MESSAGE",
-
             text:
                 correct
                     ? "✅ Resposta correta!"
                     : "❌ Resposta incorreta."
-
         }
     );
-
 
     if(correct){
 
         player.acertos++;
-
 
         player.position =
             Math.min(
@@ -4272,13 +3719,11 @@ function processAnswer(
                 player.position+2
             );
 
-
         sendEvent(
             player.id,
             "✅ Muito bem!",
             "Você acertou a pergunta e avançou 2 casas."
         );
-
 
     }else{
 
@@ -4287,16 +3732,12 @@ function processAnswer(
                 "📢 Denúncia"
             );
 
-
-        if(
-            denuncia !== -1
-        ){
+        if(denuncia !== -1){
 
             player.items.splice(
                 denuncia,
                 1
             );
-
 
             sendEvent(
                 player.id,
@@ -4304,43 +3745,30 @@ function processAnswer(
                 "Você pode tentar responder novamente."
             );
 
-
             pendingQuestion = {
-
-                playerId:
-                    player.id,
-
-                house:
-                    player.position
-
+                playerId:player.id,
+                house:player.position
             };
 
+            setTimeout(function(){
 
-            sendToPlayer(
-                player.id,
-                {
-
-                    type:"QUESTION",
-
-                    question:{
-
-                        house:
-                            player.position,
-
-                        ...question
-
+                sendToPlayer(
+                    player.id,
+                    {
+                        type:"QUESTION",
+                        question:{
+                            house:player.position,
+                            ...question
+                        }
                     }
+                );
 
-                }
-            );
-
+            },500);
 
             broadcastState();
 
             return;
-
         }
-
 
         sendEvent(
             player.id,
@@ -4350,11 +3778,9 @@ function processAnswer(
 
     }
 
-
     broadcastState();
 
-
-    setTimeout(()=>{
+    setTimeout(function(){
 
         nextTurnAfterDelay(
             player
@@ -4364,48 +3790,34 @@ function processAnswer(
 
 }
 
-
 /* =========================================================
    TURNOS
 ========================================================= */
 
-function nextTurnAfterDelay(
-    player
-){
+function nextTurnAfterDelay(player){
 
     if(gameFinished){
         return;
     }
 
-
     broadcastState();
 
-
-    setTimeout(()=>{
+    setTimeout(function(){
 
         if(gameFinished){
             return;
         }
 
-
         const index =
             players.findIndex(
-                p =>
-                    p.id ===
-                    player.id
+                function(p){
+                    return p.id === player.id;
+                }
             );
-
 
         if(index === -1){
             return;
         }
-
-
-        /*
-         * PASSA PARA O PRÓXIMO JOGADOR.
-         *
-         * Isso é feito exclusivamente pelo host.
-         */
 
         if(isHost){
 
@@ -4415,25 +3827,15 @@ function nextTurnAfterDelay(
                 ) %
                 players.length;
 
-
             rolling = false;
-
             actionLocked = false;
 
-
             broadcastState();
-
             updateUI();
 
         }else{
 
-            /*
-             * No cliente, o STATE do host
-             * libera a próxima jogada.
-             */
-
             rolling = false;
-
             actionLocked = false;
 
             updateUI();
@@ -4443,7 +3845,6 @@ function nextTurnAfterDelay(
     },1200);
 
 }
-
 
 /* =========================================================
    EVENTOS
@@ -4458,16 +3859,11 @@ function sendEvent(
     sendToPlayer(
         playerId,
         {
-
             type:"EVENT",
-
-            title,
-
-            text
-
+            title:title,
+            text:text
         }
     );
-
 
     if(
         playerId ===
@@ -4483,7 +3879,6 @@ function sendEvent(
 
 }
 
-
 function showEvent(
     title,
     text
@@ -4493,18 +3888,15 @@ function showEvent(
         .textContent =
             title;
 
-
     $("eventText")
         .textContent =
             text;
-
 
     $("eventModal")
         .classList
         .remove("hidden");
 
 }
-
 
 function closeEvent(){
 
@@ -4514,15 +3906,16 @@ function closeEvent(){
 
 }
 
-
 function closeModal(id){
 
-    $(id)
-        .classList
-        .add("hidden");
+    const element =
+        $(id);
+
+    if(element){
+        element.classList.add("hidden");
+    }
 
 }
-
 
 /* =========================================================
    ITENS
@@ -4535,18 +3928,14 @@ function openItems(){
             myPlayerId
         );
 
-
     if(!player){
         return;
     }
 
-
     const list =
         $("itemsList");
 
-
     list.innerHTML = "";
-
 
     if(
         player.items.length === 0
@@ -4558,16 +3947,15 @@ function openItems(){
     }else{
 
         player.items.forEach(
-            itemName=>{
+            function(itemName){
 
                 let itemData =
                     null;
 
-
                 Object.values(
                     ITENS
                 ).some(
-                    item=>{
+                    function(item){
 
                         if(
                             item.nome ===
@@ -4586,16 +3974,13 @@ function openItems(){
                     }
                 );
 
-
                 const div =
                     document.createElement(
                         "div"
                     );
 
-
                 div.className =
                     "item-card";
-
 
                 div.innerHTML =
                     "<strong>" +
@@ -4609,23 +3994,18 @@ function openItems(){
                             : "Item especial."
                     );
 
-
-                list.appendChild(
-                    div
-                );
+                list.appendChild(div);
 
             }
         );
 
     }
 
-
     $("itemsModal")
         .classList
         .remove("hidden");
 
 }
-
 
 /* =========================================================
    COMO JOGAR
@@ -4639,33 +4019,26 @@ function openHowToPlay(){
 
 }
 
-
 /* =========================================================
    FINAL
 ========================================================= */
 
-function finishGame(
-    player
-){
+function finishGame(player){
 
     if(gameFinished){
         return;
     }
 
-
     gameFinished = true;
-
 
     clearInterval(
         timerInterval
     );
 
-
     const title =
         "🏆 " +
         player.name +
         " venceu!";
-
 
     const text =
         "Parabéns! " +
@@ -4674,77 +4047,51 @@ function finishGame(
         TOTAL_CASAS +
         " e venceu a partida! 🌱";
 
-
     showEvent(
         title,
         text
     );
 
-
     broadcast({
-
         type:"GAME_OVER",
-
-        title,
-
-        text
-
+        title:title,
+        text:text
     });
 
-
     broadcastState();
-
 
     updateUI();
 
 }
 
-
 /* =========================================================
-   APLICAR ESTADO DO HOST
+   APLICAR ESTADO
 ========================================================= */
 
-function applyGameState(
-    state
-){
+function applyGameState(state){
 
     if(!state){
         return;
     }
 
-
     players =
-        state.players ||
-        [];
-
-
-    /*
-     * Não usamos || 0 aqui porque o índice 0
-     * é um valor válido, mas é melhor garantir
-     * explicitamente o número.
-     */
+        state.players || [];
 
     currentTurn =
-        typeof state.currentTurn ===
-        "number"
+        typeof state.currentTurn === "number"
             ? state.currentTurn
             : 0;
-
 
     gameStarted =
         !!state.gameStarted;
 
-
     gameFinished =
         !!state.gameFinished;
 
-
     timeLeft =
-        typeof state.timeLeft ===
-        "number"
+        typeof state.timeLeft === "number"
             ? state.timeLeft
             : TEMPO_TOTAL;
-
 
     if(gameStarted){
 
@@ -4754,7 +4101,6 @@ function applyGameState(
         $("game").style.display =
             "block";
 
-
         if(
             !$("board").children.length
         ){
@@ -4763,21 +4109,10 @@ function applyGameState(
 
         }
 
-
         renderPlayers();
-
         renderTokens();
-
         updateUI();
-
         updateTimer();
-
-
-        /*
-         * Recebeu o estado atualizado:
-         * pode liberar o botão quando for
-         * a vez deste jogador.
-         */
 
         if(
             currentPlayer() &&
@@ -4804,92 +4139,255 @@ function applyGameState(
 
 }
 
-
 /* =========================================================
-   DICE RESULT
+   INICIALIZAÇÃO DOS BOTÕES
 ========================================================= */
 
-const originalHandleClientMessage =
-    handleClientMessage;
+function initializeButtons(){
 
+    console.log(
+        "Inicializando botões..."
+    );
 
-/*
- * Adiciona suporte ao resultado visual do dado
- * sem substituir a comunicação principal.
- */
+    const createBtn =
+        $("createBtn");
 
-function processClientMessageWithDice(
-    data
-){
+    const joinBtn =
+        $("joinBtn");
 
-    if(
-        data &&
-        data.type ===
-        "DICE_RESULT"
-    ){
+    const joinRoomBtn =
+        $("joinRoomBtn");
 
-        handleDiceResult(
-            data
+    const copyRoomBtn =
+        $("copyRoomBtn");
+
+    const startBtn =
+        $("startBtn");
+
+    const rollButton =
+        $("rollButton");
+
+    const diceBox =
+        $("diceBox");
+
+    const itemsButton =
+        $("itemsButton");
+
+    const howButton =
+        $("howButton");
+
+    const eventContinueBtn =
+        $("eventContinueBtn");
+
+    const itemsCloseBtn =
+        $("itemsCloseBtn");
+
+    const howCloseBtn =
+        $("howCloseBtn");
+
+    if(createBtn){
+
+        createBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                createRoom();
+
+            }
         );
-
-        return true;
 
     }
 
-    return false;
+    if(joinBtn){
+
+        joinBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                showJoin();
+
+            }
+        );
+
+    }
+
+    if(joinRoomBtn){
+
+        joinRoomBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                joinRoom();
+
+            }
+        );
+
+    }
+
+    if(copyRoomBtn){
+
+        copyRoomBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                copyRoomCode();
+
+            }
+        );
+
+    }
+
+    if(startBtn){
+
+        startBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                startGame();
+
+            }
+        );
+
+    }
+
+    if(rollButton){
+
+        rollButton.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                rollDice();
+
+            }
+        );
+
+    }
+
+    if(diceBox){
+
+        diceBox.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                rollDice();
+
+            }
+        );
+
+    }
+
+    if(itemsButton){
+
+        itemsButton.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                openItems();
+
+            }
+        );
+
+    }
+
+    if(howButton){
+
+        howButton.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                openHowToPlay();
+
+            }
+        );
+
+    }
+
+    if(eventContinueBtn){
+
+        eventContinueBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                closeEvent();
+
+            }
+        );
+
+    }
+
+    if(itemsCloseBtn){
+
+        itemsCloseBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                closeModal(
+                    "itemsModal"
+                );
+
+            }
+        );
+
+    }
+
+    if(howCloseBtn){
+
+        howCloseBtn.addEventListener(
+            "click",
+            function(event){
+
+                event.preventDefault();
+
+                closeModal(
+                    "howModal"
+                );
+
+            }
+        );
+
+    }
+
+    console.log(
+        "Botões inicializados com sucesso."
+    );
 
 }
 
-
-/*
- * Interceptador simples.
- */
-
-const previousClientHandler =
-    handleClientMessage;
-
-
-/*
- * Como a função original já foi declarada,
- * redefinimos a referência utilizada pelas
- * conexões abaixo.
- */
-
-handleClientMessage =
-    function(data){
-
-        if(
-            processClientMessageWithDice(
-                data
-            )
-        ){
-
-            return;
-
-        }
-
-
-        previousClientHandler(
-            data
-        );
-
-    };
-
-
 /* =========================================================
-   FECHAR MODAIS
+   FECHAR MODAIS CLICANDO FORA
 ========================================================= */
 
-document
-    .querySelectorAll(
-        ".modal"
-    )
-    .forEach(
-        modal=>{
+function initializeModals(){
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(function(modal){
 
             modal.addEventListener(
                 "click",
-                event=>{
+                function(event){
 
                     if(
                         event.target ===
@@ -4904,81 +4402,127 @@ document
                 }
             );
 
-        }
-    );
+        });
 
+}
 
 /* =========================================================
    ENTER
 ========================================================= */
 
-$("roomInput")
-    .addEventListener(
-        "keydown",
-        event=>{
+function initializeKeyboard(){
 
-            if(
-                event.key ===
-                "Enter"
-            ){
-
-                joinRoom();
-
-            }
-
-        }
-    );
-
-
-$("playerName")
-    .addEventListener(
-        "keydown",
-        event=>{
-
-            if(
-                event.key ===
-                "Enter"
-            ){
+    $("roomInput")
+        .addEventListener(
+            "keydown",
+            function(event){
 
                 if(
-                    !$("joinArea")
-                        .classList
-                        .contains(
-                            "hidden"
-                        )
+                    event.key ===
+                    "Enter"
                 ){
 
+                    event.preventDefault();
+
                     joinRoom();
-
-                }else{
-
-                    createRoom();
 
                 }
 
             }
+        );
 
-        }
-    );
+    $("playerName")
+        .addEventListener(
+            "keydown",
+            function(event){
 
+                if(
+                    event.key ===
+                    "Enter"
+                ){
+
+                    event.preventDefault();
+
+                    if(
+                        !$("joinArea")
+                            .classList
+                            .contains(
+                                "hidden"
+                            )
+                    ){
+
+                        joinRoom();
+
+                    }else{
+
+                        createRoom();
+
+                    }
+
+                }
+
+            }
+        );
+
+}
 
 /* =========================================================
-   INICIALIZAÇÃO
+   INICIALIZAÇÃO PRINCIPAL
 ========================================================= */
 
-$("timer")
-    .textContent =
-        "30:00";
+function initializeGame(){
 
+    try{
 
-console.log(
-    "Caminhos da Justiça Ambiental carregado."
-);
+        $("timer")
+            .textContent =
+                "30:00";
 
-console.log(
-    "Multiplayer PeerJS corrigido."
-);
+        initializeButtons();
 
+        initializeModals();
+
+        initializeKeyboard();
+
+        console.log(
+            "Caminhos da Justiça Ambiental carregado."
+        );
+
+    }catch(error){
+
+        console.error(
+            "ERRO NA INICIALIZAÇÃO:",
+            error
+        );
+
+        alert(
+            "O jogo encontrou um erro ao carregar. Recarregue a página."
+        );
+
+    }
+
+}
+
+/*
+ * Espera o documento inteiro carregar antes
+ * de conectar os eventos dos botões.
+ */
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeGame
+    );
+
+}else{
+
+    initializeGame();
+
+}
 </script>
 
 </body>
