@@ -1431,15 +1431,28 @@ let isHost = false;
 let myId = "";
 let roomId = "";
 let myPlayerId = "";
+
 let players = [];
 let currentTurn = 0;
+
 let gameStarted = false;
 let gameFinished = false;
+
 let timeLeft = TEMPO_TOTAL;
 let timerInterval = null;
+
 let rolling = false;
 let actionLocked = false;
+
 let pendingQuestion = null;
+
+/*
+ * NOVO:
+ * Guarda qual foi o último turno recebido.
+ * Isso impede que o botão seja liberado durante
+ * a animação do movimento.
+ */
+let lastKnownTurn = -1;
 
 /* =========================================================
    ELEMENTOS
@@ -1454,10 +1467,13 @@ function $(id){
 ========================================================= */
 
 function setStatus(text){
+
     const status = $("lobbyStatus");
+
     if(status){
         status.textContent = text;
     }
+
 }
 
 function showMessage(text,duration=3500){
@@ -1484,6 +1500,7 @@ function showMessage(text,duration=3500){
         }
 
     },duration);
+
 }
 
 function normalizeName(name){
@@ -1492,6 +1509,7 @@ function normalizeName(name){
         .trim()
         .replace(/\s+/g," ")
         .slice(0,20);
+
 }
 
 function randomRoomCode(){
@@ -1512,6 +1530,7 @@ function randomRoomCode(){
     }
 
     return code;
+
 }
 
 function generateId(){
@@ -1520,6 +1539,7 @@ function generateId(){
         .toString(36)
         .slice(2,10) +
         Date.now().toString(36);
+
 }
 
 function playerById(id){
@@ -1527,9 +1547,11 @@ function playerById(id){
     return players.find(function(p){
         return p.id === id;
     });
+
 }
 
 function currentPlayer(){
+
     return players[currentTurn];
 }
 
@@ -1541,6 +1563,7 @@ function escapeHTML(text){
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
 }
 
 /* =========================================================
@@ -1558,6 +1581,7 @@ function showJoin(){
     setStatus(
         "Digite o código da sala criada pelo outro jogador."
     );
+
 }
 
 /* =========================================================
@@ -1724,6 +1748,12 @@ function setupPeerHost(){
         conn.on("open",function(){
 
             try{
+
+                /*
+                 * Primeiro informa que a conexão está viva.
+                 * O estado também é enviado, mas o JOIN recebido
+                 * logo depois fará o estado correto ser enviado.
+                 */
 
                 conn.send({
                     type:"WELCOME",
@@ -2191,6 +2221,10 @@ function handleHostMessage(
         players.push(incoming);
 
         renderLobbyPlayers();
+
+        /*
+         * Envia o estado atualizado para TODOS.
+         */
         broadcastState();
 
         showMessage(
@@ -2267,6 +2301,15 @@ function handleClientMessage(data){
         return;
     }
 
+    if(data.type === "WELCOME"){
+
+        if(data.roomId){
+            roomId = data.roomId;
+        }
+
+        return;
+    }
+
     if(data.type === "STATE"){
 
         applyGameState(
@@ -2278,9 +2321,26 @@ function handleClientMessage(data){
 
     if(data.type === "QUESTION"){
 
-        showQuestion(
-            data.question
-        );
+        /*
+         * CORREÇÃO IMPORTANTE:
+         * Antes a pergunta aparecia no cliente,
+         * mas pendingQuestion permanecia null.
+         * Agora o cliente sabe que aquela pergunta
+         * pertence a ele.
+         */
+
+        if(data.question){
+
+            pendingQuestion = {
+                playerId:myPlayerId,
+                house:data.question.house
+            };
+
+            showQuestion(
+                data.question
+            );
+
+        }
 
         return;
     }
@@ -2315,9 +2375,14 @@ function handleClientMessage(data){
 
         gameFinished = true;
 
+        rolling = false;
+        actionLocked = true;
+
         clearInterval(
             timerInterval
         );
+
+        closeModal("questionModal");
 
         showEvent(
             data.title,
@@ -2354,6 +2419,11 @@ function handleClientMessage(data){
         );
 
         rolling = false;
+
+        /*
+         * Não desbloqueia cegamente.
+         * updateUI decidirá se é realmente a vez.
+         */
         actionLocked = false;
 
         updateUI();
@@ -2483,8 +2553,15 @@ function startGame(){
 
     gameStarted = true;
     gameFinished = false;
+
     currentTurn = 0;
+
     timeLeft = TEMPO_TOTAL;
+
+    rolling = false;
+    actionLocked = false;
+
+    lastKnownTurn = currentTurn;
 
     $("startBtn")
         .classList
@@ -2516,13 +2593,42 @@ function startGameClient(){
 
     renderBoard();
     renderPlayers();
+
+    /*
+     * No começo, o jogador deve ficar bloqueado
+     * até receber o STATE correto.
+     */
+    rolling = false;
+
+    if(
+        currentPlayer() &&
+        currentPlayer().id ===
+        myPlayerId
+    ){
+
+        actionLocked = false;
+
+    }else{
+
+        actionLocked = true;
+
+    }
+
+    lastKnownTurn = currentTurn;
+
     updateUI();
     updateTimer();
 
     gameStarted = true;
     gameFinished = false;
 
-    startClientTimer();
+    /*
+     * Somente o host mantém o timer principal.
+     * Os clientes recebem atualizações TIMER.
+     */
+    if(!isHost){
+        startClientTimer();
+    }
 
     showMessage(
         "O jogo começou! Boa sorte! 🌱",
@@ -2558,6 +2664,7 @@ function getCellType(num){
     }
 
     return "normal";
+
 }
 
 function renderBoard(){
@@ -2739,6 +2846,10 @@ function renderPlayers(){
     const list =
         $("playersList");
 
+    if(!list){
+        return;
+    }
+
     list.innerHTML = "";
 
     players.forEach(function(player,index){
@@ -2747,12 +2858,7 @@ function renderPlayers(){
             document.createElement("div");
 
         div.className =
-            "player-mini" +
-            (
-                index === currentTurn
-                    ? " active"
-                    : ""
-            );
+            "player-mini";
 
         div.style.borderColor =
             player.color;
@@ -2786,6 +2892,17 @@ function updateUI(){
         currentPlayer();
 
     if(!player){
+
+        $("currentPlayerName")
+            .textContent =
+                "Aguardando...";
+
+        $("rollButton").disabled = true;
+
+        $("diceBox")
+            .style.pointerEvents =
+                "none";
+
         return;
     }
 
@@ -2807,16 +2924,21 @@ function updateUI(){
             "🎒 Itens: " +
             player.items.length;
 
-    if(
-        player.id ===
-        myPlayerId
-    ){
+    const isMyTurn =
+        player.id === myPlayerId;
+
+    if(isMyTurn){
 
         $("turnIndicator")
             .textContent =
                 gameFinished
                     ? "🏁 Jogo encerrado"
-                    : "🎯 É a sua vez! Jogue o dado.";
+                    : (
+                        rolling ||
+                        actionLocked
+                            ? "⏳ Aguarde a jogada terminar..."
+                            : "🎯 É a sua vez! Jogue o dado."
+                    );
 
         $("rollButton")
             .disabled =
@@ -2850,6 +2972,10 @@ function updateUI(){
 
 }
 
+/* =========================================================
+   TIMER
+========================================================= */
+
 function updateTimer(){
 
     const min =
@@ -2871,10 +2997,6 @@ function updateTimer(){
         min + ":" + sec;
 
 }
-
-/* =========================================================
-   TIMER
-========================================================= */
 
 function startTimer(){
 
@@ -2921,6 +3043,10 @@ function startTimer(){
 
 function startClientTimer(){
 
+    /*
+     * O cliente NÃO cria outro contador independente.
+     * O host é quem manda o tempo.
+     */
     clearInterval(
         timerInterval
     );
@@ -2936,6 +3062,9 @@ function finishByTime(){
     }
 
     gameFinished = true;
+
+    rolling = false;
+    actionLocked = true;
 
     clearInterval(
         timerInterval
@@ -2975,6 +3104,7 @@ function finishByTime(){
     });
 
     broadcastState();
+
     updateUI();
 
 }
@@ -3092,6 +3222,16 @@ function rollDice(){
                         playerId:myPlayerId
                     });
 
+                    /*
+                     * IMPORTANTE:
+                     * Não deixamos rolling preso.
+                     * actionLocked continua true até
+                     * o host mudar o turno.
+                     */
+                    rolling = false;
+
+                    updateUI();
+
                 }catch(e){
 
                     console.error(e);
@@ -3200,6 +3340,13 @@ function handleDiceResult(data){
         return;
     }
 
+    if(
+        data.value < 1 ||
+        data.value > 6
+    ){
+        return;
+    }
+
     $("dice").textContent =
         DADOS[
             data.value - 1
@@ -3211,6 +3358,22 @@ function handleDiceResult(data){
               data.value
             : "Saiu " +
               data.value;
+
+    /*
+     * A animação do dado terminou.
+     * O botão continua bloqueado porque
+     * actionLocked continua true.
+     */
+    if(
+        data.playerId === myPlayerId
+    ){
+
+        rolling = false;
+        actionLocked = true;
+
+        updateUI();
+
+    }
 
 }
 
@@ -3270,6 +3433,9 @@ function animatePlayerMovement(
 
         renderPlayers();
 
+        /*
+         * O host transmite o movimento.
+         */
         broadcastState();
 
         setTimeout(
@@ -3343,32 +3509,27 @@ function resolveLanding(player){
             house:player.position
         };
 
+        const questionData = {
+            house:player.position,
+            ...PERGUNTAS[
+                player.position
+            ]
+        };
+
         sendToPlayer(
             player.id,
             {
                 type:"QUESTION",
-                question:{
-                    house:player.position,
-                    ...PERGUNTAS[
-                        player.position
-                    ]
-                }
+                question:questionData
             }
         );
 
-        if(
-            player.id ===
-            myPlayerId
-        ){
-
-            showQuestion({
-                house:player.position,
-                ...PERGUNTAS[
-                    player.position
-                ]
-            });
-
-        }
+        /*
+         * Para o host, sendToPlayer já chama
+         * handleClientMessage. Para garantir
+         * que a pergunta apareça corretamente,
+         * não chamamos showQuestion duas vezes.
+         */
 
         broadcastState();
 
@@ -3514,6 +3675,10 @@ function resolveLanding(player){
 
 function showQuestion(question){
 
+    if(!question){
+        return;
+    }
+
     $("questionText")
         .textContent =
             question.pergunta;
@@ -3574,8 +3739,33 @@ function answerQuestion(
     index
 ){
 
+    /*
+     * Se o modal é do jogador, pendingQuestion
+     * precisa existir.
+     */
     if(!pendingQuestion){
-        return;
+
+        /*
+         * Segurança extra para o caso de uma pergunta
+         * ter sido recebida mas o estado local ainda
+         * não ter sido registrado.
+         */
+        if(
+            question &&
+            typeof question.house === "number"
+        ){
+
+            pendingQuestion = {
+                playerId:myPlayerId,
+                house:question.house
+            };
+
+        }else{
+
+            return;
+
+        }
+
     }
 
     const player =
@@ -3752,14 +3942,16 @@ function processAnswer(
 
             setTimeout(function(){
 
+                const questionData = {
+                    house:player.position,
+                    ...question
+                };
+
                 sendToPlayer(
                     player.id,
                     {
                         type:"QUESTION",
-                        question:{
-                            house:player.position,
-                            ...question
-                        }
+                        question:questionData
                     }
                 );
 
@@ -3821,6 +4013,12 @@ function nextTurnAfterDelay(player){
 
         if(isHost){
 
+            /*
+             * Só aqui o turno muda.
+             * Isso é importante para que o jogador
+             * não possa jogar duas vezes.
+             */
+
             currentTurn =
                 (
                     index+1
@@ -3830,13 +4028,20 @@ function nextTurnAfterDelay(player){
             rolling = false;
             actionLocked = false;
 
+            lastKnownTurn = currentTurn;
+
             broadcastState();
+
             updateUI();
 
         }else{
 
+            /*
+             * O cliente NÃO muda currentTurn sozinho.
+             * Ele espera o STATE enviado pelo host.
+             */
+
             rolling = false;
-            actionLocked = false;
 
             updateUI();
 
@@ -3865,17 +4070,10 @@ function sendEvent(
         }
     );
 
-    if(
-        playerId ===
-        myPlayerId
-    ){
-
-        showEvent(
-            title,
-            text
-        );
-
-    }
+    /*
+     * Para o host, sendToPlayer já mostra o evento.
+     * Para clientes, o EVENT é recebido normalmente.
+     */
 
 }
 
@@ -4031,6 +4229,9 @@ function finishGame(player){
 
     gameFinished = true;
 
+    rolling = false;
+    actionLocked = true;
+
     clearInterval(
         timerInterval
     );
@@ -4074,6 +4275,9 @@ function applyGameState(state){
         return;
     }
 
+    const oldTurn =
+        currentTurn;
+
     players =
         state.players || [];
 
@@ -4109,27 +4313,75 @@ function applyGameState(state){
 
         }
 
-        renderPlayers();
-        renderTokens();
-        updateUI();
-        updateTimer();
+        /*
+         * Detecta mudança REAL de turno.
+         */
+        const turnChanged =
+            oldTurn !== currentTurn ||
+            lastKnownTurn !== currentTurn;
 
-        if(
-            currentPlayer() &&
-            currentPlayer().id ===
-            myPlayerId
-        ){
+        if(turnChanged){
+
+            lastKnownTurn =
+                currentTurn;
+
+            rolling = false;
+
+            const newCurrent =
+                currentPlayer();
 
             if(
-                !gameFinished &&
-                !rolling
+                newCurrent &&
+                newCurrent.id ===
+                myPlayerId &&
+                !gameFinished
             ){
 
+                /*
+                 * AGORA é seguro liberar o botão.
+                 */
                 actionLocked = false;
+
+            }else{
+
+                actionLocked = true;
 
             }
 
         }
+
+        /*
+         * Se for a primeira atualização do jogo,
+         * configura corretamente o botão.
+         */
+        if(lastKnownTurn === -1){
+
+            lastKnownTurn =
+                currentTurn;
+
+            rolling = false;
+
+            actionLocked =
+                !(
+                    currentPlayer() &&
+                    currentPlayer().id ===
+                    myPlayerId &&
+                    !gameFinished
+                );
+
+        }
+
+        if(gameFinished){
+
+            rolling = false;
+            actionLocked = true;
+
+        }
+
+        renderPlayers();
+        renderTokens();
+        updateUI();
+        updateTimer();
 
     }else{
 
@@ -4502,11 +4754,6 @@ function initializeGame(){
     }
 
 }
-
-/*
- * Espera o documento inteiro carregar antes
- * de conectar os eventos dos botões.
- */
 
 if(
     document.readyState ===
