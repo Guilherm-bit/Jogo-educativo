@@ -167,6 +167,32 @@ button{
 }
 
 /* =========================
+   COMO JOGAR NO LOBBY
+========================= */
+
+.how-lobby{
+    margin-top:18px;
+}
+
+.how-lobby-btn{
+    width:100%;
+    border:2px solid #3824bd;
+    background:#f2f0ff;
+    color:#28199b;
+    border-radius:16px;
+    padding:13px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.how-lobby-btn:hover{
+    background:#e8e5ff;
+    transform:translateY(-2px);
+}
+
+/* =========================
    JOGO
 ========================= */
 
@@ -277,7 +303,7 @@ button{
 }
 
 /* =========================
-   JOGADORES / PEÕES
+   JOGADORES
 ========================= */
 
 .tokens{
@@ -545,10 +571,6 @@ button{
     background:linear-gradient(135deg,#0879a8,#00557c);
 }
 
-.action-btn.how{
-    background:linear-gradient(135deg,#2113a3,#17086e);
-}
-
 .turn-indicator{
     margin-top:14px;
     background:linear-gradient(135deg,#003c20,#002f19);
@@ -672,7 +694,7 @@ button{
 }
 
 /* =========================
-   BOTÕES DE ESCOLHA
+   ESCOLHAS
 ========================= */
 
 .choice-btn{
@@ -865,6 +887,10 @@ button{
 
 <body>
 
+<!-- =========================
+     LOBBY
+========================= -->
+
 <section id="lobby">
 
 <div class="lobby-box">
@@ -898,6 +924,19 @@ class="btn btn-blue"
 type="button">
 👥 Entrar em uma sala
 </button>
+
+<!-- COMO JOGAR FICA NO LOBBY -->
+
+<div class="how-lobby">
+
+<button
+id="howLobbyBtn"
+class="how-lobby-btn"
+type="button">
+❓ Como jogar
+</button>
+
+</div>
 
 <div id="joinArea" class="hidden">
 
@@ -951,6 +990,10 @@ Conecte-se para começar.
 </div>
 </section>
 
+
+<!-- =========================
+     JOGO
+========================= -->
 
 <section id="game">
 
@@ -1020,13 +1063,6 @@ type="button">
 🎒 Meus itens
 </button>
 
-<button
-id="howButton"
-class="action-btn how"
-type="button">
-❓ Como jogar
-</button>
-
 </div>
 
 <div id="turnIndicator" class="turn-indicator">
@@ -1089,7 +1125,7 @@ Continuar
 
 
 <!-- =========================
-     ESCOLHA DE ITEM / AÇÃO
+     ESCOLHA
 ========================= -->
 
 <div id="choiceModal" class="modal hidden">
@@ -1131,6 +1167,7 @@ Fechar
 
 <!-- =========================
      COMO JOGAR
+     AGORA É ABERTO PELO LOBBY
 ========================= -->
 
 <div id="howModal" class="modal hidden">
@@ -1140,46 +1177,62 @@ Fechar
 <h2>❓ Como jogar</h2>
 
 <p>
-🎯 O objetivo é chegar à casa 150 antes
-que o tempo termine.
+🎯 <strong>Objetivo:</strong> chegar à casa 150
+antes que o tempo termine.
 </p>
 
 <p>
-🎲 Na sua vez, jogue o dado. Seu personagem
-avançará o número de casas sorteado.
+🎲 <strong>Na sua vez:</strong> jogue o dado.
+Seu peão avançará o número de casas sorteado.
 </p>
 
 <p>
-🔴 <strong>Problemas:</strong> ao cair em uma
-casa de problema, você poderá escolher se
-quer usar um item para se proteger.
+🔴 <strong>Problemas:</strong> representam
+situações de injustiça e racismo ambiental.
+Ao cair em um problema, você poderá usar
+um item de proteção, caso possua.
 </p>
 
 <p>
-🟢 <strong>Soluções:</strong> ajudam seu
-personagem a avançar.
+🟢 <strong>Soluções:</strong> representam
+ações que ajudam a combater desigualdades
+ambientais. Ao cair nelas, você avança casas.
 </p>
 
 <p>
 ❓ <strong>Perguntas:</strong> responda
-corretamente para ganhar casas extras.
+corretamente para avançar.
 </p>
 
 <p>
-📢 <strong>Denúncia:</strong> se errar uma
-pergunta e possuir uma Denúncia, você poderá
-escolher se quer usá-la para tentar novamente.
+🌳 <strong>Árvore:</strong> protege contra
+uma penalidade de problema.
 </p>
 
 <p>
-🎒 <strong>Itens:</strong> podem ajudar
-durante a partida, mas você decide quando
-usá-los.
+💧 <strong>Água:</strong> reduz uma penalidade
+de problema.
+</p>
+
+<p>
+📢 <strong>Denúncia:</strong> se você errar
+uma pergunta, pode usar a Denúncia para
+tentar responder novamente.
+</p>
+
+<p>
+🎒 Os itens são encontrados durante o caminho
+e ficam guardados para você decidir quando usar.
+</p>
+
+<p>
+👥 No modo multiplayer, cada jogador joga
+quando chegar sua vez.
 </p>
 
 <p>
 🏆 O primeiro jogador a chegar à casa 150
-vence.
+vence a partida.
 </p>
 
 <button
@@ -1231,181 +1284,230 @@ const DADOS = [
 ];
 
 /* =========================================================
-   CASAS ESPECIAIS
+   PROBLEMAS
 ========================================================= */
 
 const PROBLEMAS = {
+
     7:{
         titulo:"🌊 Alagamento",
         texto:"A falta de infraestrutura adequada provocou alagamentos na comunidade.",
         penalidade:3
     },
+
     16:{
         titulo:"🏭 Poluição",
         texto:"A região foi afetada pela poluição e pela falta de fiscalização.",
         penalidade:3
     },
+
     25:{
         titulo:"💧 Falta de água",
         texto:"A comunidade enfrenta dificuldades de acesso à água.",
         penalidade:3
     },
+
     34:{
         titulo:"🚽 Falta de saneamento",
         texto:"A falta de saneamento básico prejudica a qualidade de vida.",
         penalidade:3
     },
+
     43:{
         titulo:"🌳 Poucas áreas verdes",
         texto:"A ausência de áreas verdes aumenta os impactos ambientais.",
         penalidade:3
     },
+
     52:{
         titulo:"🌧️ Enchentes",
         texto:"A falta de planejamento urbano aumenta os riscos de enchentes.",
         penalidade:3
     },
+
     61:{
         titulo:"🗑️ Descarte irregular",
         texto:"O descarte inadequado de resíduos prejudica o ambiente.",
         penalidade:3
     },
+
     70:{
         titulo:"🏭 Contaminação",
         texto:"A comunidade foi afetada por uma área contaminada.",
         penalidade:3
     },
+
     79:{
         titulo:"💨 Ar poluído",
         texto:"A poluição do ar afeta principalmente comunidades mais vulneráveis.",
         penalidade:3
     },
+
     88:{
         titulo:"💧 Água contaminada",
         texto:"A contaminação da água prejudicou os moradores.",
         penalidade:3
     },
+
     96:{
         titulo:"🌧️ Novo alagamento",
         texto:"A ausência de políticas públicas adequadas provocou novos alagamentos.",
         penalidade:3
+    },
+
+    /* =====================================================
+       NOVOS PROBLEMAS ENTRE 100 E 150
+    ===================================================== */
+
+    106:{
+        titulo:"🏭 Poluição industrial",
+        texto:"Uma comunidade vulnerável sofre com os impactos de atividades industriais próximas.",
+        penalidade:3
+    },
+
+    119:{
+        titulo:"💧 Acesso desigual à água",
+        texto:"Moradores enfrentam dificuldade de acesso à água potável enquanto outras áreas recebem melhor atendimento.",
+        penalidade:3
+    },
+
+    131:{
+        titulo:"🗑️ Resíduos na comunidade",
+        texto:"A coleta insuficiente de resíduos aumenta os impactos ambientais sobre a população local.",
+        penalidade:3
+    },
+
+    144:{
+        titulo:"🌧️ Risco de enchentes",
+        texto:"A falta de infraestrutura e planejamento aumenta o risco de enchentes em uma comunidade vulnerável.",
+        penalidade:3
     }
+
 };
 
+/* =========================================================
+   SOLUÇÕES
+========================================================= */
+
 const SOLUCOES = {
+
     11:{
         titulo:"🚰 Saneamento",
         texto:"Investimentos em saneamento ajudam a melhorar a qualidade de vida.",
         bonus:2
     },
+
     20:{
         titulo:"🔎 Fiscalização",
         texto:"A fiscalização ambiental ajuda a combater atividades poluidoras.",
         bonus:2
     },
+
     29:{
         titulo:"♻️ Coleta de resíduos",
         texto:"Uma coleta adequada reduz problemas ambientais.",
         bonus:2
     },
+
     38:{
         titulo:"🌧️ Prevenção de enchentes",
         texto:"Políticas de prevenção reduzem os riscos de alagamentos.",
         bonus:2
     },
+
     47:{
         titulo:"🌳 Arborização",
         texto:"Mais árvores ajudam a melhorar o ambiente urbano.",
         bonus:2
     },
+
     56:{
         titulo:"💧 Acesso à água",
         texto:"Políticas públicas podem garantir acesso justo à água.",
         bonus:2
     },
+
     65:{
         titulo:"♻️ Reciclagem",
         texto:"A reciclagem contribui para reduzir a quantidade de resíduos.",
         bonus:2
     },
+
     74:{
         titulo:"🏘️ Planejamento urbano",
         texto:"Um planejamento urbano adequado pode reduzir desigualdades ambientais.",
         bonus:2
     },
+
     83:{
         titulo:"🌱 Recuperação ambiental",
         texto:"A recuperação de áreas degradadas beneficia toda a comunidade.",
         bonus:2
     },
+
     92:{
         titulo:"⚖️ Justiça ambiental",
         texto:"Políticas de justiça ambiental ajudam a combater desigualdades.",
         bonus:2
+    },
+
+    /* =====================================================
+       NOVAS SOLUÇÕES ENTRE 100 E 150
+    ===================================================== */
+
+    102:{
+        titulo:"⚖️ Justiça ambiental",
+        texto:"A criação de políticas que protegem comunidades vulneráveis ajuda a combater o racismo ambiental.",
+        bonus:2
+    },
+
+    113:{
+        titulo:"🚰 Saneamento para todos",
+        texto:"Ampliar o acesso ao saneamento básico contribui para reduzir desigualdades ambientais.",
+        bonus:2
+    },
+
+    126:{
+        titulo:"🌳 Mais áreas verdes",
+        texto:"A criação e preservação de áreas verdes melhora a qualidade ambiental das comunidades.",
+        bonus:2
+    },
+
+    138:{
+        titulo:"📢 Participação comunitária",
+        texto:"A participação dos moradores nas decisões ambientais fortalece a busca por justiça ambiental.",
+        bonus:2
+    },
+
+    148:{
+        titulo:"🏘️ Política pública ambiental",
+        texto:"Políticas públicas voltadas às comunidades mais afetadas ajudam a reduzir desigualdades ambientais.",
+        bonus:2
     }
+
 };
 
+/* =========================================================
+   SOMENTE OS 3 ITENS PRINCIPAIS
+========================================================= */
+
 const ITENS = {
+
     9:{
         nome:"🌳 Árvore",
         descricao:"Protege contra uma penalidade de problema."
     },
+
     18:{
         nome:"📢 Denúncia",
         descricao:"Pode permitir uma nova tentativa após errar uma pergunta."
     },
+
     27:{
         nome:"💧 Água",
         descricao:"Reduz uma penalidade de problema."
-    },
-    36:{
-        nome:"♻️ Coleta seletiva",
-        descricao:"Ajuda nas situações relacionadas a resíduos."
-    },
-    45:{
-        nome:"🌱 Semente",
-        descricao:"Representa ações de recuperação ambiental."
-    },
-    54:{
-        nome:"🧰 Kit de emergência",
-        descricao:"Ajuda a enfrentar situações ambientais."
-    },
-    63:{
-        nome:"📚 Livro",
-        descricao:"Representa conhecimento e educação ambiental."
-    },
-    72:{
-        nome:"📣 Megafone",
-        descricao:"Representa mobilização comunitária."
-    },
-    81:{
-        nome:"☀️ Energia solar",
-        descricao:"Representa energia renovável."
-    },
-    90:{
-        nome:"📱 Telefone",
-        descricao:"Representa comunicação e mobilização."
-    },
-    99:{
-        nome:"🧤 Luvas",
-        descricao:"Representam ações de cuidado e limpeza."
-    },
-    108:{
-        nome:"🗺️ Mapa",
-        descricao:"Ajuda no planejamento das ações."
-    },
-    117:{
-        nome:"🪴 Mudas",
-        descricao:"Representam recuperação de áreas verdes."
-    },
-    126:{
-        nome:"🗑️ Lixeira",
-        descricao:"Representa descarte correto de resíduos."
-    },
-    135:{
-        nome:"📄 Documento",
-        descricao:"Representa direitos e políticas públicas."
     }
+
 };
 
 /* =========================================================
@@ -1413,6 +1515,7 @@ const ITENS = {
 ========================================================= */
 
 const PERGUNTAS = {
+
     4:{
         pergunta:"O que é racismo ambiental?",
         respostas:[
@@ -1423,6 +1526,7 @@ const PERGUNTAS = {
         ],
         correta:0
     },
+
     13:{
         pergunta:"Qual situação pode representar injustiça ambiental?",
         respostas:[
@@ -1433,6 +1537,7 @@ const PERGUNTAS = {
         ],
         correta:1
     },
+
     22:{
         pergunta:"Por que o saneamento básico é importante?",
         respostas:[
@@ -1443,6 +1548,7 @@ const PERGUNTAS = {
         ],
         correta:1
     },
+
     31:{
         pergunta:"Qual ação ajuda a combater problemas ambientais?",
         respostas:[
@@ -1453,6 +1559,7 @@ const PERGUNTAS = {
         ],
         correta:2
     },
+
     40:{
         pergunta:"Quem deve participar da construção da justiça ambiental?",
         respostas:[
@@ -1463,6 +1570,7 @@ const PERGUNTAS = {
         ],
         correta:3
     },
+
     49:{
         pergunta:"O acesso à água potável é:",
         respostas:[
@@ -1473,6 +1581,7 @@ const PERGUNTAS = {
         ],
         correta:0
     },
+
     58:{
         pergunta:"Qual atitude contribui para uma cidade mais sustentável?",
         respostas:[
@@ -1483,6 +1592,7 @@ const PERGUNTAS = {
         ],
         correta:2
     },
+
     67:{
         pergunta:"O que significa participação comunitária?",
         respostas:[
@@ -1493,6 +1603,7 @@ const PERGUNTAS = {
         ],
         correta:1
     },
+
     76:{
         pergunta:"Qual é uma consequência da poluição dos rios?",
         respostas:[
@@ -1503,6 +1614,7 @@ const PERGUNTAS = {
         ],
         correta:2
     },
+
     85:{
         pergunta:"A justiça ambiental busca:",
         respostas:[
@@ -1513,6 +1625,7 @@ const PERGUNTAS = {
         ],
         correta:1
     },
+
     94:{
         pergunta:"Qual atitude ajuda na prevenção de enchentes?",
         respostas:[
@@ -1523,6 +1636,7 @@ const PERGUNTAS = {
         ],
         correta:2
     },
+
     98:{
         pergunta:"Por que educação ambiental é importante?",
         respostas:[
@@ -1533,6 +1647,7 @@ const PERGUNTAS = {
         ],
         correta:0
     }
+
 };
 
 /* =========================================================
@@ -1559,16 +1674,6 @@ let rolling = false;
 let actionLocked = false;
 
 let pendingQuestion = null;
-
-/*
- * NOVO:
- * Guarda uma decisão que precisa ser tomada
- * pelo jogador.
- *
- * type:
- * "problem"  = escolha de Árvore/Água/não usar
- * "denuncia" = escolha de usar/não usar Denúncia
- */
 let pendingDecision = null;
 
 let lastKnownTurn = -1;
@@ -1700,6 +1805,18 @@ function showJoin(){
     setStatus(
         "Digite o código da sala criada pelo outro jogador."
     );
+
+}
+
+/* =========================================================
+   COMO JOGAR
+========================================================= */
+
+function openHowToPlay(){
+
+    $("howModal")
+        .classList
+        .remove("hidden");
 
 }
 
@@ -2109,7 +2226,7 @@ function joinRoom(){
 }
 
 /* =========================================================
-   CONECTAR AO HOST
+   CONECTAR HOST
 ========================================================= */
 
 function connectUsingRoomCode(
@@ -2266,7 +2383,7 @@ function copyRoomCode(){
 }
 
 /* =========================================================
-   MENSAGENS DO HOST
+   MENSAGENS HOST
 ========================================================= */
 
 function handleHostMessage(
@@ -2399,10 +2516,6 @@ function handleHostMessage(
         return;
     }
 
-    /* =====================================================
-       NOVO: ESCOLHAS DE ITEM
-    ===================================================== */
-
     if(data.type === "PROBLEM_CHOICE"){
 
         if(
@@ -2440,7 +2553,7 @@ function handleHostMessage(
 }
 
 /* =========================================================
-   MENSAGENS DO CLIENTE
+   MENSAGENS CLIENTE
 ========================================================= */
 
 function handleClientMessage(data){
@@ -2485,10 +2598,6 @@ function handleClientMessage(data){
         return;
     }
 
-    /* =====================================================
-       NOVO: RECEBER ESCOLHA DE PROBLEMA
-    ===================================================== */
-
     if(data.type === "PROBLEM_CHOICE"){
 
         pendingDecision = {
@@ -2505,10 +2614,6 @@ function handleClientMessage(data){
 
         return;
     }
-
-    /* =====================================================
-       NOVO: RECEBER ESCOLHA DA DENÚNCIA
-    ===================================================== */
 
     if(data.type === "DENUNCIA_CHOICE"){
 
@@ -2598,7 +2703,6 @@ function handleClientMessage(data){
         );
 
         rolling = false;
-
         actionLocked = false;
 
         updateUI();
@@ -2956,7 +3060,7 @@ function getCellElement(position){
 }
 
 /* =========================================================
-   TOKENS / PEÕES
+   TOKENS
 ========================================================= */
 
 function renderTokens(movingId=null){
@@ -3494,7 +3598,7 @@ function processRoll(
 }
 
 /* =========================================================
-   RESULTADO DO DADO
+   RESULTADO DADO
 ========================================================= */
 
 function handleDiceResult(data){
@@ -3620,9 +3724,9 @@ function resolveLanding(player){
         return;
     }
 
-    /* =====================================================
+    /* =========================
        ITEM
-    ===================================================== */
+    ========================= */
 
     if(
         ITENS[player.position]
@@ -3659,9 +3763,9 @@ function resolveLanding(player){
         return;
     }
 
-    /* =====================================================
+    /* =========================
        PERGUNTA
-    ===================================================== */
+    ========================= */
 
     if(
         PERGUNTAS[player.position]
@@ -3692,9 +3796,9 @@ function resolveLanding(player){
         return;
     }
 
-    /* =====================================================
+    /* =========================
        PROBLEMA
-    ===================================================== */
+    ========================= */
 
     if(
         PROBLEMAS[player.position]
@@ -3714,14 +3818,6 @@ function resolveLanding(player){
             player.items.includes(
                 "💧 Água"
             );
-
-        /*
-         * IMPORTANTE:
-         *
-         * NUNCA usamos automaticamente.
-         *
-         * Se tiver Árvore ou Água, o jogador escolhe.
-         */
 
         if(
             hasTree ||
@@ -3750,11 +3846,6 @@ function resolveLanding(player){
             return;
         }
 
-        /*
-         * Se não possui nenhum dos dois,
-         * aplica a penalidade normalmente.
-         */
-
         applyProblemPenalty(
             player,
             "none"
@@ -3763,9 +3854,9 @@ function resolveLanding(player){
         return;
     }
 
-    /* =====================================================
+    /* =========================
        SOLUÇÃO
-    ===================================================== */
+    ========================= */
 
     if(
         SOLUCOES[player.position]
@@ -3816,7 +3907,7 @@ function resolveLanding(player){
 }
 
 /* =========================================================
-   NOVO: ESCOLHA DO PROBLEMA
+   ESCOLHA PROBLEMA
 ========================================================= */
 
 function showProblemChoice(
@@ -3935,7 +4026,7 @@ function showProblemChoice(
 }
 
 /* =========================================================
-   ENVIAR ESCOLHA DO PROBLEMA
+   ENVIAR ESCOLHA PROBLEMA
 ========================================================= */
 
 function sendProblemChoice(choice){
@@ -4002,7 +4093,7 @@ function sendProblemChoice(choice){
 }
 
 /* =========================================================
-   PROCESSAR ESCOLHA DO PROBLEMA
+   PROCESSAR PROBLEMA
 ========================================================= */
 
 function processProblemChoice(
@@ -4052,11 +4143,6 @@ function processProblemChoice(
         "choiceModal"
     );
 
-    /*
-     * Segurança:
-     * o jogador só pode usar um item que realmente possui.
-     */
-
     if(
         choice === "tree" &&
         player.items.includes("🌳 Árvore")
@@ -4091,7 +4177,7 @@ function processProblemChoice(
 }
 
 /* =========================================================
-   APLICAR PENALIDADE
+   PENALIDADE
 ========================================================= */
 
 function applyProblemPenalty(
@@ -4188,7 +4274,9 @@ function applyProblemPenalty(
             " casas."
         );
 
-    }else if(itemUsed === "none"){
+    }else if(
+        itemUsed === "none"
+    ){
 
         sendEvent(
             player.id,
@@ -4417,11 +4505,6 @@ function processAnswer(
         index ===
         question.correta;
 
-    /*
-     * A pergunta é encerrada neste momento.
-     * Se errar e possuir Denúncia, uma nova decisão
-     * será aberta abaixo.
-     */
     closeModal(
         "questionModal"
     );
@@ -4468,22 +4551,12 @@ function processAnswer(
         return;
     }
 
-    /* =====================================================
-       ERROU
-    ===================================================== */
-
     const denuncia =
         player.items.indexOf(
             "📢 Denúncia"
         );
 
     if(denuncia !== -1){
-
-        /*
-         * NÃO consumimos a Denúncia aqui.
-         *
-         * Primeiro perguntamos ao jogador.
-         */
 
         pendingDecision = {
             type:"denuncia",
@@ -4503,10 +4576,6 @@ function processAnswer(
 
         return;
     }
-
-    /*
-     * Não possui Denúncia.
-     */
 
     pendingQuestion = null;
 
@@ -4529,7 +4598,7 @@ function processAnswer(
 }
 
 /* =========================================================
-   NOVO: ESCOLHA DA DENÚNCIA
+   DENÚNCIA
 ========================================================= */
 
 function showDenunciaChoice(){
@@ -4608,7 +4677,7 @@ function showDenunciaChoice(){
 }
 
 /* =========================================================
-   ENVIAR ESCOLHA DA DENÚNCIA
+   ENVIAR DENÚNCIA
 ========================================================= */
 
 function sendDenunciaChoice(
@@ -4677,7 +4746,7 @@ function sendDenunciaChoice(
 }
 
 /* =========================================================
-   PROCESSAR ESCOLHA DA DENÚNCIA
+   PROCESSAR DENÚNCIA
 ========================================================= */
 
 function processDenunciaChoice(
@@ -4745,11 +4814,6 @@ function processDenunciaChoice(
             1
         );
 
-        /*
-         * A Denúncia foi realmente consumida
-         * somente agora, porque o jogador escolheu usar.
-         */
-
         sendEvent(
             player.id,
             "📢 Denúncia utilizada!",
@@ -4782,10 +4846,6 @@ function processDenunciaChoice(
 
         return;
     }
-
-    /*
-     * Jogador escolheu não usar.
-     */
 
     pendingQuestion = null;
 
@@ -5018,18 +5078,6 @@ function openItems(){
 }
 
 /* =========================================================
-   COMO JOGAR
-========================================================= */
-
-function openHowToPlay(){
-
-    $("howModal")
-        .classList
-        .remove("hidden");
-
-}
-
-/* =========================================================
    FINAL
 ========================================================= */
 
@@ -5197,7 +5245,7 @@ function applyGameState(state){
 }
 
 /* =========================================================
-   INICIALIZAÇÃO DOS BOTÕES
+   BOTÕES
 ========================================================= */
 
 function initializeButtons(){
@@ -5230,8 +5278,8 @@ function initializeButtons(){
     const itemsButton =
         $("itemsButton");
 
-    const howButton =
-        $("howButton");
+    const howLobbyBtn =
+        $("howLobbyBtn");
 
     const eventContinueBtn =
         $("eventContinueBtn");
@@ -5362,9 +5410,11 @@ function initializeButtons(){
 
     }
 
-    if(howButton){
+    /* COMO JOGAR DO LOBBY */
 
-        howButton.addEventListener(
+    if(howLobbyBtn){
+
+        howLobbyBtn.addEventListener(
             "click",
             function(event){
 
@@ -5433,7 +5483,7 @@ function initializeButtons(){
 }
 
 /* =========================================================
-   FECHAR MODAIS CLICANDO FORA
+   MODAIS
 ========================================================= */
 
 function initializeModals(){
@@ -5445,14 +5495,6 @@ function initializeModals(){
             modal.addEventListener(
                 "click",
                 function(event){
-
-                    /*
-                     * Não permitimos fechar a escolha
-                     * de item clicando fora.
-                     *
-                     * Isso é importante porque o jogador
-                     * precisa tomar uma decisão.
-                     */
 
                     if(
                         event.target ===
@@ -5479,7 +5521,7 @@ function initializeModals(){
 }
 
 /* =========================================================
-   ENTER
+   TECLADO
 ========================================================= */
 
 function initializeKeyboard(){
@@ -5539,7 +5581,7 @@ function initializeKeyboard(){
 }
 
 /* =========================================================
-   INICIALIZAÇÃO PRINCIPAL
+   INICIALIZAÇÃO
 ========================================================= */
 
 function initializeGame(){
